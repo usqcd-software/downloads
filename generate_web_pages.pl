@@ -4,15 +4,15 @@
 #
 
 # These are the canonical directories to be searched
-foreach my $dir ("bagel_qdp", "c-lime", "qdp", "qdp++", "qio", "qla", "qmp", "qmt", "qopqdp")
+foreach my $dir ("bagel_qdp", "c-lime", "qdp", "qdp++", "qio", "qla", "qmp", "qmt", "qopqdp", "qhmc")
 {
   chdir($dir);
 
 #  my $big = tr/a-z/A-Z/;
   my $big = $dir;
 
-  # Start the page
-  open(HTML, "> index.html");
+  # Start the page (use new temporary filename __index.html)
+  open(HTML, "> __index.html");
   print HTML<<EOF;
 <html>
 
@@ -29,7 +29,7 @@ foreach my $dir ("bagel_qdp", "c-lime", "qdp", "qdp++", "qio", "qla", "qmp", "qm
 EOF
 
   # Simple method - look for *.tar.gz files. This will even support sub-directories.
-  open(HTML, ">> index.html");
+  #open(HTML, ">> __index.html");
   open(FILES, "find . -name '*.tar.gz' -print |");
 
   while(my $file = <FILES>)
@@ -41,10 +41,10 @@ EOF
   }
 
   close(FILES);
-  close(HTML);
+  #close(HTML);
 
   # Finish the page
-  open(HTML, ">> index.html");
+  #open(HTML, ">> __index.html");
   print HTML<<EOF;
 </p>
 
@@ -56,6 +56,11 @@ EOF
 EOF
 
   close(HTML);
+
+  # copy new to old if different
+  `cmp __index.html index.html || cp -a __index.html index.html`;
+  unlink "__index.html";
+
   chdir("..");
 }
 
