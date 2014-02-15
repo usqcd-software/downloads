@@ -29,22 +29,29 @@ foreach my $dir ("bagel_qdp", "c-lime", "qdp", "qdp++", "qio", "qla", "qmp", "qm
 EOF
 
   # Simple method - look for *.tar.gz files. This will even support sub-directories.
-  #open(HTML, ">> __index.html");
   open(FILES, "find . -name '*.tar.gz' -print |");
 
-  while(my $file = <FILES>)
-  {
+  @files = ();
+  while(my $file = <FILES>) {
     chomp $file;
     $file =~ s/^\.\///;
+    push @files, $file;
+  }
+  close(FILES);
 
+  # sort them, trying to be smart about version numbers
+  sub pad0($) {
+    my $f = shift(@_);
+    $f =~ s/([^0-9])([0-9][^0-9])/${1}0$2/g;
+    $f =~ s/([^0-9])([0-9][^0-9])/${1}0$2/g;
+    #print $f, "\n";
+    return $f;
+  }
+  for my $file (sort { pad0($a) cmp pad0($b) } @files) {
     printf HTML "<a href=\"$file\">$file</a><br>\n";
   }
 
-  close(FILES);
-  #close(HTML);
-
   # Finish the page
-  #open(HTML, ">> __index.html");
   print HTML<<EOF;
 </p>
 
