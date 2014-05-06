@@ -49,7 +49,7 @@ EOF
   }
   printf HTML "<table>\n";
   for my $file (sort { pad0($a) cmp pad0($b) } @files) {
-    $date = `tar ztvf $file |awk '{print\$4,\$5}' |sort |tail -n1`;
+    $date = `TZ=UTC tar ztvf $file |awk '{print\$4,\$5}' |sort |tail -n1`;
     chomp $date;
     printf HTML "<tr><td><a href=\"$file\">$file</a></td><td>$date</td></tr>\n";
   }
