@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Inlining functions and optimisation</TITLE>
+<META NAME="description" CONTENT="Inlining functions and optimisation">
+<META NAME="keywords" CONTENT="chroma_install">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="chroma_install.css">
+
+<LINK REL="next" HREF="node13.html">
+<LINK REL="previous" HREF="node11.html">
+<LINK REL="up" HREF="node9.html">
+<LINK REL="next" HREF="node13.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html223"
+  HREF="node13.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html219"
+  HREF="node9.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html213"
+  HREF="node11.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html221"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html224"
+  HREF="node13.html">Enabling SSE/SSE2</A>
+<B> Up:</B> <A NAME="tex2html220"
+  HREF="node9.html">Quick Start: A linux</A>
+<B> Previous:</B> <A NAME="tex2html214"
+  HREF="node11.html">Configuring and building QDP++</A>
+ &nbsp <B>  <A NAME="tex2html222"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00053000000000000000">
+Inlining functions and optimisation</A>
+</H2>
+The previous build is not very useful. It leaves on the (default) debugging 
+flags and does not do any inlining, resulting in extremely <EM>slow</EM> code.
+We found with <TT>gcc</TT> better code is produced by setting the following:
+
+<P>
+<PRE>
+/home/bj/src/qdp++/configure --prefix=/home/bj/install/qdp_scalar_single \
+    --enable-parallel-arch=scalar CXXFLAGS="-O2 -finline-limit=50000" CFLAGS="-O2"
+</PRE>
+
+<P>
+This sets optimisation level 2 for both GCC and G++. It also sets the inline 
+limit for the C++ compiler to a large value, allowing a large amount of function inlining and should genereate better code.
+
+<P>
+<BR><HR>
+<ADDRESS>
+Balint Joo
+2005-04-11
+</ADDRESS>
+</BODY>
+</HTML>

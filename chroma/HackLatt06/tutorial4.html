@@ -1,0 +1,299 @@
+<html>
+<head>
+<title>Tutorial4: Inline Measurements and Named Objects</title>
+</head>
+<h1>Exercise 4: Writing your own inline measurement task</h1>
+<h2>Difficulty Rating:</h2>
+<p>
+This exercise is rated <em>Advanced</em>.</p>
+
+<h2>Get the Files</h2>
+<p>Download the files from <a href="./tut4_files/tut4_files.tar.gz">here</a>
+and unpack them in a working directory. They contain the following:
+<dl>
+  <dn><tt>Makefile</tt></dn>
+  <dd>A makefile for this tutorial</dd>
+
+  <dn><tt>inline_my_meas.h</tt> and <tt>inline_my_meas.cc</tt></dn>
+  <dd>The header and source file for our new measurement</dd>
+
+  <dn><tt>chroma.cc</tt></dn>
+  <dd>A copy of chroma.cc, suitably modified to cope with the new measurement</dd>
+
+  <dn><tt>chroma_my_meas.ini.xml</tt></dn>
+  <dd>A hacked XML file for this chroma measurement</dd>
+  
+  <dn><tt>test_purgaug.cfg1 propagator0</tt></dn>
+  <dd>Your favourite 4x4x4x8 gauge field and propagator</dd>
+</dl>
+<p>
+Wait a minute. Didn't I say we don't need to modify <tt>chroma.cc</tt> for a
+new measurement? How come I need to modify <tt>chroma.cc</tt>. Let's discuss
+this.</p>
+
+
+<h2>The hacked <tt>chroma.cc</tt></h2>
+<p>
+Edit the <tt>chroma.cc</tt> file. The modifications are as follows:
+<ul>
+<li>On line 8 I added <tt>#include "inline_my_meas.h"</tt>. If this
+new measurement were part of the chroma library, this file would automatically
+be included by including <tt>chroma.h</tt>. As we are developing externally
+to the library we need to include it.</li>
+<li>On line 76 I added the following line to the <tt>linkageHack</tt>:
+<blockquote><tt>
+  foo &= InlineMyMeasEnv::registered;
+</tt></blockquote>
+which just links in the measurement into the code.
+Again, if we added this measurement to the Chroma library, this line 
+would be done by the preceding:
+<blockquote><tt>
+  foo &= InlineAggregateEnv::registered;
+</tt></blockquote>
+which ensures registration for all inline measurements.</li>
+</ul>
+But the point stands, or more correctly it stands like this:
+As we add new inline measurements to the library, we don't need
+to modify <tt>chroma.cc</tt>. We only have to do it here, because
+our code is not integrated into the library the usual way.
+This linkage problem is alluded to in the lecture matreial
+on Design Patterns, and is exactly the same that you may have
+met in the last tutorial when dealing with factories (and 
+for exactly the same reason).
+</p>
+
+<h2>The source file: <tt>inline_my_meas.h</tt></h2>
+<p>
+Edit the file <tt>inline_my_meas.h</tt> file. This is a pretty 
+bog standard C++ <tt>.h</tt> file, with an include guard at the 
+start and end, and all the code going into namespace <tt>Chroma</tt>.
+</p>
+
+<p>We then define a namespace particular to the measurement: <tt>InlineMyMeasEnv</tt> Here we
+will put the name of the measurement and have a flag as to whether
+it is registered or not with an object factory.</p>
+
+<p>We define a parameter structure for the measurement. This is 
+what the XML will "fill out". You can see on line 31, the definition
+of a constructor for the struct (in C++ this is perfectly legit, 
+structs are just classes with only public members). This is 
+a constructor that constructs the parameter struct from XML.
+There is also a write function to write out the parameter struct.
+The remaining members are:
+<li>Line 28 - holds a default constructor, so you can fill out the 
+structure in code without XML.</li>
+<li>Line 37 contains a member called <em>frequency</em>. In Monte
+Carlo evolutions this can be used to control how often the measurement
+is carried out</li>
+<li>Lines 40 and 43 hold strings called prop_id and gauge_id respectively.
+These will be filled out with the names of the input propagator and 
+the input gauge field from the named maps respectively</li>
+<li>Finally on line 45 we have a string to hold the name of 
+an XML file. This is to support the behaviour you saw in tutorial 1,
+that we can redirect the output of the measurement to its own private
+XML file.</li>
+</ul>
+
+<p>The measurement itself is defined starting at line 49. We define it as
+<blockquote><tt>
+class InlineMyMeas : public AbsInlineMeasurement
+</tt></blockquote>
+to show that it is a subclass of <tt>AbsInlineMeasurement</tt>. We declare
+a bunch of public functions:
+<ul>
+  <li>A destructor, which should clean up when the object is destroyed</li>
+  <li>A constructor to make a measurement from a parameter struct. This just 
+copies the input params struct into the private param struct of the class.</li>
+  <li>A copy constructor, to allow us to copy the object. Again this just copies over the internal parameter structure.</li>
+  <li>a function called <tt>getFrequency</tt> which just returns the frequency
+  element of the internal parameters struct. This can be used by HMC to decide
+whether it is time to make a measurement</li>
+  <li>the <tt>operator()</tt> which allows objects of this kind of measurement
+to be used like functions</li>
+</ul></p>
+
+<p>You do not need to modify this file</p>
+
+<h2>The source file: <tt>inline_my_meas.cc</tt></h2>
+<p>
+Edit the source file <tt>inline_my_meas.cc</tt>.</p>
+
+<p>The first interesting thing you should look at is the function
+<tt>createMeasurement</tt> on line 28. It takes an XML reader and 
+a path. It uses these to first create an <tt>InlineMyMeasParam</tt>
+parameter structure which it uses to dynamically allocate and instantiate
+a new <tt>InlineMyMeas</tt>. <em>It is this function, associated with 
+a name that gets registered in the ObjectFactory</em>. This function
+is local to this file (not defined in any header) and is private
+to the <tt>InlineMyMeasEnv</tt> namespace.</p>
+
+<p>
+On line 38, we find the <tt>string</tt> that is the <em>name</em>
+of the measurement that was declared <tt>extern</tt> in the <tt>.h</tt>
+file. <em>This is the string which must appear in the <tt>&lt;Name&gt;
+&lt;/Name&gt;</tt> tags of the XML. It is the name with which the <tt>createMeasurement</tt> function is associated in the Object Factory.</em></p>
+
+<p>Line 41 registers the name and the creation function in the Object Factory.
+The factory itself is a <em>class</em> called:
+<blockquote><tt>
+TheInlineMeasurementFactory
+</tt></blockquote></p>
+<p>The factory is a special construction called a <em>singleton</em>. This is much like a global variable but special C++ tricks are used to ensure that 
+there really can be only one of it. A reference to the single instance of the factory is returned by the <tt>Instance()</tt> function defined in the factory class. This is a static function in the class, rather than a member function belonging to a particular object, hence the <tt>::</tt> notation. Once we get the reference to the factory object, we use the <tt>register()</tt> member function of the object (back to <tt>.</tt> notation for memeber functions). The <tt>registered</tt> function in the namespace is updated with the return value of <tt>register()</tt> function.<p>
+
+<p>Now there is one problem. If there is no reference in the main program
+to the <tt>registered</tt> variable, the compiler may <em>not even link in</em>
+this object file into the final executable. This is why we had to "touch" the
+<tt>registered</tt> variable in the <tt>chroma.cc</tt> file. If we were 
+adding this module to the library, we would touch the registerd flag in
+a file called:
+<blockquote><tt>
+chroma/lib/meas/inline/inline_aggregate.cc
+</tt></blockquote>
+or one of its sub-aggregate files, which touch the registered flags
+for you. In the <tt>chroma</tt> application in the <tt>linkageHack</tt>
+function, you'd only have to touch the <em>aggregate</em> variable.
+You should see the transparencies on Design Patterns and Chroma
+for more information about this.
+</p>
+
+<p>Lines 50-100 deal with XML input and output for the parameter structure,
+these include reader and writer functions, and constructors for the parameter
+structure, including one to construct the param struct for XML.</p>
+
+<p>Lines 103-130</p> We code the <tt>operator()</tt> here, or rather
+just a springboard for it. This routine just has a look to see if we
+requested a separate XML file for our measurement or not. If we have
+then it will open one for us. If we haven't it will pass on its
+input XML writer. In both cases it will call the function <b><tt>func()</tt></b>
+where all the real work is done. (The function <tt>func()</tt> was 
+declared as private in the header file. An external user cannot see it. It is only 
+accessible to the <tt>InlineMyMeas</tt> class. Strictly speaking it
+is not necessary to split the work out into <tt>func</tt> we could well
+have done it all in the <tt>operator()</tt>. However this is a pattern
+that was developed when turning external programs into inline measurements.
+Essentially the code from <tt>main()</tt> more or less got pasted into 
+<tt>func</tt>.
+
+
+<p>Finally the main code to do the actual computation for the measurement 
+begins on line 135. It is the <tt>operator()</tt> function for the measurement.
+It currently takes 2 parameters
+<ul>
+  <li>An update number. This is mostly for use in HMC routines</li>
+  <li>A reference to an XML writer to output measurement related XML</li>
+</ul>
+</p>
+
+<p>In this function one can write what was effectively contained in the 
+main programs before.</p>
+
+<h3>Accessing Named Objects</h3>
+<p>
+How do we get at the gauge field. How do we get at the propagator?
+Recall that now, measurements communicate through named objects.
+Even the gauge field is a named object which could be read/written
+with another measurement. The gauge field described in the <tt>Cfg_t</tt>
+tags of the XML file is given a default name: <tt>default_gauge_field</tt>.
+You can see on line 66 how this works. I set the gauge ID with a 
+function:
+<blockquote>
+<tt>
+gauge_id =  InlineDefaultGaugeField::readGaugeId(paramtop, "NamedObject/gauge_id");
+</tt>
+</blockquote>
+</p>
+<p>
+This function looks inside the XMLReader that we pass in (<tt>paramtop</tt>)
+for the <tt>&lt;gauge_id&gt;</tt> tag in the <tt>NamedObject</tt> group. If it
+doesn't find it, it substitutes the name of the default gauge field.
+</p>
+
+<p>The propagator is not so fundamental, and it needs to be explicitly 
+specified. It is searched for on line 62</p>
+
+<p>Now look at the code between lines 146 and 192. This is where we 
+access our named object buffer. On line 152 we try to get the
+gauge field from a map. If this lookup fails it throws a (string)
+excption. If the lookup succeeds but the named object is 
+not a <tt>multi1d&lt;LatticeColorMatrix&gt;</tt> then a <tt>bad_cast</tt>
+exception is thrown</p>
+
+<p>If we succeed with line 152, we go on to line 153 and try to 
+get the record XML corresponding to the gauge field.</p>
+
+<p>We repeat the last two steps for the input propagator on lines
+156 - 159. Observe, that the <tt>getData</tt> function on line
+156 is templated by <tt>LatticePropagator</tt> now.</p?
+
+<p>Lines 162-178 contain two exception catching clauses - the first
+deals with the case where our object id is in the map, but is the 
+wrong type, and the second deals with the case when we fail to 
+find the object_id in the map at all.</p>
+
+<p>By the time we reach line 186 we know that 
+<ul>
+  <li>The gauge field and propagator are both in the Named Object
+  maps. </li>
+  <li>We have their record XML in XML Buffer writers.</li>
+</ul>
+ So knowing that we will encounter no surprises from the map we 
+bind references to both the gauge field (line 186) and the propagator
+(line 190). Thereafter in the rest of our measurements we just
+refer to the reference names -- <tt>u</tt> for the gauge field and 
+<tt>prop</tt> for the prop.
+
+
+<h3>Named Objects and the XML input file</h3>
+<p>
+Look at (edit) the supplied XML file <tt>chroma_my_meas.ini.xml</tt>.
+You will see that we load the propagator in the second inline measurement:
+<blockquote>
+<tt> &lt;elem&gt;<br/>
+      &nbsp;&nbsp;&lt;Name&gt;QIO_READ_NAMED_OBJECT&lt;/Name&gt;<br/>
+      &nbsp;&nbsp;&lt;File&gt;<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&lt;file_name&gt;./propagator_0&lt;/file_name&gt;<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&lt;file_volfmt&gt;SINGLEFILE&lt;/file_volfmt&gt;<br/>
+      &nbsp;&nbsp;&lt;/File&gt;<br/>
+      &nbsp;&nbsp;&lt;NamedObject&gt;<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&lt;object_type&gt;LatticePropagator&lt;/object_type&gt;<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&lt;object_id&gt;prop&lt;/object_id&gt;<br/>
+      &nbsp;&nbsp;&lt;/NamedObject&gt;<br/>
+    &lt;/elem&gt;<br/>
+</tt>
+</blockquote>
+
+
+
+<p><em>And that is all there is to writing a measurement</em></p>
+
+<h2>Exercise 1: Compile and run the code</h2>
+<p>
+Now that we have gone through the code for the inline measurement,
+build and run the code. Remember that the <tt>Makefile</tt> may
+need to be updated to point to the chroma installation in 
+<blockquote><tt>
+/usr/local/chroma/scalar
+</tt></blockquote>
+</p>
+
+<p>Run the application with the supplied XML input file. Have a look at the
+XML output file</p>
+
+<h2>Exercise 2: Add your own code</h2>
+<p>
+Now add your own code to the measurement at line 130. You could re-use
+some of the code you wrote for Tutorial 3.
+</p>
+
+<h2>Play Away</h2>
+<p>
+Try various things. Change the name of your measurement from <tt>MY_MEAS</tt>
+to something else. Add some XML parameters. <em>Go forth and hack!</em>
+
+
+<h2> Congratulations You have Completed Tutorial 4</h2>
+ 
+</body>
+
+</html>

@@ -1,0 +1,358 @@
+Linkage = 0
+InlineMeasurements are: 
+<InlineMeasurements>
+
+    <elem>
+      <Name>MAKE_SOURCE</Name>
+      <Frequency>1</Frequency>
+      <Param>
+        <version>6</version>
+        <Source>
+          <version>2</version>
+          <SourceType>SHELL_SOURCE</SourceType>
+          <j_decay>3</j_decay>
+          <t_srce>0 0 0 0</t_srce>
+
+          <SmearingParam>
+            <wvf_kind>GAUGE_INV_GAUSSIAN</wvf_kind>
+            <wvf_param>2.0</wvf_param>
+            <wvfIntPar>5</wvfIntPar>
+            <no_smear_dir>3</no_smear_dir>
+          </SmearingParam>
+
+        </Source>
+
+      </Param>
+      <NamedObject>
+        <gauge_id>default_gauge_field</gauge_id>
+        <source_id>sh_source_1</source_id>
+      </NamedObject>
+    </elem>
+
+    <elem>
+      <Name>PROPAGATOR</Name>
+      <Frequency>1</Frequency>
+      <Param>
+        <version>10</version>
+        <quarkSpinType>FULL</quarkSpinType>
+        <obsvP>false</obsvP>
+        <FermionAction>
+         <FermAct>WILSON</FermAct>
+         <Kappa>0.11</Kappa>
+         <AnisoParam>
+           <anisoP>false</anisoP>
+           <t_dir>3</t_dir>
+           <xi_0>1.0</xi_0>
+           <nu>1.0</nu>
+         </AnisoParam>
+         <FermState>
+           <Name>SIMPLE_FERM_STATE</Name>
+           <FermionBC>
+             <FermBC>SIMPLE_FERMBC</FermBC>
+             <boundary>1 1 1 -1</boundary>
+           </FermionBC>
+         </FermState>
+        </FermionAction>
+        <InvertParam>
+          <invType>CG_INVERTER</invType>
+          <RsdCG>1.0e-8</RsdCG>
+          <MaxCG>1000</MaxCG>
+        </InvertParam>
+      </Param>
+      <NamedObject>
+        <gauge_id>default_gauge_field</gauge_id>
+        <source_id>sh_source_1</source_id>
+        <prop_id>sh_prop_1</prop_id>
+      </NamedObject>
+    </elem>
+
+    <elem>
+      <annotation>erase the source to save memory</annotation>
+      <Name>ERASE_NAMED_OBJECT</Name>
+      <Frequency>1</Frequency>
+      <NamedObject>
+        <object_id>sh_source_1</object_id>
+      </NamedObject>
+    </elem>
+
+    <elem>
+      <annotation>Save the prop</annotation>
+      <Name>QIO_WRITE_NAMED_OBJECT</Name>
+      <Frequency>1</Frequency>
+      <NamedObject>
+           <object_id>sh_prop_1</object_id>
+	   <object_type>LatticePropagator</object_type>
+      </NamedObject>
+      <File>
+           <file_name>./sh_prop_1</file_name>
+	   <file_volfmt>SINGLEFILE</file_volfmt>
+      </File>
+    </elem>
+
+    <elem>
+      <Name>SINK_SMEAR</Name>
+      <Frequency>1</Frequency>
+      <Param>
+        <version>5</version>
+        <Sink>
+          <version>2</version>
+          <SinkType>POINT_SINK</SinkType>
+	  <j_decay>3</j_decay>
+        </Sink>
+      </Param>
+      <NamedObject>
+        <gauge_id>default_gauge_field</gauge_id>
+        <prop_id>sh_prop_1</prop_id>
+        <smeared_prop_id>sh_pt_sink_1</smeared_prop_id>
+      </NamedObject>
+    </elem>
+
+    <elem>
+      <Name>SINK_SMEAR</Name>
+      <Frequency>1</Frequency>
+      <Param>
+        <version>5</version>
+        <Sink>
+          <version>2</version>
+          <SinkType>SHELL_SINK</SinkType>
+          <j_decay>3</j_decay>
+
+          <SmearingParam>
+            <wvf_kind>GAUGE_INV_GAUSSIAN</wvf_kind>
+            <wvf_param>2.0</wvf_param>
+            <wvfIntPar>5</wvfIntPar>
+            <no_smear_dir>3</no_smear_dir>
+          </SmearingParam>
+        </Sink>
+      </Param>
+      <NamedObject>
+        <gauge_id>default_gauge_field</gauge_id>
+        <prop_id>sh_prop_1</prop_id>
+        <smeared_prop_id>sh_sh_sink_1</smeared_prop_id>
+      </NamedObject>
+    </elem>
+
+
+    <elem>
+      <annotation>erase the source to save memory</annotation>
+      <Name>ERASE_NAMED_OBJECT</Name>
+      <Frequency>1</Frequency>
+      <NamedObject>
+        <object_id>sh_prop_1</object_id>
+      </NamedObject>
+    </elem>
+
+    <elem>
+      <annotation>
+         Compute the hadron spectrum. 
+      </annotation>
+      <Name>HADRON_SPECTRUM</Name>
+      <Frequency>1</Frequency>
+      <Param>
+        <version>1</version>
+        <MesonP>true</MesonP>
+        <CurrentP>true</CurrentP>
+        <BaryonP>true</BaryonP>
+        <time_rev>false</time_rev>
+        <mom2_max>3</mom2_max>
+        <avg_equiv_mom>true</avg_equiv_mom>
+       </Param>
+      <NamedObject>
+        <gauge_id>default_gauge_field</gauge_id>
+        <sink_pairs>
+          <elem>
+            <first_id>sh_pt_sink_1</first_id>
+            <second_id>sh_pt_sink_1</second_id>
+          </elem>
+          <elem>
+            <first_id>sh_sh_sink_1</first_id>
+            <second_id>sh_sh_sink_1</second_id>
+          </elem>
+        </sink_pairs>
+      </NamedObject>
+      <xml_file>hadspec.dat.xml</xml_file>
+    </elem>
+
+  </InlineMeasurements>
+
+Finished init of RNG
+Finished lattice layout
+Attempt to read gauge field
+Gauge initialization: cfg_type = SZIN
+Gauge field successfully read: time= 0.010622 secs
+There are 8 measurements 
+Doing 8 measurements
+MAKE_SOURCE: propagator source constructor
+Source = SHELL_SOURCE
+Shell source
+Link smearing type = NONE
+Quark smearing type = GAUGE_INV_GAUSSIAN
+Displacement type = NONE
+color = 0
+spin = 0
+spin = 1
+spin = 2
+spin = 3
+color = 1
+spin = 0
+spin = 1
+spin = 2
+spin = 3
+color = 2
+spin = 0
+spin = 1
+spin = 2
+spin = 3
+Attempt to update source
+Source successfully update
+MAKE_SOURCE: total time = 0.080627 secs
+MAKE_SOURCE: ran successfully
+PROPAGATOR: propagator calculation
+Snarf the source from a named buffer
+Source successfully read and parsed
+FermAct = WILSON
+Try the various factories
+Reading an AnisoParam_t
+Suitable factory found: compute the quark prop
+Entering quarkProp4
+InvCG2: starting
+InvCG: k = 29  cp = 1.31229462835656e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.020053(s) Flops=43456512 => 2167.08283049918 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  2167.08283049918 Mflops = 2.16708283049918 Gflops = 0.00216708283049918 Tflops
+InvCG2: starting
+InvCG: k = 29  cp = 1.37373630349405e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.021385(s) Flops=43456512 => 2032.10250175357 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  2032.10250175357 Mflops = 2.03210250175357 Gflops = 0.00203210250175357 Tflops
+InvCG2: starting
+InvCG: k = 28  cp = 2.85214345212108e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.020582(s) Flops=42006528 => 2040.93518608493 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  2040.93518608493 Mflops = 2.04093518608493 Gflops = 0.00204093518608493 Tflops
+InvCG2: starting
+InvCG: k = 29  cp = 1.46793548090157e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.020015(s) Flops=43456512 => 2171.19720209843 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  2171.19720209843 Mflops = 2.17119720209843 Gflops = 0.00217119720209843 Tflops
+InvCG2: starting
+InvCG: k = 29  cp = 1.16765289794267e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.029019(s) Flops=43456512 => 1497.51928047142 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  1497.51928047142 Mflops = 1.49751928047142 Gflops = 0.00149751928047142 Tflops
+InvCG2: starting
+InvCG: k = 29  cp = 1.10822150868891e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.04595(s) Flops=43456512 => 945.734755168662 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  945.734755168662 Mflops = 0.945734755168662 Gflops = 0.000945734755168662 Tflops
+InvCG2: starting
+InvCG: k = 29  cp = 1.25924440869395e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.024153(s) Flops=43456512 => 1799.21798534344 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  1799.21798534344 Mflops = 1.79921798534344 Gflops = 0.00179921798534344 Tflops
+InvCG2: starting
+InvCG: k = 29  cp = 1.18403962301729e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.021365(s) Flops=43456512 => 2034.00477416335 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  2034.00477416335 Mflops = 2.03400477416335 Gflops = 0.00203400477416335 Tflops
+InvCG2: starting
+InvCG: k = 29  cp = 1.20345190335903e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.02139(s) Flops=43456512 => 2031.62748948107 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  2031.62748948107 Mflops = 2.03162748948107 Gflops = 0.00203162748948107 Tflops
+InvCG2: starting
+InvCG: k = 29  cp = 1.24733643139271e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.037266(s) Flops=43456512 => 1166.11688938979 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  1166.11688938979 Mflops = 1.16611688938979 Gflops = 0.00116611688938979 Tflops
+InvCG2: starting
+InvCG: k = 29  cp = 1.40521206152029e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.046504(s) Flops=43456512 => 934.46826079477 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  934.46826079477 Mflops = 0.93446826079477 Gflops = 0.00093446826079477 Tflops
+InvCG2: starting
+InvCG: k = 29  cp = 1.12711438632698e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.019991(s) Flops=43456512 => 2173.80381171527 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  2173.80381171527 Mflops = 2.17380381171527 Gflops = 0.00217380381171527 Tflops
+Exiting quarkProp4
+Propagator computed: time= 0.3879 secs
+Start writing propagator info
+Propagator successfully updated
+PROPAGATOR: total time = 0.395605 secs
+PROPAGATOR: ran successfully
+ERASE_NAMED_OBJECT: object erase
+Attempt to erase object name = sh_source_1
+Object erased
+ERASE_NAMED_OBJECT: ran successfully
+QIO_WRITE_NAMED_OBJECT: object writer
+Attempt to write object name = sh_prop_1
+Object successfully written: time= 0.006114 secs
+QIO_WRITE_NAMED_OBJECT: ran successfully
+SINK_SMEAR: Sink smearing for propagators
+Attempt to read forward propagator
+Sink_xml = <Sink>
+      <version>2</version>
+      <SinkType>POINT_SINK</SinkType>
+      <j_decay>3</j_decay>
+    </Sink>
+
+Sink = POINT_SINK
+Point sink
+Sink successfully updated
+SINK_SMEAR: total time = 0.006656 secs
+SINK_SMEAR: ran successfully
+SINK_SMEAR: Sink smearing for propagators
+Attempt to read forward propagator
+Sink_xml = <Sink>
+      <version>2</version>
+      <SinkType>SHELL_SINK</SinkType>
+      <j_decay>3</j_decay>
+      <SmearingParam>
+        <wvf_kind>GAUGE_INV_GAUSSIAN</wvf_kind>
+        <wvf_param>2.0</wvf_param>
+        <wvfIntPar>5</wvfIntPar>
+        <no_smear_dir>3</no_smear_dir>
+      </SmearingParam>
+    </Sink>
+
+Sink = SHELL_SINK
+Shell sink
+Quark smearing type = GAUGE_INV_GAUSSIAN
+Displacement type = NONE
+Sink successfully updated
+SINK_SMEAR: total time = 0.064557 secs
+SINK_SMEAR: ran successfully
+ERASE_NAMED_OBJECT: object erase
+Attempt to erase object name = sh_prop_1
+Object erased
+ERASE_NAMED_OBJECT: ran successfully
+ HADSPEC: Spectroscopy for Wilson-like fermions
+
+     Gauge group: SU(3)
+     volume: 4 x 4 x 4 x 8
+Attempt to parse forward propagator = sh_pt_sink_1
+Try action and mass
+FermAct = WILSON
+Mass = 0.5454546
+Forward propagator successfully parsed
+Attempt to parse forward propagator = sh_pt_sink_1
+Try action and mass
+FermAct = WILSON
+Mass = 0.5454546
+Forward propagator successfully parsed
+Source_type_1 = SHELL_SOURCE
+Sink_type_1 = POINT_SINK
+Source_type_2 = SHELL_SOURCE
+Sink_type_2 = POINT_SINK
+Source type = Shell
+Sink type = Point
+Attempt to parse forward propagator = sh_sh_sink_1
+Try action and mass
+FermAct = WILSON
+Mass = 0.5454546
+Forward propagator successfully parsed
+Attempt to parse forward propagator = sh_sh_sink_1
+Try action and mass
+FermAct = WILSON
+Mass = 0.5454546
+Forward propagator successfully parsed
+Source_type_1 = SHELL_SOURCE
+Sink_type_1 = SHELL_SINK
+Source_type_2 = SHELL_SOURCE
+Sink_type_2 = SHELL_SINK
+Source type = Shell
+Sink type = Shell
+HADRON_SPECTRUM: total time = 0.889004 secs
+HADRON_SPECTRUM: ran successfully
+CHROMA measurements: time= 1.444129 secs
+CHROMA: total time = 1.480137 secs
+CHROMA: ran successfully

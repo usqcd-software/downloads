@@ -1,0 +1,821 @@
+<html>
+<head>
+<title>Chroma Tutorial 1: Measurement with <tt>chroma</tt> </title>
+</head>
+<body>
+<h1>Chroma Tutorial 1: Measurement with <tt>chroma</tt> </h1>
+<h2>Introduction</h2>
+<p>
+This part of the tutorial uses the <em>pre-installed</em> Chroma
+applications on a workstation. The purpose is to get you
+familiar with the model for making measurements so that you 
+can go and run similar measurements yourself. Also, you will learn
+where to find example input files.
+</p>
+
+
+<p>
+We will perform a spectroscopy calculation
+<!--
+and produce an effective mass for some particles. Those of you who 
+are advanced and have the time, can then carry on and try and produce
+a simple three point function.
+-->
+</p>
+
+<p> 
+We will use a simple 4x4x4x8 lattice configuration that comes bundled
+with the chroma in the <tt>tests/</tt> directory. It is called <tt>
+test_purgaug.cfg1</tt>. </p>
+
+<h3>Setting up a working directory</h3>
+<p>
+Make a directory to work in. Let's call it <tt>tut1</tt>. You should
+then <tt>cd</tt> into it.</p>
+
+<h3>Getting the chroma program</h3>
+<p>
+The workhorse of the chroma system is a program called <tt>chroma</tt>.
+For this tutorial we will use a pre-installed copy of chroma located
+in the directory
+<blockquote>
+   <tt>/usr/local/chroma/scalar</tt>
+</blockquote>
+and you should be able to find the <tt>chroma</tt> application in the 
+<tt>bin</tt> subdirectory there (ie: in <tt>/usr/local/chroma/scalar/bin</tt>)
+Copy the executable to your <tt>tut1</tt> directory now. If you are doing
+this tutorial offline you can download the chroma executable from <a href="./tut1_files/chroma">here (Intel/FedoraCore 3)</a>
+</p>
+
+
+<h3>Get the test Configuration</h3>
+<p>
+Copy the test configuration from the chroma <em>source</em>. Usually you will 
+have checked out the chroma sources from the CVS, or you will have downloaded
+them as a tarball. For the purpose of this exercise I have put a copy of the
+source tree into
+<blockquote>
+  <tt>/usr/local/chroma/src</tt>
+</blockquote>
+to which I will refer throughout as the <em>chroma source directory</em>.
+It is a carbon copy of the source tree you would check out from the CVS.
+
+The gauge configuration for the example is called <tt>test_purgaug.cfg1</tt>
+and it lives in the <tt>chroma/tests</tt> subdirectory of the source directory.
+Copy it to your working directory now. If you are doing this tutorial offline
+you can find the test configuration <a href="./tut1_files/test_purgaug.cfg1">here</a>
+</p>
+
+<h3>An overview of the computation</h3>
+<p>
+The <tt>chroma</tt> application allows you to perform a series of tasks on a configuration. It is a lot like setting up a pipeline that can be applied to 
+every single configuration. The tasks that the <tt>chroma</tt> program executes
+are called (for historical reasons) <em>InlineMeasurement</em> tasks. We need to perform the following tasks to compute the spectroscopy on a single configuration.
+<ul>
+  <li>Read the gauge configuration</li>
+  <li>Make a colour source</li>
+  <li>Invert the fermion matrix on the colour source to compute a quark propagator</li>
+  <li>Discard the colour source</li>
+  <li>Potentially save the propagator</li>
+  <li>Perform various contractions on the quark propagator</li>
+</ul>
+</p>
+<p>
+In chroma a colour source is the same size as a full propagator so that is 
+why I have put in the step to explicitly discard it - to save memory.
+Also some people like to save propagators. This is not always necessary, 
+for example a heavy quark prop may be computed faster on the QCDOC than
+it may be loaded depending on the size of the partition and the type 
+of fermion used. In this example we will save the propagator just
+to show you how it is done.
+</p>
+<p>
+You should also observe the data flow among the tasks. We read in the 
+gauge configuration and it remains 'live' all through the tasks. The source
+is needed for the propagator calculation and not after. Likewise
+the propagator is needed by the contractions and for saving but not thereafter.
+</p>
+<p>
+We need to specify all these tasks to Chroma. We do it in an XML file.
+</p>
+
+<h2>Anatomy of an XML file</h2>
+<p>
+Let us have a look at the input file for this job. You can find it <a href="./tut1_files/example.ini.xml">in the <tt>example.ini.xml</tt> file here</a>. As this is an XML file it is nice to view it as a tree from the Firefox browser (to do this, place the pointer over the hyperlink, press the right mouse button and, holding the right button down, select "Open Link in New Window"). Alternatively you can look at the document in an editor such as <tt>vi</tt>, or <tt>emacs</tt>.
+You should see a nested (indented) tag structure. (In firefox you can close up the tags) to give you a more or less verbose depiction of the tree) 
+Closing all but the outer level tags the file looks in firefox like so:
+<img src="./tut1_files/toplevel_xml.png"/>
+<ul>
+<li>The outermost tag pair is called &lt;chroma&gt;
+<li>Within this, at the first indentation, there are 4 tags:
+   <dl>
+   <dt>&lt;annotation&gt;</dt>
+   <dd>
+     This is an annotation tag. You can write whatever you want in it
+   </dd>
+   <dt>&lt;Param&gt;</dt>
+   <dd>
+     THis is the main parameter tag for chroma and we will look at it 
+     in greater detail next
+   </dd>
+   <dt>&lt;RNG&gt;</dt>
+   <dd>This is a place to supply a random number seed to the program. This tag
+is optional, but you may like to have it if you have stochastic measurements such as Ritz eigenvalue/vector computations or noisy sources. - I will not focus on the contents of this tag anymore</dd>
+   <dt>&lt;Cfg&gt;</dt>
+   <dd>This tag details the default input configuration.</dd>
+   </dl>
+</li>
+</ul>
+</p>
+
+<p>The main points of interest are in the &lt;Param&gt; tag. Let us look at this now. Expanding this tag in firefox I get:<img src="./tut1_files/param_xml1.png"/>
+</p>
+<p>
+There are 2 tags at this level
+<dl>
+   <dt>&lt;InlineMeasurements&gt;</dt>
+   <dd>This tag holds the list of measurement tasks. Each tag sits in an &lt;elem&gt; &lt;/elem&gt; tag pair. You can see 5 tags corresponding to 5 measurement actions. We will look inside the measurement elements shortly</dd>
+   <dt>&lt;nrow&gt</dt>
+   <dd>this tag contains the dimensions of the lattice. Now, some configurations formats contain this information in their metadata. Some however do not. Also occasionally it can happen that we work with unit gauge or other internal configurations. So we have to explicitly state the size of the lattice we use. You can see that these tags hold the value "4 4 4 8" which correspond to the dimensions of our lattice in the X, Y, Z and T directions respectively.
+   </dd>
+</dl>
+</p>
+
+<p>Before going into details of the measurements, lets look at the &lt;Cfg&gt;
+tag. Expanding it we get:
+<img src="./tut1_files/cfg_tag.png"></p>
+<p>
+We see 2 subtags
+<dl>
+  <dt>&lt;cfg_type&gt;</dt>
+  <dd>Corresponds to the type of configuration we are reading. In this case we are reading the SZIN format, but we could well be configs in NERSC, SCIDAC (&ILDG), CPPACS and other formats too. Also there are some internal formats such as UNIT for the unit gauge, DISORDERED for a hot start and, WEAK_FIELD which is a slightly perturbed UNIT gauge.</dd>
+  <dt>&lt;cfg_file&gt;</dt>
+  <dd>Corresponds to the filename which holds the config. For non file based formats, the value of this field is ignored</dd>
+</dl>
+</p>
+
+<h4>Changes in the wind for &lt;Cfg&gt;</h4>
+<p>
+We note that times are changing. This is the old way of reading configs into chroma, where the input config was somehow special. In the new way, a configuration will be a <tt>NamedObject</tt> just like propagators etc. Already the mechanism for this is in place. Inline measurements support a <tt>gauge_id</tt> tag
+for a gauge field in a named object, and the &lt;Cfg&gt; tag is kept for backward compatibility. It places a gauge field into a default named object and measurements with no &lt;gauge_id&gt; tags use this default. </p>
+
+<h3>The measurement elements</h3>
+<p> Let us now look at the elements in the &lt;InlineMeasurements&gt; tag. 
+I will expand them one by one. 
+
+<h4>The MAKE_SOURCE measurement</h4>
+<p>
+The first element corresponds to task of making a source (the gauge field already being handled with the &lt;Cfg&gt; tag.) A first level expansion of the 
+&lt;elem&gt; tag is below:</p>
+<p>
+<img src="tut1_files/make_source1.png"/>
+</p>
+
+<p>
+There are some fairly univeral elements here:
+<dl>
+  <dt>&lt;Name&gt;</dt>
+  <dd>This is the name of the task. It is used as an <tt>ObjectId</tt> to the 
+factory which creates the measurements. Each measurement has one of these. The name of this task is <tt>MAKE_SOURCE</tt> which is used for forward propagator source creation. (Sequential sources would be created with <tt>SEQSOURCE</tt>)</dd>
+  <dt>&lt;Frequency&gt;</dt>
+  <dd>This tag is useful in the context of using the measurement as an inline measurement  The measurement is only measured if its frequency divides the current update number. Of course 1 divides into everything, so for the case when the measurement is being used in <tt>chroma</tt> we set the frequency to 1.</dd>
+  
+  <dt>&lt;Param&gt;</dt>
+  <dd>This tag contains the parameters for the measurement and its contents are generally measurement specific</dd>
+
+  <dt>&lt;NamedObject&gt;</dt>
+  <dd>These are the tags that specify which objects the measurement creates. Most measurements have these.  In this case, the measurement creates a source and we want to give it a name so we can refer to it elsewhere. The source in our program will be called <tt>pt_source</tt> as we are making a point source. <b>Note</b> Other measurements may contain more or fewer named objects with different IDs depending on their needs..</dd>
+
+  <dt>&lt;xml_file&gt;</dt>
+  <dd>This indicates that the output from this measurement should go to its own separate XML file rather than the global log XML file. This tag is common to measurements, however it is optional. If you do not have it in place, the output will go into the global log. I put it here to illustrate the general structure, but on the whole the output from the source creation is generally not considered exciting enough to merit a file on its own, and so in source creation this tag is often absent</dd>
+</dl>
+</p>
+
+<p>
+The above tags are generic to the measurements and I shall not repeat there
+discussion unless there is something distinct to be said (Usually to do with 
+the &lt;NamedObject&gt; tags). Now I will concentrate on what is in the 
+measurement specific &lt;Param&gt; tag. Expanding it out we get</p>
+<p>
+<img src="./tut1_files/make_source2.png"/>
+</p>
+<p>
+we see that there is are the following tags:
+<dl>
+  <dt>&lt;version&gt;</dt>
+  <dd>This indicates the version of the parameter input XML. Over time
+  the information input can change and we try to keep track of it with 
+  version numbers.</dd>
+  <dt>&lt;Source&gt;</dt>
+  <dd>These are the parameters for the source creation, which is now done through factories. The &lt;SourceType&gt; subtag is the factory object ID. The &lt;j_decay&gt; subtag indicates the time direction and the &lt;t_srce&gt; tag specifies the coordinates of the point source</dd>
+</dl>
+</p>
+<p> 
+Of course the program can create more than just point sources, and it can create smeared sources with wavefunction and link smearing both at the source and the sink, however discussion of the markup for those measurements is beyond the 
+scope of this short tutorial. The interested readers should look in the
+<blockquote>
+  chroma/tests/chroma/hadron/make_source
+</blockquote>
+directory of the <em>chroma source</em> tree at the various <tt>.ini.xml</tt>
+files. </p>
+
+<h4>The PROPAGATOR measurement</h4>
+<p>
+The second &lt;InlineMeasurement&gt;  element is used to compute a propagator.
+This is the conversion of the previous <tt>propagator</tt> program into an 
+inline measurement. The <tt>propagator</tt> program itself has been deprecated.
+</p>
+
+<p>
+<img src="./tut1_files/prop1.png"/>
+</p>
+
+<p>
+It also has &lt;Name&gt;, &lt;Frequency&gt; and &lt;NamedObject&gt; tags which 
+are as before except
+<ul>
+  <li>The name of this measurement if <tt>PROPAGATOR</tt></li>
+  <li>The &lt;NamedObject&gt; tag has now got two tags within it:
+     <dl>
+       <dt>&lt;source_id&gt;</dt>
+       <dd>This is the source to invert on, it is the one we created in the previous step</dd>
+       
+       <dt>&lt;prop_id&gt;</dt>
+       <dd>This is the ID of the propagator that will be created by this measurement</dd>
+     </dl>
+  </li>
+</ul>
+
+<p>
+The measurement specific parameter tag now looks like:
+</p>
+
+<p>
+<img src="tut1_files/prop2.png">
+</p>
+
+<p> Let us look at these tags:
+<dl>
+  <dt>&lt;version&gt;</dt>
+  <dd>Again we have a version type</dd>
+  
+  <dt>&lt;quarkSpinType&gt;</dt>
+  <dd>This specifies the kind of propagator we make. In this instance <tt>FULL</tt> means we compute the full prop on all 12 spin colour components. We could also specify <tt>UPPER</tt> and <tt>LOWER</tt> for non relativistic projection using (1/2)(1 + gamma_4) or/and (1/2)(1 - gamma_4) projections respectively. </dd>
+  
+  <dt>&lt;obsvP&gt;</dt>
+  <dd>This flag was put in to allow us to hook in some extra observables onto the ends of the propagator calculations. This option is really only useful in 5 dimenasional solves where the observables may be done with the 5D props, as the output of the propagator measurement will only be the effective 4D prop. In 5D enabling this flag to <tt>true</tt> for example could measure the correlators needed for 5D mres measurements. In 4D solves we should just keep this as false</dd>
+
+  <dt>&lt;FermionAction&gt;</dt>
+  <dd>This tag specifies the fermion action we use. It contains the subtags
+         <dl>
+         <dt>&lt;FermAct&gt;</dt>
+	 <dd>This is the factory Product ID that specifies the type of fermion action to be used</dd>
+	 <dt>&lt;FermionBC&gt;</dt>
+	 <dd>Specifies the fermion boundaries to be used. The &lt;FermBC&gt; tag is a factory key after which the parameters are specific to the type of boundary condition. Simple boundaries can be denoted with the &lt;boundary&gt; array which has a number for each dimension. In this case 1 means periodic, -1 means antiperiodic and 0 means Dirichlet boundaries. The example uses periodic boundaries in space and antiperiodic ones in time</dd>
+	 <dt>&lt;Kappa&gt;</dt>
+	 <dd>Speficies the Kappa parameter for Wilson fermions. Internally this is converted to the free field definition of the quark mass. One could also use a &lt;Mass&gt; tag here - which is more conventional in chroma.</dd>
+	 </dl>
+  </dd>
+  <dt>&lt;InvertParam;&gt;</dt>
+  <dd>These are the parameters for the inversion. The subtags are as follows:
+  <dl>
+    <dt>&lt;invType&gt;</dt>
+    <dd>The type of inverter to use.</dd>
+    <dt>&lt;RsdCG&gt;</dt>
+    <dd>The target <b>relative</b> residuum</dd>
+    <dt>&lt;MaxCG&gt;</dt>
+    <dd>The maximum number of iterations to perform before claiming nonconvergence.</dd>
+  </dl>
+  </dd>
+</dl>
+</p>
+<p>
+We do not specify a a separate XML output file for this type.
+
+<h4>The ERASE_NAMED_OBJECT element</h4>
+<p>
+The third elemen is used to discard the source which is no longer needed. 
+Expanding out the XML looks like:</p>
+<p>
+<img src="tut1_files/erase.png"/>
+</p>
+<p>
+The structure should be familiar to you. The <tt>&lt;NamedObject&gt;</tt> 
+section contains the ID of the named object to discard in the &lt;object_id&gt;
+tag. Apart from this the measurement has no &lt;Param&gt; tag.</p>
+
+
+<h4>The QIO_WRITE_NAMED_OBJECT element</h4>
+<p>We come to the 4th element of the inline measurements, which is the task
+where we save the propagator. The expanded XML looks like
+</p>
+<p>
+<img src="tut1_files/save_prop.png"/>
+</p>
+
+<p>
+The XML structure is as usual. The name of this task is <tt>QIO_WRITE_NAMED_OBJECT</tt> to signify that we will write the object in QIO LIME format. The interesting tags are as follows
+<dl>
+  <dt>&lt;NamedObject&gt;</dt>
+  <dd>We specify the details of the object to write.
+      <dl>
+	<dt>&lt;object_id&gt;</dt>
+	<dd>The name of the named object</dd>
+	<dt>&lt;object_type&gt;</dt>
+	<dd>What kind of object we wish to write. Up until now this has been 
+	implicit, since sources could only create sources and propagators 
+	could only deal with sources and propagators. However now we have
+	a routine that does not know up front what the type of the input object
+	is. Now we could have got around this by either having a separate measurement to write each type of object, but we chose to have one general writing function with a string specifying the type. The type string is as one would have in the C++ code, with the exception that the &lt; and &gt; symbols due to templates are discarded. Ie a <tt>multi1d&lt;LatticeColorMatrix&gt;</tt> type would appear in the XML file as <tt>multi1dLatticeColorMatrix</tt></dd>
+      </dl>
+  </dd>
+
+  <dt>&lt;File&gt;</dt>
+  <dd>Here we specify the details of the I/O. 
+  <dl>
+    <dt>&lt;file_name&gt;</dt>
+    <dd>The name of the output file</dd>
+    <dt>&lt;file_volfmt&gt;</dt>
+    <dd>The volume format of the output file. Here we choose <tt>SINGLEFILE</tt> to indicate the prop should be just dumped into a single file. We could also use <tt>MULTIFILE</tt> in which case every node would write its own file, or <tt>PARTFILE</tt> where only nominated I/O nodes would write files. In the latter cases the filename would have the string <tt>.volXXX</tt> appended to it where XXX is an ID pertaining to the node that wrote the file.</dd>
+  </dl>
+</dl>
+</p>
+
+<h4>The SPECTRUM Measurement</h4>
+<p>
+We reach the last of our measurements, which measures simple degenerate spectroscopy. This is the conversion of the previous <tt>spectrum_w</tt> program into an
+inline measurement. The <tt>spectrum_w</tt> program itself has been deprecated.
+The expanded XML for the measurement is as below:</p>
+<p>
+<img src="tut1_files/spectrum.png"/>
+</p>
+<p>
+The &lt;NamedObject&gt; tag now contains a list of propagator object IDs to work on.since one may have computed several props in principle before reaching this measurement. Also this measurement will write its own <tt>spectrum.out.xml</tt>
+file. The tags in &lt;Param;&gt; are as follows:
+<dl>
+<dn>Pt_snk</dn>
+<dd>Whether to do spectroscopy with unsmeared (point) sink</dd>
+
+<dn>Sl_snk</dn>
+<dd>Whether to do spectroscopy with a smeared sink</dd>
+
+<dn>Wl_snk</dn>
+<dd>Whether to compute correlators with a Wall sink</dd>
+
+<dn>MesonP</dn>
+<dd>Whether to compute degenerate Meson Correlators</dd>
+
+<dn>CurrentP</dn>
+<dd>Whether to compute various current correlators</dd>
+
+<dn>BaryonP</dn>
+<dd>Whether to compute degenerate Baryon correlators</dd>
+
+<dn>HybMesP</dn>
+<dd>Whether to compute non-degenerate mesons</dd>
+
+<dn>fact_sm</dn>
+<dd>Smearing factor for the sink</dd>
+
+<dn>numb_sm</dn>
+<dd>The number of smearing steps to apply to the sink</dd>
+
+<dn>time_rev</dn>
+<dd>Whether to time reverse the prop before computing Baryon correlators</dd>
+
+<dn>mom2_max</dn>
+<dd>The maximum value of the norm of sink momenta</dd>
+
+<dn>avg_equiv_mom</dn>
+<dd>Whether to average over momenta of equal norm</dd>
+
+<dn>wvf_kind</dn>
+<dd>The kind of wavefunction for sink smearing. In this case we should use a Gauge invariant Gaussian wavefungion</dd>
+
+<dn>wvf_param</dn>
+<dd>The coefficient of the wavefunction smearing of the sink</dd>
+
+<dn>wvfIntPar</dn>
+<dd>An integer parameter for the sink smearing algorithm. Usually this is an iteration count</dd>
+
+<dn>link_smear_fact</dn>
+<dd>The factor to be used when performing link smearing at the sink</dd>
+
+<dn>link_smear_num</dn>
+<dd>The number of link smearing steps to perform at the sing</dd>
+</dl>
+
+<h3>Running the program</h3>
+<p>
+Now that we know what the XML file does, let us run the <tt>chroma</tt> program
+<blockquote>
+  ./chroma -i example.ini.xml -o example.out.xml
+</blockquote>
+</p>
+
+<p> 
+You should see lots of output on your screen as the code runs, telling 
+you about its progress. I have captured the standard output <a href="./tut1_files/stdout">in this file</a> and you should see similar things. In particular, the program should
+<ul>
+  <li>echo back the XML for the inline measurements</li>
+  <li>should display the name of each measurement, how long it took to run and whether it ran successfully</li>
+  <li> You should be able to see the output from the solver as it works on each spin-color component</li>
+</ul>
+
+ You should also find the following files in 
+your working directory produced by the program.
+<ul>
+<li><tt>example.out.xml</tt></li>
+<li><tt>spectrum.out.xml</tt></li>
+<li><tt>my_prop</tt></li>
+</ul>
+Of these, the <tt>example.out.xml</tt> is the output file you specified 
+with the <tt>-o</tt> option to the executable. The <tt>spectrum.out.xml</tt>
+is the output of the spectrum measurement. We requested that it come out 
+into this file by adding the tags &lt;xml_file&gt;spectrum.out.xml&lt;xml_file&gt; into the <tt>SPECTRUM</tt> measurement of the input file. Finally, <tt>propagator</tt> is the propagator that was saved by the <tt>WRITE_NAMED_OBJECT</tt> task.
+</p>
+
+<h4>Notes</h4>
+Here are some general notes:
+<ul>
+ <li> The command lines <tt>-i</tt> and <tt>-</tt> flags are used by chroma to select where to read the input XML from and write the output XML respectively. If you do not specify them chroma will try to read the input XML from a file called <tt>DATA</tt> and write the 
+output XML to a file called <tt>XMLDAT</tt> in the working directory (these are left over from the old SZIN days. On operating systems that support the <tt>getcwd</tt> system call to get the path to the current working directory (eg under most UNIX operating systems) this all works fine. On the QCDOC the <tt>getcwd</tt> system call is not publicly exposed so the program will always look in the root directory from the mount point. These flags can be used to read input from and or place output to different working directories, and they are generally convenient if you run a long chain of tools and don't want to rename everything to DATA and XMLDAT between running the tools</li>
+ <li>The XML file contains floating point numbers in variable width format even  in double precision. Fixing this to always print an appropriate number of digits whatever the precision is on our to do list.</li>
+ <li>
+ In this exercise you have not been working on a parallel machine. Working on a parallel machine, you can add an extra option to chroma called <tt>-geom</tt>. This allows you to specify the geometry of your processors. We assume a logical 4D processor array, although underneath everything it may actually be a different topology (eg switched). On the QCDOC you of course need to remap the machine axes suitably prior to running. For example on a 128 node switched machine, you may choos to map the processor grid as a 1x2x8x8 grid. You would then use <tt>-geom 1 2 8 8</tt>. Alternatively you may have a 256 node QCDOC, which you have 
+remapped (using <tt>qpartition_remap</tt>) as a 4x4x4x4 grid. You would then 
+specify that on the command line as <tt>-geom 4 4 4 4</tt>
+</ul>
+</p>
+
+
+<h2>Output files</h2>
+<p>
+Have a look at the <tt>example.out.xml</tt> file. This will look awfully long and complicated. My one is <a href="tut1_files/example.out.xml">here</a>. However, the power of the firefox XML browser allows me to compress it. The toplevel view then looks as follows:
+</p>
+<p>
+<img src="./tut1_files/out_top.png"/>
+</p>
+<p>
+The tags containg the following information:
+<dl>
+  <dn>&lt;Input&gt;</dn>
+  <dd>This is an echo of the full input file. I have just spent considerable time going through this so I won't comment more on it</dd>
+
+  <dn>&lt;ProgramInfo&gt;</dn>
+  <dd>This is a rather useful tag.
+  <p>
+    <img src="tut1_files/proginfo.png">
+  </p>
+ Firstly it gives the version numbers of the code used (both for <tt>chroma</tt> and <tt>qdp</tt>). Secondly it tries to record providing the system sports a working date function. Finally it provides information on the geometry used in the problem 
+ <dl>
+   <dn>&lt;latt_size&gt;</dn>
+   <dd>The lattice size</dd>
+   <dn>&lt;logical_size&gt;</dn>
+   <dd>The logical processor grid size</dd>
+   <dn>&lt;subgrid_size&gt;</dn>
+   <dd>THe local lattice size per processor</dd>
+   <dn>total_volume</dn>
+   <dd>The number of sites in the total volume</dd>
+   <dn>subgrid_volume</dn>
+   <dd>The number of sites in the local volume</dd>
+ </dl>
+</dd>
+<dn>&lt;RNG&gt;</dn>
+<dd>This just echoes back the stat of the random number generator</dd>
+<dn>&lt;ConfigInfo&gt;</dn>
+<dd>This is information that could be gleaned from the configuration headers if any</dd>
+<dn>&lt;Observables&gt;</dn>
+<dd>These are standard observables that are always measured on the default configuration. <p><img src="tut1_files/observables.png"/></p>
+They are:
+    <dl>
+       <dn>&lt;w_plaq&gt;</dn>
+       <dd>The full plaquette, normalised that the value on the unit gauge is 1</dd>
+
+       <dn>&lt;s_plaq&gt;</dn>
+       <dd>The spatial plaquettes</dd>
+
+       <dn>&lt;t_plaq&gt;</dn>
+       <dd>The temporal plaquettes</dd>
+
+       <dn>&lt;link&gt;</dn>
+       <dd>The sum of the traces of the links (this is not gauge invariant)</dd>
+       <dn>&lt;pollp;&gt</dn> 
+       <dd>The Polyakov loop - each
+       &lt;elem&gt;&lt;/elem&gt; contains the polyakov loop in a given
+       direction. The list is ordered. THe first element corresponds
+       to direction 0, the second to direction 1 etc, and the
+       &lt;re&gt; and &lt;im&gt; tags refer to the real and imaginary
+       components of the values respectively</dd>
+    </dl>
+These observables as a check that the configuration has been read in correctly.
+</dd>
+<dn>&lt;InlineObservables&gt;</dn>
+<dd>This element contains the actual output from each task. I will not go into this in glorious detail as it is quite complex. I draw your attention however to the second &lt;elem&gt;&lt;/elem&gt; pair which referes to the propagator, and 
+when suitably collapsed in looks as follows:
+<p><img src="tut1_files/prop_out.png"/></p>
+Apart from repeating everything again about the input and the program etc we are also given the pion correlator constructed from the source in &lt;Source_correlator&gt; - we can see that we used a point source which had a Dirac Delta for each of the 12 components. We are also given the timesliced zero momentum pion correlator in the &lt;prop_corr&gt; tag within the &lt;Prop_correlator&gt; group. The total number of iterations is given in the &lt;ncg_had&gt; tag within the &lt;Relaxation_iterations&gt; group. Finally expanding the &lt;QuarkProp4&gt; tag we get the individual per component CG iteration counts:
+<p><img src="tut1_files/prop_out2.png"/></p>
+<p>
+The last element of the output from inline measurements is the output from the spectroscopy measurement. It is simply:</p>
+<p><img src="tut1_files/spec_out.png"/></p>
+<p>
+thus indicating that we redirected the output to the <tt>spectrum.out.xml</tt> file.</p>
+</dd>
+</dl>
+<h3>Output File from Spectroscopy</h3>
+<p>
+The output file <tt>spectrum.out.xml</tt> is now rather large, as all
+the spectrum computations have been dumped into it. Skipping the
+informational tags (such as the echoing of the input and the
+information gleaned from gauge configs we get to the results
+<tt>&lt;Wilson_hadron_measurements&gt;</tt> tag.  This is now an array
+of the loop over propagators.</p>
+
+<p>Each element of the loop throws up some information about the propagator
+it uses. This is followed by several tags:
+<ul>
+<li><tt>Point_Point_Wilson_Mesons</tt></li>
+<li><tt>Point_Shell_Wilson_Mesons</tt></li>
+<li><tt>Point_Point_Meson_Currents</tt></li>
+<li><tt>Point_Point_Wilson_Baryons</tt></li>
+<li><tt>Point_Shell_Wilson_Baryons</tt></li>
+</ul>
+each of these contains a lot of data. 
+
+<li>The tags dealing with Mesons contain data elements for each of the 
+16 possible gamma matrix combinations and for each momenta.</li>
+<li>The tags dealing with the Currents contain the elements for the 
+Vector and Axial currents</li>
+<li>The tags dealing with Baryons contain the elements for all the measured
+baryon channels</li>
+</ul>
+
+<p>The meson tags are relatively easy to understand. The structure is as follows:
+<ul>
+<li>Each &lt;elem&gt; deals with a particular gamma matrix which is 
+inserted between the propagator and the anti-quark propagator. 
+
+The spin basis is the same as the MILC code and also the Columbia Physics System. The basis is achiral one. The gamma matrices are labeled  gamma_{1,2,3,4} for x,y,z,t  in that order. The index of a gamma matrix is then mapped to a digit in a 4 digit binary number.
+<p>
+# gamma(   1)    &nbsp;&nbsp;   # ( 0001 )  --> 1 <br>
+# gamma(   2)    &nbsp;&nbsp;        # ( 0010 )  --> 2 <br>
+# gamma(   3)   &nbsp;&nbsp;      # ( 0100 )  --> 4<br>
+# gamma(   4)    &nbsp;&nbsp;            # ( 1000 )  --> 8<br>
+</p>
+
+<p>The way we do mesons is enumerate the possible gamma matrix
+products
+<blockquote>
+Gamma = gamma_1^n1 * gamma_2^n2 * gamma_3^n3 * gamma_4^n4
+</blockquote>
+where n_i are single bit fields. Since gamma_1 comes first
+the bit for it must come first. So, then, for example,
+
+<ul>
+<li>gamma_5 is represented as<span style="">&nbsp; </span>1111b = 15d .</li>
+
+<li> gamma_1*gamma_2*gamma_4 is represented as<span style="">&nbsp; </span>1011b = 11d (note the ordering).</li>
+</ul>
+</li>
+<li>For each gamma value there are correlation functions for each momenta in the array with tag <tt>&lt;momenta&gt;</tt></li>
+<li>Each element of the momenta array contains a linear index for the momenta, and an actual 3 vector of the momenta (or a representative momentum vector if equivalet momenta are summed over) and the correlation function in tag <tt>&lt;mesprop&gt;</tt></li>
+</ul>
+</p>
+
+<h3>Making use of the XML files from spectroscopy</h3>
+<p>
+Clearly at this stage of the game it becomes difficult to deal with the 
+XML files just by looking at them in an editor, and some form of data 
+binding would be useful. Or just like in the SZIN case, we can <em>strip
+the data out of the XML file</em> into individual files for each correlation
+function.</p>
+
+<p>The task of stripping the data has been delegated to data analysis. There 
+is a software package called ADAT which was written to sllow this kind of thing. It contains stripping programs for many of the interesting output formats in 
+chroma such as spectroscopy and some 3 point functions. For this exercise we will use the <tt>strip_spectrum</tt> program.
+
+<h4>Getting and compiling ADAT</h4>
+<p>
+In this section we will check out the <tt>adat</tt> software package from 
+CVS and build the <tt>strip_spectrum</tt> application. If you don't have
+CVS installed or want to skip this section you can go on to the next
+bit using the copy of adat <a href="./tut1_files/strip_spectrum"> this copy of
+strip_spectrum (Linux FedoraCore3)</a>.
+
+<p>
+Check out the ADAT pacakge from the anonymous CVS by typing the following 
+commands (I assume you are using the <tt>bash</tt> shell)
+<blockquote>
+  <tt>
+  export CVSROOT=:pserver:anonymous@cvs.jlab.org:/group/lattice/cvsroot</br/>
+  export CVS_RSH=ssh<br/>
+  cvs login </tt> (hit return when asked for password)<tt><br/>
+  cvs checkout adat<br/>
+</tt>
+</blockquote>
+this will check out the source code for adat into a directory called <tt>adat</tt> in your working directory.
+
+To build the adat library simply enter the <tt>adat</tt> directroy
+<blockquote>
+<tt>cd adat</tt></br> 
+</blockquote>
+
+and configure and make the package as you would with qdp++ and chroma.
+As long as libxml is installed in a system location, you don't need options to
+configure.
+
+<blockquote> 
+<tt>
+   ./configure <br/>
+   make</br>
+</tt>
+</blockquote>
+
+Once the library has been built, you'll nedd to make the actual stripper.
+From the <tt>adat</tt> directory go to the <tt?main/strippers</tt>
+subdirectory:
+<blockquote>
+<tt>cd main/strippers</tt>
+</blockquote>
+and make the spectrum stripper program
+<blockquote>
+<tt>make strip_spectrum</tt>
+</blockquote>
+You should at this point have the stripping program compiled in the directory 
+you are in. Copy it back to your main working directory (eg <tt>tut1</tt>)
+
+<h3>Stripping with <tt>strip_spectrum</tt></h3>
+
+You should now have a copy of the <tt>strip_spectrum</tt> program in your
+working directory. Run it with:
+
+<blockquote>
+ <tt>./strip_spectrum spectrum.out.xml</tt>
+</blockquote>
+and you should get  output like:
+<blockquote>
+<tt>
+Open file spectrum.out.xml        <br>
+Done Open file spectrum.out.xml   <br>
+Read config 1 data spectrum.out.xml <br>
+spec.had.size = 1 <br>
+spec.had.meson_PP.size = 16 <br>
+spec.had.meson_PS.size = 16 <br>
+spec.had.meson_SP.size = 0  <br>
+spec.had.meson_SS.size = 0  <br>
+spec.had.hybmes_SP.size = 0 <br>
+Processing output version 11 <br>
+Construct filenames <br>
+  Mass_s[0]= 5455  snk_wvf_param_s[0]= G2<br>
+Creating meson file names <br>
+Creating current file names <br>
+Creating baryon file names <br>
+</tt>
+</blockquote>
+</p>
+
+<p>Doing an <tt>ls</tt> now should reveal that you have LOADS of 
+files such as:
+<blockquote><tt>
+pion.D5455.P_1.DG2_1.PS<br>
+pion.D5455.P_1.P_1.PP<br>
+pion.D5455.P_2.DG2_2.PS<br>
+pion.D5455.P_2.P_2.PP<br>
+pion_px1_py1_pz0.D5455.P_2.DG2_2.PS<br>
+</tt></blockquote>
+</p>
+
+<p>
+The naming scheme is relatively straightforward:
+<blockquote>
+channel_momenta.DMassString.SourceSmear_Channel.SinkSmear_Channel.Smearing
+</blockquote>
+<p>
+
+<ul>
+<li>In the case of the pions channel is <tt>pion</tt></li>
+<li>If the momentum is non zero you get the <tt>pxX_pyY_pzZ</tt>
+of the name giving the momentum with components (X,Y,Z).</li>
+<li><tt>D5455</tt> is a mass string which was shown in the terminal output.
+In this case 5454 comes from Mass=0.5454 which is the Kappa converted to a Mass</li>
+<li>The first <tt>P_1</tt> comes from "Point source 1". So it was a point source. The 1 means that it is pion channel 1 (Gamma=gamma_5). Pion Channel 2 is Gamma=Gamma_4 Gamma_5.</li>
+<li><tt>DG2</tt> is a hash made from the sink smearing parameters.</li>
+<li>The final hash summarises the source and sink smearings:
+   <dl>
+     <dn>PP</dn>
+     <dd>Point source, point sink</dd>
+
+     <dn>PS</dn>
+     <dd Point source, shell sink</dd>
+     
+     <dn>SP</dn>
+     <dd>Smeared source, point sink</dd>
+     
+     <dn>SS</dn>
+     <dd>Smeared source, smeared sink</dd>
+    </dl>
+</li>
+</ul>
+
+So the zero momentum point-point pion with the Gamma=Gamma_5 is in file:
+<blockquote>
+<tt>
+   pion.D5455.P_1.P_1.PP
+</tt>
+</blockquote>
+
+Have a look at this file. It should look like:
+<blockquote>
+<tt>
+1 8 0 4 1<br>
+0 0.690566<br>
+1 0.0339118<br>
+2 0.00594429<br>
+3 0.00178302<br>
+4 0.00104282<br>
+5 0.00176841<br>
+6 0.0058234<br>
+7 0.0336933<br>
+</tt>
+</blockquote>
+
+The first line is a header. The digits are as follows:
+<dl>
+   <dn>1</dn>
+   <dd>The number of correlators/configs</dd>
+
+   <dn>8</dn>
+   <dd>The number of timeslices </dd>
+
+   <dn>0</dn>   
+   <dd>The timeslice of on which the source was placed<. (in this case 1)</dd>
+
+   <dn>4</dn>
+   <dd>The spatial extent of the lattice</dd>
+
+   <dn>1</dn>
+   <dd>Number of data for each timeslice. For real numbers it is 1. For complex numbers it would be 2</dd>
+</dl></p>
+
+Following the first line we get a list of the timesliced correlators for
+each configuration in the format:
+<blockquote><tt>
+    t &nbsp;&nbsp   C(t)
+</tt></blockquote></p>
+
+You should check that the values of the correlation function match
+up with the &lt;prop_corr&gt; tag near the end of the <tt>propagator.out.xml</tt> file.
+
+<p>
+In this example we used only one config, so there are only 8 lines.
+We can simulate the effect of having multiple configs by using 1 config
+twice. Try running <tt>strip_spectrum</tt> with the following command
+<blockquote><tt>
+   ./strip_spectrum spectrum.out.xml spectrum.out.xml
+</tt></blockquote></p>
+
+<p>Now the pion correlator should look like:
+<blockquote><tt>
+2 8 0 4 1<br>
+0 0.690566<br>
+1 0.0339118<br>
+2 0.00594429<br>
+3 0.00178302<br>
+4 0.00104282<br>
+5 0.00176841<br>
+6 0.0058234<br>
+7 0.0336933<br>
+0 0.690566<br>
+1 0.0339118<br>
+2 0.00594429<br>
+3 0.00178302<br>
+4 0.00104282<br>
+5 0.00176841<br>
+6 0.0058234<br>
+7 0.0336933<br>
+</tt></blockquote>
+The first line now reflects that the file contains 2 correlators, and you 
+can see the correlation function repeated twice below.
+</p>
+
+<h4>Notes:</h4>
+<p>
+<ul>
+  <li>If you don't like the stripping programs you can also use
+for example XSLT to get your data out of your files.</li>
+  <li>Because the strippers generate so many files it may be expedient
+to run them in their own directory. Eg:
+  <blockquote><tt>
+    mkdir stripped; cd stripped <br/>
+    mv ../strip_spectrum . <br/>
+    ./strip_spectrum ../XML_FILE_1 ../XML_FILE_2 <br/>
+  </tt>
+  </blockquote>
+  </li>
+</ul>
+</p>
+
+<h3>It is now time for you to take a well deserved BREAK</h3>
+</body> 
+</html>

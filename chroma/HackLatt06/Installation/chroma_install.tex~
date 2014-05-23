@@ -1,0 +1,47 @@
+\documentclass{report}
+\usepackage{times}
+\usepackage{fullpage}
+\title{Installation notes for the Chroma Software System}
+\author{B\'alint Jo\'o}
+\begin{document}
+\maketitle
+\tableofcontents
+\part{Introduction}
+\section{Preliminaries}
+This set of notes describes the work necessary for the installation
+of the Chroma software system. Chroma has been designed to be highly portable,
+and so far has been built on the following diverse number of systems:
+\begin{itemize}
+\item
+Linux and Cygwin scalar workstations
+\item
+PC Clusters running Linux with the following fabrics
+\begin{itemize}
+\item 
+Myrinet machines using MPICH-GM for communications
+\item
+GigE machines using M-Via based Gigabit Ethernet communications harness
+\item
+Ethernet based systems using MPICH-MPI communications
+\end{itemize}
+\item
+QCDOC machines using QCDOC-s QMP implementation
+\item
+IBM P-series computers using MPI based QMP harness
+\item
+BlueGene/L machines using MPI base QMP harness
+\end{itemize}
+
+The price of this level of portability is layering of software components.
+This has resulted in quite a complicated software map of various dependent software. We show the software map in fig. \ref{f:SoftwareMap}.
+\begin{figure}[ht]
+\leavevmode
+\hbox{%
+\epsfxsize=5.7in
+\epsffile{chroma_software_map.eps}
+}
+\caption{The chroma software map}
+\label{f:SoftwareMap}
+\end{figure}
+
+\end{document}

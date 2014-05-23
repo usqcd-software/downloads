@@ -1,0 +1,169 @@
+<html>
+<head>
+<title>Tutorial 2: More more more</title>
+</head>
+<h1>Tutorial 2: Using your recently acquired skills</h1>
+<h2>Introduction</h2>
+<p>
+This tutorial is more of the same as tutorial 1. The difference
+is that you will get to use slightly larger configurations 
+and more of them.
+
+<h2>Configurations</h2>
+<p>
+Followig <a href="./tut2_files">this link</a> will take you 
+to a directory containing
+<ul>
+<li>5 Gauge Configurations, named <tt>dumm_run_cfg_XXX.lime</tt>. Here XXX stants for the HMC sweep number and can take the values <tt>220</tt>, <tt>240</tt>,<tt>260</tt>, <tt>280</tt> and <tt>300</tt>. The configs were produced with Wilson Gauge action and 2 flavours of dynamical Wilson fermions. The physics params were:
+     <ul>
+      <li> beta = 5.4 </li>
+      <li> kappa= 0.11</li>
+     </ul>
+The configurations have volume=8x8x8x16, and are saved in the <tt>SZINQIO</tt> format.
+<li>One file for <tt>chroma</tt> to compute spectroscopy on config 220</li>
+<li>An XMGR parameter file for plotting (see later)</li>
+</ul>
+</p>
+
+<p>
+Your task, should you choose to accept it, is to compute effective masses
+from the spectroscopy carried out on these files</p>
+
+<h2>Doing the first of 5</h2>
+<p>
+Make a directory called <tt>tut2</tt>. Enter into it with
+<blockquote>
+<tt>
+cd tut2
+</tt>
+</blockquote>
+
+<p>
+Copy the configuration <a href="./tut2_files/dummy_run_cfg_220.lime">dummy_run_cfg_220.lime</a> and the example parameter file <a href="./tut2_files/example_220.ini.xml">example_220.ini.xml</a> into your working directory.</p>
+
+<p>
+Take a copy of chroma into the working directory. You can reuse the one
+from the first tutorial or just download it again from <a href="./tut1_files/chroma">here (if you have Fedora Core 3 or compatible linux)</a>. Alternatively
+you can get it from the installation directory </tt>/usr/local/chroma/scalar/bin/chroma</tt> if you are attending this tutorial in person.</p>
+
+<p>
+Run chroma with the command
+<blockquote>
+<tt>chroma -i ./example_220.ini.xml -o ./output_220.xml</tt>
+</blockquote>
+
+Chroma should run. You should find an output file <tt>spectrum.out.xml</tt>
+for the spectroscopy. I have turned off hybrid mesons and baryons for this
+test to make life faster. Also the propagator is no longer being saved.
+
+<h2>Do the rest</h2>
+<p>
+At this point, you can carry on and do the other 4 configs.  You
+can get the configs from <a href="./tut2_files">this link</a>. You
+should also get the input XML files for config 220. In order to finish
+this exercise quickly I have the following hints:</p>
+
+<h3>Using Sed</h3>
+<p>
+You can perform search and replace on a given XML (or indeed any text)
+file using sed. You can use this for example to change the config
+number from 220 to any other config number from an input XML file to
+an output one: <blockquote><tt> sed -e "s/220/240/g"
+example_220.ini.xml > example_240.ini.xml </tt></blockquote> will do a
+search and replace on <tt>example_220.ini.xml</tt> and create a file
+<tt>example_240.ini.xml</tt> suitable for use with config 240.  Have a
+care tho. This will replace <b>every</b> occurrance of the string
+"220" with "240". So if you were in a situation where you'd have say
+kappa=0.1220 it would also be changed to kappa=0.1240. However in this
+exercise you should be in no danger of that. If you want more
+selective XML processing, find out about XSLT transformations.
+</p>
+
+<h3>Stripping</h3>
+<p>
+Take a copy of the <tt>strip_spectrum</tt> utility you used in the
+last exercise. Make a directory called <tt>strip</tt> and strip the
+files into it as before. A good way is to go into the directory and do
+the stripping there ie:
+<blockquote>
+<tt>
+cd strip <br/>
+cp ../strip_spectrum .</br>
+./strip_spectrum ../spectrum.out.220.xml ../spectrum.out.240.xml ../spectrum.out.260.out.xml ../spectrum.out.280.xml ../spectrum.out.300.xml</br>
+</tt>
+</blockquote>
+
+<h3>Effective Mass Utility</h3>
+<p>
+The adat analysis package also contains a utility to look at quick and dirty effective masses. Recall that you built <tt>strip_spectrum</tt>. Let us now build the effective mass utility.</p>
+
+<p>
+Go into the directory where you have checked out 
+<tt>adat</tt>. Instead of going into the <tt>main/strippers</tt> directory
+as before, you should now go into the <tt>main/ensem</tt> directory, and type
+<blockquote>
+  <tt>make meff</tt>
+</blockquote>
+</p>
+<p>
+You should build a utility called <tt>meff</tt>. As usual if you have FedoraCore or a compatible system you can circumvent the building of it by simply <a href="./tut2_files/meff">getting it from here</a>.
+</p>
+
+<p>
+Now copy this to the directory  where you stripped the spectrum results (the one we called <tt>tut2/strip</tt>). <tt>cd</tt> back to the <tt>tut2/strip</tt> directory (where you have just copied <tt> meff </tt> to) and type
+<blockquote>
+<tt>./meff ./meff pion.D5455.P_1.P_1.PP</tt>
+</blockquote>
+You should see the output:
+<blockquote>
+<tt>
+0 3.39003 0.0064513 <br/>
+1 2.72824 0.0150325 <br/>
+2 2.65792 0.0144408 <br/>
+3 2.62275 0.0307213 <br/>
+4 2.65234 0.0374466 <br/>
+5 2.62383 0.0316489 <br/>
+6 2.563 0.0329779   <br/>
+7 1.98347 0.0595311 <br/>
+8 -1.91219 0.076478 <br/>
+9 -2.63864 0.0261858 <br/>
+10 -2.6253 0.0235725 <br/>
+11 -2.62692 0.0333184 <br/>
+12 -2.65712 0.0177053 <br/>
+13 -2.65389 0.0277146 <br/>
+14 -2.69619 0.0105981 <br/>
+15 -3.41136 0.012748 <br/>
+</tt>
+</blockquote>
+</p>
+<p>
+The first column is the timeslice number, the second is the effective mass, and the third is the jackknife error. This correlator is symmetric and has not been folded in the middle. Hence at the midpoint the effective mass turns and becomes negarive. I did say it was rough and ready.</p>
+
+<h3>Plotting it</h3>
+<p>
+You can of course save the above information by redirecting the output of <tt>meff</tt> to some file eg:
+<blockquote>
+<tt>./meff ./meff pion.D5455.P_1.P_1.PP > eff_mass.dat </tt>
+</blockquote>
+which you can then plot with your favourite plotting program. I like <tt>xmgrace</tt>. 
+
+ This <a href="./tut2_files/xmgr_params">XMGR Parameter File</a> should make the plot more pretty. You can use it as follows:
+<ul>
+<li>Download it into a local file called <tt>xmgr_params</tt> in your 
+working directory</li>
+<li>Run XMGR with the command:
+<blockquote><tt>
+xmgr -param xmgr_params pion_fold_eff_mass.dat
+</tt></blockquote>
+</ul>
+
+<h2>Finally: Fitting Correlators</h2>
+<p>I choose conciously not to discuss this aspect of the work here. Everyone has their own favourite fitter to which they stick to through thick and thin. Consult your local fitting expert for what is best for you (them).</p>
+
+<h2>And you're done</h2>
+<p>
+Congratulations. You should now know how to do spectroscopy with Chroma. </p>
+
+<body>
+</body>
+</html>

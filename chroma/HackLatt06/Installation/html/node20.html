@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Enabling the GMP library for RHMC</TITLE>
+<META NAME="description" CONTENT="Enabling the GMP library for RHMC">
+<META NAME="keywords" CONTENT="chroma_install">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="chroma_install.css">
+
+<LINK REL="next" HREF="node21.html">
+<LINK REL="previous" HREF="node19.html">
+<LINK REL="up" HREF="node9.html">
+<LINK REL="next" HREF="node21.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html319"
+  HREF="node21.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html315"
+  HREF="node9.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html309"
+  HREF="node19.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html317"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html320"
+  HREF="node21.html">And that's it</A>
+<B> Up:</B> <A NAME="tex2html316"
+  HREF="node9.html">Quick Start: A linux</A>
+<B> Previous:</B> <A NAME="tex2html310"
+  HREF="node19.html">Enabling the SSE Wilson</A>
+ &nbsp <B>  <A NAME="tex2html318"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION000511000000000000000">
+Enabling the GMP library for RHMC</A>
+</H2>
+If you would like to perform simulations involving single flavours
+of fermions (eg 2+1 flavour, 1+1+1 flavour etc), you need to build 
+the Remez algorithm for computing rational approximations to various
+square roots. To do this you need to add the <code>--enable-gmp</code>
+option to configure. However, this time life is a little more tricky, 
+since GMP integration is not yet complete. You also need to specify 
+the compiler include path, link path and the library name.
+
+<P>
+Find out where you copy of GMP is installed. If you installed it yourself
+you will of course know this information. On my linux machine a default
+installation is in <TT>/usr</TT> with the includes being in <TT>/usr/include</TT>
+and the library being in <TT>/usr/lib</TT>. The library is called <TT>libgmp.a</TT>
+
+<P>
+So for g++ you will need the following compiler arguments:
+
+<UL>
+<LI><TT>CXXFLAGS="-I/usr/include"</TT> - to identify the <TT>include</TT> directory
+</LI>
+<LI><TT>LDFLAGS="-L/usr/lib"</TT> - to locate the library <TT>lib</TT> directory
+</LI>
+<LI><TT>LIBS="-lgmp"</TT> - to add the library to the list of linked libraries.
+</LI>
+</UL>
+
+<P>
+Your command line for configure would then look like:
+<PRE>
+/home/bj/src/chroma/configure CXXFLAGS="-I/usr/include" CFLAGS="" \
+  LDFLAGS="-L/usr/lib" LIBS="-lgmp" \
+  --with-qdp=/home/bj/install/qdp_scalar_single \
+  --enable-sse-wilson-dslash \
+  --enable-gmp \
+  --prefix=/home/bj/install/chroma_scalar_single
+</PRE>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html319"
+  HREF="node21.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html315"
+  HREF="node9.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html309"
+  HREF="node19.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html317"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html320"
+  HREF="node21.html">And that's it</A>
+<B> Up:</B> <A NAME="tex2html316"
+  HREF="node9.html">Quick Start: A linux</A>
+<B> Previous:</B> <A NAME="tex2html310"
+  HREF="node19.html">Enabling the SSE Wilson</A>
+ &nbsp <B>  <A NAME="tex2html318"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Balint Joo
+2005-04-11
+</ADDRESS>
+</BODY>
+</HTML>

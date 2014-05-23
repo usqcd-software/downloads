@@ -1,0 +1,71 @@
+<html>
+<head>
+<title>HackLatt 2006: Chroma Tutorial Index Page</title>
+</head>
+
+<body>
+<h1>The HackLatt 2006 Chroma Tutorial</h1>
+
+<h2>Introduction</h2>
+<p>Welcome to the Chroma tutorial of the HackLatt 2006 workshop on 
+lattice QCD codes.</p>
+
+<h2>The workshop presentations</h2>
+<p>The presentations can be found here:
+<ul>
+ <li>An introduction to Chroma <a href="Presentations/ChromaIntro.odp">OpenOffice.org v2</a>, <a href="Presentations/ChromaIntro.ppt">PowerPoint Conversion</a>, <a href="Presentations/ChromaIntro.pdf">PDF</a></li>
+ <li>QDP++ Low level plumbing for Chroma <a href="Presentations/ChromaPlumbing.odp">OpenOffice.org v2</a>, <a href="Presentations/ChromaPlumbing.ppt">PowerPoint Conversion</a>, <a href="Presentations/ChromaPlumbing.pdf">PDF</a></li>
+ <li>Design Patterns in Chroma <a href="Presentations/DesignPatternsInChroma.odp">OpenOffice.org v2</a>, <a href="Presentations/DesignPatternsInChroma.ppt">PowerPoint Conversion</a>, <a href="Presentations/DesignPatternsInChroma.pdf">PDF</a></li>
+ <li>The Chroma Class Structure <a href="Presentations/ChromaClassStructure.odp">OpenOffice.org v2</a>, <a href="Presentations/ChromaClassStructure.ppt">PowerPoint Conversion</a>, <a href="Presentations/ChromaClassStructure.pdf">PDF</a></li>
+</ul>
+
+<h2>The tutorial Material</h2>
+
+The practical tutorials are below:
+<ul>
+  <li><a href="./tutorial1.html"><b>Tutorial 1: Measurement with <tt>chroma</tt></b></a> This tutorial presents the main <tt>chroma</tt> application and goes in detail through a single configuration spectroscopy measurement.</li>
+  <li><a href="./tutorial2.html"><b>Tutorial 2: More measurement with <tt>chroma</tt></b></a> This tutorial takes you through the computation of a pion for an ensemble of 5 8x8x8x16 configurations</li>
+  <li><a href="./tutorial3.html"><b>Tutorial 3: Hacking with Chroma</b></a> - This tutorial takes you through various programming exercises, from mucking about with XML to invoking Factories and linkage.</li>
+  <li><a href="./tutorial4.html"><b>Tutorial 4: Writing your own inline measurement</a></b> -- does just as advertised. You go through the anatomy of an inline measurement and have to deal with named objects</li>
+</ul>
+
+<h2>Notes</h2>
+<h3>Code Versions</h3>
+<p>
+Like all codes chroma is evolutionary. I have carried out the tutorial exercises here using
+<ul>
+  <li>QDP tagged version <tt>qdp1-20-1</tt></li>
+  <li>Chroma tagged version <tt>chroma2-15-2</tt></li>
+</ul>
+</p>
+<p>We try to keep versions up to date but even looking at the output in this tutorial you will find that some output XML quotes the QDP++ version as 1.19.0 rather than 1.20.1. Sorry about that</p>
+<p>
+We are anticipating changes to the API in version 3 of chroma. This may break
+some of the exercises (Tutorial 3: Exercises 5 and 6 in particular). Please
+be aware of this.</p>
+
+<h3>Compiling and Installing Chroma</h3>
+<p>
+We have begun writing document about compiling and installing chroma. The document can be found  <a href="Installation/html/index.html"> here</a>.</p>
+
+<p>It currently covers installation in a non-parallel mode on a linux workstation using GNU 
+g++. However it should be a reasonable springboard. However, do be aware 
+of the information below:
+</p>
+
+<p>
+Chroma has grown to be quite a complex piece of software. The current map of software modules required for a full build is shown in the image below:
+<p>
+<center>
+<img src="./chroma_software_map.jpg"/> 
+</center>
+</p>
+
+<p>Fortunately, on a Pentium or other SSE assembly capable GNU/Linux or Cygwin workstations, building is relatively straightforward because the third party <tt>gmp</tt> and <tt>libxml2</tt> libraries are shipped as standard with most linux distributions (or are available as easily installable packages). The 
+<tt>autoconf</tt> and <tt>automake</tt> packages are also shipped with most
+linux (and other UN*X) systems however they are frequently out of date. We currently require <tt>autoconf-2.58</tt> and <tt>automake-1.9.3</tt>.
+
+<p> Also the SSE assembly code needed for efficiency is distributed with the QDP++ and Chroma source. On such a platform there is no need for the BAGEL libraries or QMP.</p>
+
+</body>
+</html>

@@ -1,0 +1,874 @@
+This is TeX, Version 3.14159 (Web2C 7.3.1) (format=latex 2003.2.18)  11 APR 2005 15:35
+**chroma_install.tex
+(chroma_install.tex
+LaTeX2e <2001/06/01>
+Babel <v3.7h> and hyphenation patterns for american, french, german, ngerman, i
+talian, nohyphenation, loaded.
+(/usr/share/texmf/tex/latex/base/article.cls
+Document Class: article 2001/04/21 v1.4e Standard LaTeX document class
+(/usr/share/texmf/tex/latex/base/size10.clo
+File: size10.clo 2001/04/21 v1.4e Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/share/texmf/tex/latex/psnfss/times.sty
+Package: times 2001/06/04 PSNFSS-v8.2 (SPQR) 
+)
+(/usr/share/texmf/tex/latex/misc/fullpage.sty
+Style Option FULLPAGE Version 2 as of 15 Dec 1988
+) (/usr/share/texmf/tex/latex/graphics/epsfig.sty
+Package: epsfig 1999/02/16 v1.7a (e)psfig emulation (SPQR)
+
+(/usr/share/texmf/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/usr/share/texmf/tex/latex/graphics/graphics.sty
+Package: graphics 2001/07/07 v1.0n Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/usr/share/texmf/tex/latex/config/graphics.cfg)
+Package graphics Info: Driver file: dvips.def on input line 80.
+
+(/usr/share/texmf/tex/latex/graphics/dvips.def
+File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+\epsfxsize=\dimen105
+\epsfysize=\dimen106
+)
+(/usr/share/texmf/tex/latex/html/html.sty
+Package: html 1999/07/19 v1.38 hypertext commands for latex2html (nd, hws, rrm)
+
+\c@lpart=\count87
+\c@lchapter=\count88
+\c@chapter=\count89
+\c@lsection=\count90
+\c@lsubsection=\count91
+\c@lsubsubsection=\count92
+\c@lparagraph=\count93
+\c@lsubparagraph=\count94
+\c@lsubsubparagraph=\count95
+\ptrfile=\write3
+) (chroma_install.aux)
+\openout1 = `chroma_install.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 8.
+
+(/usr/share/texmf/tex/latex/psnfss/ot1ptm.fd
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 9.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 9.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 9.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 11.
+ (chroma_install.toc
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 4.
+
+(/usr/share/texmf/tex/latex/psnfss/ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 4.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 4.
+)
+\tf@toc=\write4
+\openout4 = `chroma_install.toc'.
+
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 17.
+
+(/usr/share/texmf/tex/latex/psnfss/omsptm.fd
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 17.
+ [1
+
+]
+File: chroma_software_map.eps Graphic file (type eps)
+ <chroma_software_map.eps>
+[2]
+LaTeX Font Info:    Font shape `OMS/ptm/m/it' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 88.
+
+Overfull \hbox (1.02034pt too wide) in paragraph at lines 111--118
+[]\OT1/ptm/m/n/10 These pack-ages pro-vide as-sem-bler op-ti-mi-sa-tions for li
+n-ear al-ge-bra in QDP++,
+ []
+
+[3]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 163.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 175.
+ [4]
+Overfull \hbox (3.24504pt too wide) in paragraph at lines 192--192
+ []\OT1/pcr/m/n/10 configure CXXFLAGS="-O2 -finline-limit=50000 -I/home/foo/gmp
+/include" \[] 
+ []
+
+
+Overfull \hbox (14.86049pt too wide) in paragraph at lines 214--215
+[]\OT1/ptm/m/n/10 is where the soft-ware is in-stalled. It can be usu-ally spec
+-i-fied with the []\OT1/pcr/m/n/10 --prefix=<installdir>
+ []
+
+
+Overfull \hbox (7.44292pt too wide) in paragraph at lines 214--215
+\OT1/ptm/m/n/10 com-mand lne ar-gu-ment to con-fig-ure. If no []\OT1/pcr/m/n/10
+ --prefix \OT1/ptm/m/n/10 ar-gu-ment is given, \OT1/pcr/m/n/10 configure \OT1/p
+tm/m/n/10 de-faults to\OT1/pcr/m/n/10 /usr/local\OT1/ptm/m/n/10 . 
+ []
+
+
+Overfull \hbox (15.99326pt too wide) in paragraph at lines 233--234
+[]\OT1/ptm/m/n/10 The only com-piler that is fully sup-ported is \OT1/pcr/m/n/1
+0 gcc/g++. This is simply because it is most likely
+ []
+
+
+Overfull \hbox (40.24501pt too wide) in paragraph at lines 233--234
+\OT1/pcr/m/n/10 that this is a compiler that most machines have available. You 
+will need gcc version
+ []
+
+
+Overfull \hbox (22.24501pt too wide) in paragraph at lines 233--234
+\OT1/pcr/m/n/10 3 or higher. At the time of writing the current version of gcc 
+is version 3.4 (or
+ []
+
+
+Overfull \hbox (25.24501pt too wide) in paragraph at lines 235--236
+[]\OT1/pcr/m/n/10 The chroma system has been compiled with other compilers incl
+uding icc the Intel
+ []
+
+
+Overfull \hbox (10.24501pt too wide) in paragraph at lines 235--236
+\OT1/pcr/m/n/10 C++ compiler for linux as well as xlc/xlC also known as the IBM
+ Visual Age C/C++
+ []
+
+
+Overfull \hbox (4.24501pt too wide) in paragraph at lines 235--236
+\OT1/pcr/m/n/10 compiler although this fails on some systems. The Sun ONE Studi
+o 8 Compiler at
+ []
+
+
+Overfull \hbox (34.24501pt too wide) in paragraph at lines 235--236
+\OT1/pcr/m/n/10 the time of writing, does not support template-template argumen
+ts which is necessary
+ []
+
+
+Overfull \hbox (13.24501pt too wide) in paragraph at lines 237--238
+[]\OT1/pcr/m/n/10 On some systems a distinction is made between the machine fro
+nt end, where you
+ []
+
+
+Overfull \hbox (4.24501pt too wide) in paragraph at lines 237--238
+\OT1/pcr/m/n/10 can compile stuff and the back end, where the code will run. Th
+is can arise in
+ []
+
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 240.
+
+(/usr/share/texmf/tex/latex/psnfss/omspcr.fd
+File: omspcr.fd 
+)
+LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 240.
+
+Overfull \hbox (23.24504pt too wide) in paragraph at lines 240--242
+[]\OT1/pcr/m/n/10 The front end is different hardware from the back end for exa
+mple on QCDOC and
+ []
+
+
+Overfull \hbox (41.24504pt too wide) in paragraph at lines 242--243
+[]\OT1/pcr/m/n/10 The front end is scalar and the back end is parallel. Paralle
+lism related checks
+ []
+
+[5]
+Overfull \hbox (25.24501pt too wide) in paragraph at lines 245--246
+[]\OT1/pcr/m/n/10 In this case a special kind of build is needed called cross c
+ompiling. The main
+ []
+
+
+Overfull \hbox (16.24501pt too wide) in paragraph at lines 245--246
+\OT1/pcr/m/n/10 distinguishing characteristic of cross compiling is that the ex
+ecutables produced
+ []
+
+
+Overfull \hbox (37.24501pt too wide) in paragraph at lines 247--248
+[]\OT1/pcr/m/n/10 In the first instance above, you may need an entirely separat
+e compiler to perform
+ []
+
+
+Overfull \hbox (10.24501pt too wide) in paragraph at lines 247--248
+\OT1/pcr/m/n/10 the build: eg on QCDOC, gcc may well be available on the front 
+end but you need
+ []
+
+
+Overfull \hbox (7.24501pt too wide) in paragraph at lines 249--251
+[]\OT1/pcr/m/n/10 In the second case, you need the same compiler for the front 
+and back end but
+ []
+
+
+Overfull \hbox (16.24501pt too wide) in paragraph at lines 249--251
+\OT1/pcr/m/n/10 some configure type checks need to be disabled because executab
+les created cannot
+ []
+
+
+Overfull \hbox (13.24501pt too wide) in paragraph at lines 252--257
+[]\OT1/pcr/m/n/10 A particularly evil case is building the bagel libraries, whi
+ch consist of two
+ []
+
+
+Overfull \hbox (10.24501pt too wide) in paragraph at lines 252--257
+\OT1/pcr/m/n/10 cases. First some executables needed to be built on the front e
+nd which produce
+ []
+
+
+Overfull \hbox (10.24501pt too wide) in paragraph at lines 252--257
+\OT1/pcr/m/n/10 code that will be compiled for the back end. The first stage of
+ the build is on
+ []
+
+
+Overfull \hbox (64.24501pt too wide) in paragraph at lines 252--257
+\OT1/pcr/m/n/10 the front end (a so called native build) whereas the second sta
+ge is a cross compilation. 
+ []
+
+LaTeX Font Info:    Font shape `OT1/pcr/m/it' in size <10> not available
+(Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 260.
+
+Overfull \hbox (21.24501pt too wide) in paragraph at lines 260--263
+[]\OT1/pcr/m/sl/10 The build \OT1/pcr/m/n/10 system is the system on which the 
+build/compilation is performed. This
+ []
+
+
+Overfull \hbox (47.24504pt too wide) in paragraph at lines 260--263
+\OT1/pcr/m/n/10 system can be specified by the []--build command line argument 
+to configure scripts. 
+ []
+
+
+Overfull \hbox (33.24501pt too wide) in paragraph at lines 264--265
+[]\OT1/pcr/m/sl/10 The host \OT1/pcr/m/n/10 system is the system on which the c
+ode will run. This system is specified
+ []
+
+
+Overfull \hbox (7.24501pt too wide) in paragraph at lines 267--270
+[]\OT1/pcr/m/n/10 For a configure script to work in cross compiling mode, you n
+eed to specify a
+ []
+
+
+Overfull \hbox (34.24501pt too wide) in paragraph at lines 267--270
+[]\OT1/pcr/m/n/10 --host that is different from []--build. If you specify neith
+er, they will be guessed
+ []
+
+
+Overfull \hbox (13.24501pt too wide) in paragraph at lines 271--272
+[]\OT1/pcr/m/n/10 Autoconf defines a kind of name canonicalisation. The canonic
+al names are the
+ []
+
+
+Overfull \hbox (58.24501pt too wide) in paragraph at lines 271--272
+\OT1/pcr/m/n/10 ones that must be given as arguments to the []--host and []--bu
+ild command line of configure 
+ []
+
+
+Overfull \hbox (1.24501pt too wide) in paragraph at lines 273--275
+[]\OT1/pcr/m/n/10 A system is defined by a 3 part canonical name consisting of 
+the following 3
+ []
+
+
+Overfull \hbox (10.24501pt too wide) in paragraph at lines 273--275
+\OT1/pcr/m/n/10 parts: processor-vendor-os. These parts are very loosely define
+d. For example
+ []
+
+
+Overfull \hbox (16.24501pt too wide) in paragraph at lines 273--275
+\OT1/pcr/m/n/10 most linux machines have a canonical name something like i686-p
+c-linux-gnu. Here
+ []
+
+
+Overfull \hbox (16.24501pt too wide) in paragraph at lines 273--275
+\OT1/pcr/m/n/10 i686 is the processor identifier, the vendor is pc (some PC man
+ufacturer) and the
+ []
+
+
+Overfull \hbox (22.24501pt too wide) in paragraph at lines 273--275
+\OT1/pcr/m/n/10 OS is linux-gnu. The QCDOC front end has canonical name: powerp
+c-ibm-aix5.2.0.0.
+ []
+
+
+Overfull \hbox (28.24501pt too wide) in paragraph at lines 273--275
+\OT1/pcr/m/n/10 The QCDOC back end is simply denoted powerpc-gnu-elf with no re
+fernce to the vendor
+ []
+
+
+Overfull \hbox (4.24501pt too wide) in paragraph at lines 273--275
+\OT1/pcr/m/n/10 or OS. For systems with nothing known about them one can use th
+e canonical name
+ []
+
+
+Overfull \hbox (49.24501pt too wide) in paragraph at lines 284--288
+[]\OT1/pcr/m/n/10 can be used to trip a cross compilation on a scalar Linux fro
+nt end that is building
+ []
+
+
+Overfull \hbox (64.24501pt too wide) in paragraph at lines 284--288
+\OT1/pcr/m/n/10 for a parallel Linux back end that is potentially behind a queu
+eing system so executables
+ []
+
+[6]
+Overfull \hbox (67.24501pt too wide) in paragraph at lines 306--310
+[]\OT1/pcr/m/n/10 A notable exception when building for Cygwin (under Windows).
+ In this case executables
+ []
+
+
+Overfull \hbox (10.24501pt too wide) in paragraph at lines 306--310
+\OT1/pcr/m/n/10 have standard windows extension .exe. So for example the applic
+ation propagator
+ []
+
+
+Overfull \hbox (7.24501pt too wide) in paragraph at lines 313--315
+[]\OT1/pcr/m/n/10 and the resulting program will be called propagator but under
+ Cygwin one must
+ []
+
+
+Overfull \hbox (34.24501pt too wide) in paragraph at lines 321--325
+\OT1/pcr/m/n/10 In this section we will perform a native build for a scalar lin
+ux machine. I assume
+ []
+
+
+Overfull \hbox (28.24501pt too wide) in paragraph at lines 321--325
+\OT1/pcr/m/n/10 that libxml, and gmp, autoconf, automake, GNU make and gcc vers
+ion 3.x is installed
+ []
+
+
+Overfull \hbox (34.24501pt too wide) in paragraph at lines 327--332
+\OT1/pcr/m/n/10 You will need the sources for QDP++ and Chroma. I will assume t
+hat the QDP++ source
+ []
+
+
+Overfull \hbox (22.24501pt too wide) in paragraph at lines 327--332
+\OT1/pcr/m/n/10 is in /home/bj/src/qdp++ and that Chroma is in /home/bj/src/chr
+oma. Naturally you
+ []
+
+
+Overfull \hbox (4.24501pt too wide) in paragraph at lines 327--332
+\OT1/pcr/m/n/10 will put them them in different directories on your machines. J
+ust remember to
+ []
+
+
+Overfull \hbox (104.44502pt too wide) in paragraph at lines 339--341
+[]\OT1/pcr/m/n/10 Now we need to configure QDP++. We want to install it into /h
+ome/bj/install/qdp[]scalar[]single
+ []
+
+
+Overfull \hbox (25.24501pt too wide) in paragraph at lines 347--351
+[]\OT1/pcr/m/n/10 This should configure QDP++. By default the precision will be
+ single precision.
+ []
+
+
+Overfull \hbox (4.24501pt too wide) in paragraph at lines 347--351
+\OT1/pcr/m/n/10 There is no optimisation, no extra flags. You should see lots o
+f messages from
+ []
+
+
+Overfull \hbox (34.24501pt too wide) in paragraph at lines 347--351
+\OT1/pcr/m/n/10 configure telling you that it is looking for libxml etc. If con
+figure exits without
+ []
+
+
+Overfull \hbox (22.24501pt too wide) in paragraph at lines 359--362
+\OT1/pcr/m/n/10 The previous build is not very useful. It leaves on the (defaul
+t) debugging flags
+ []
+
+
+Overfull \hbox (22.24501pt too wide) in paragraph at lines 359--362
+\OT1/pcr/m/n/10 and does not do any inlining, resulting in extremely \OT1/pcr/m
+/sl/10 slow \OT1/pcr/m/n/10 code. We found with gcc
+ []
+
+
+Overfull \hbox (22.24501pt too wide) in paragraph at lines 366--366
+[]    \OT1/pcr/m/n/10 --enable-parallel-arch=scalar CXXFLAGS="-O2 -finline-limi
+t=50000" CFLAGS="-O2"[] 
+ []
+
+
+Overfull \hbox (7.24501pt too wide) in paragraph at lines 368--370
+[]\OT1/pcr/m/n/10 This sets optimisation level 2 for both GCC and G++. It also 
+sets the inline
+ []
+
+
+Overfull \hbox (10.24501pt too wide) in paragraph at lines 368--370
+\OT1/pcr/m/n/10 limit for the C++ compiler to a large value, allowing a large a
+mount of function
+ []
+
+
+Overfull \hbox (46.24501pt too wide) in paragraph at lines 372--381
+\OT1/pcr/m/n/10 While the previous section enabled a large amount of compiler o
+ptimisation, on Pentium
+ []
+
+
+Overfull \hbox (16.24501pt too wide) in paragraph at lines 372--381
+\OT1/pcr/m/n/10 4s and other SSE enabled targets with gcc/g++ considerable spee
+d improvements can
+ []
+
+
+Overfull \hbox (4.24501pt too wide) in paragraph at lines 372--381
+\OT1/pcr/m/n/10 be gained by enabling SSE short vector instruction optimisation
+s. These can be
+ []
+
+
+Overfull \hbox (52.24501pt too wide) in paragraph at lines 372--381
+\OT1/pcr/m/n/10 enabled with the []--enable-sse and []--enable-sse2 switches to
+ autoconf. Double precision
+ []
+
+
+Overfull \hbox (46.24501pt too wide) in paragraph at lines 372--381
+\OT1/pcr/m/n/10 needs []--enable-sse2 as the original SSE instructions did not 
+support double precision.
+ []
+
+
+Overfull \hbox (52.24501pt too wide) in paragraph at lines 372--381
+\OT1/pcr/m/n/10 If specifying SSE2, normal SSE is automatically enabled. This b
+rings the configuration
+ []
+
+[7]
+Overfull \hbox (46.24501pt too wide) in paragraph at lines 390--391
+\OT1/pcr/m/n/10 If you'd like to work in double precision you should add the []
+--enable-precision=double
+ []
+
+
+Overfull \hbox (34.24501pt too wide) in paragraph at lines 400--404
+\OT1/pcr/m/n/10 Suppose that libxml2 is not installed in the usual place on you
+r system (for example
+ []
+
+
+Overfull \hbox (22.24501pt too wide) in paragraph at lines 400--404
+\OT1/pcr/m/n/10 it wasn't there, and you have installed it, but have not placed
+ it into your PATH)
+ []
+
+
+Overfull \hbox (46.24501pt too wide) in paragraph at lines 400--404
+\OT1/pcr/m/n/10 If configure does not find it the configuration script will exi
+t with an error message
+ []
+
+
+Overfull \hbox (37.24501pt too wide) in paragraph at lines 409--410
+[]\OT1/pcr/m/n/10 Let us suppose it has been installed in /home/bj/install/libx
+ml2. You can specify
+ []
+
+
+Overfull \hbox (16.24501pt too wide) in paragraph at lines 420--423
+\OT1/pcr/m/n/10 It may happen that after configuring you type : [] and you get 
+an error like: 
+ []
+
+[8]
+Overfull \hbox (13.24501pt too wide) in paragraph at lines 434--437
+[]\OT1/pcr/m/n/10 This is a sign, that the Makefiles in the source distribution
+, do not have the
+ []
+
+
+Overfull \hbox (41.24504pt too wide) in paragraph at lines 441--443
+[]\OT1/pcr/m/n/10 The NFS client serving your files may have its clock out of s
+ync with the machine
+ []
+
+
+Overfull \hbox (85.24501pt too wide) in paragraph at lines 445--449
+[]\OT1/pcr/m/n/10 Here the best policy is to ensure that you have installed aut
+oconf-2.58 and automake-1.9.3
+ []
+
+
+Overfull \hbox (40.24501pt too wide) in paragraph at lines 445--449
+\OT1/pcr/m/n/10 and have them in your path. The build system will then recreate
+ the necessary files,
+ []
+
+
+Overfull \hbox (7.24501pt too wide) in paragraph at lines 450--452
+[]\OT1/pcr/m/n/10 Another way to try and deal with the problem is to go to the 
+\OT1/pcr/m/sl/10 source directory
+ []
+
+
+Overfull \hbox (10.24501pt too wide) in paragraph at lines 455--458
+\OT1/pcr/m/n/10 and then going back to the build directory and trying again. Ag
+ain tho you need
+ []
+
+
+Overfull \hbox (7.24501pt too wide) in paragraph at lines 459--465
+[]\OT1/pcr/m/n/10 Note: On NFS clients with filetime synchronisation problems t
+his may not fix
+ []
+
+
+Overfull \hbox (52.24501pt too wide) in paragraph at lines 459--465
+\OT1/pcr/m/n/10 your problem, and installing automake and autoconf may seem to 
+put you into an infinite
+ []
+
+
+Overfull \hbox (28.24501pt too wide) in paragraph at lines 459--465
+\OT1/pcr/m/n/10 loop. This is because, even when autoconf and automake try to r
+ebuild their files,
+ []
+
+
+Overfull \hbox (34.24501pt too wide) in paragraph at lines 459--465
+\OT1/pcr/m/n/10 due to the time syncronisation problems you may still not get t
+he date stamps right.
+ []
+
+
+Overfull \hbox (22.24501pt too wide) in paragraph at lines 467--469
+\OT1/pcr/m/n/10 Suppose that autoconf and automake are all OK, and you get othe
+r errors. A common
+ []
+
+
+Overfull \hbox (19.24501pt too wide) in paragraph at lines 473--476
+[]\OT1/pcr/m/n/10 This is almost always because something is misspelled like an
+ option to the C++
+ []
+
+
+Overfull \hbox (22.24501pt too wide) in paragraph at lines 473--476
+\OT1/pcr/m/n/10 eg: -fimline-limit=5000, or []--with-libxml= instead of []--wit
+h-libxml2. You should
+ []
+
+
+Overfull \hbox (16.24501pt too wide) in paragraph at lines 473--476
+\OT1/pcr/m/n/10 always inspect the config.log file produced by configure to try
+ and ascertain the
+ []
+
+
+Overfull \hbox (7.24501pt too wide) in paragraph at lines 477--480
+[]\OT1/pcr/m/n/10 Only if you have made \OT1/pcr/m/sl/10 absolutely certain \OT
+1/pcr/m/n/10 that you haven't misspelled anything
+ []
+
+
+Overfull \hbox (10.24501pt too wide) in paragraph at lines 477--480
+\OT1/pcr/m/n/10 or forgotten some needed configure argument should you send ema
+il to the package
+ []
+
+
+Overfull \hbox (34.24501pt too wide) in paragraph at lines 482--484
+\OT1/pcr/m/n/10 Once you have got this far and built and installed QDP++ it is 
+time to build Chroma.
+ []
+
+
+Overfull \hbox (53.44502pt too wide) in paragraph at lines 482--484
+\OT1/pcr/m/n/10 I am assuming that QDP++ is successfully installed in /home/bj/
+install/qdp[]scalar[]single
+ []
+
+
+Overfull \hbox (13.24501pt too wide) in paragraph at lines 485--487
+[]\OT1/pcr/m/n/10 Make a directory to build chroma in. Let's call it /home/bj/b
+uild/chroma  and
+ []
+
+
+Overfull \hbox (19.24501pt too wide) in paragraph at lines 494--499
+[]\OT1/pcr/m/n/10 then type gmake. Wait for the build to finish and type make i
+nstall to perform
+ []
+
+
+Overfull \hbox (71.44502pt too wide) in paragraph at lines 494--499
+\OT1/pcr/m/n/10 the installation. This command line will install in /home/bj/in
+stall/chroma[]scalar[]single.
+ []
+
+
+Overfull \hbox (22.24501pt too wide) in paragraph at lines 494--499
+\OT1/pcr/m/n/10 This will build chroma in its simplest native mode. The empty q
+uotation marks are
+ []
+
+
+Overfull \hbox (31.24501pt too wide) in paragraph at lines 500--502
+[]\OT1/pcr/m/n/10 When building you should notice that chroma has picked up the
+ values for CXXFLAGS
+ []
+
+
+Overfull \hbox (16.24501pt too wide) in paragraph at lines 504--510
+\OT1/pcr/m/n/10 This native build of Chroma is going to be very slow. On SSE en
+abled systems you
+ []
+
+
+Overfull \hbox (4.24501pt too wide) in paragraph at lines 504--510
+\OT1/pcr/m/n/10 should switch on the SSE assembler optimised dslash. This can b
+e done with the
+ []
+
+
+Overfull \hbox (28.24501pt too wide) in paragraph at lines 504--510
+[]\OT1/pcr/m/n/10 --enable-sse-wilson-dslash to chroma. Depending on the precis
+ion of the underlying
+ []
+
+
+Overfull \hbox (10.24501pt too wide) in paragraph at lines 504--510
+\OT1/pcr/m/n/10 QDP++ build, chroma will select the right dslash for you (both 
+single and double
+ []
+
+
+Overfull \hbox (16.24501pt too wide) in paragraph at lines 504--510
+\OT1/pcr/m/n/10 precision are available). If you were doing a parallel build, t
+hat would also be
+ []
+
+
+Overfull \hbox (4.24501pt too wide) in paragraph at lines 504--510
+\OT1/pcr/m/n/10 detected and the right dslash would be selected. The previous c
+ommand becomes: 
+ []
+
+[9]
+Overfull \hbox (22.24501pt too wide) in paragraph at lines 519--526
+\OT1/pcr/m/n/10 If you would like to perform simulations involving single flavo
+urs of fermions (eg
+ []
+
+
+Overfull \hbox (34.24501pt too wide) in paragraph at lines 519--526
+\OT1/pcr/m/n/10 2+1 flavour, 1+1+1 flavour etc), you need to build the Remez al
+gorithm for computing
+ []
+
+
+Overfull \hbox (10.24501pt too wide) in paragraph at lines 519--526
+\OT1/pcr/m/n/10 rational approximations to various square roots. To do this you
+ need to add the
+ []
+
+
+Overfull \hbox (28.24501pt too wide) in paragraph at lines 519--526
+[]\OT1/pcr/m/n/10 --enable-gmp option to configure. However, this time life is 
+a little more tricky,
+ []
+
+
+Overfull \hbox (16.24501pt too wide) in paragraph at lines 519--526
+\OT1/pcr/m/n/10 since GMP integration is not yet complete. You also need to spe
+cify the compiler
+ []
+
+
+Overfull \hbox (13.24501pt too wide) in paragraph at lines 527--531
+[]\OT1/pcr/m/n/10 Find out where you copy of GMP is installed. If you installed
+ it yourself you
+ []
+
+
+Overfull \hbox (16.24501pt too wide) in paragraph at lines 527--531
+\OT1/pcr/m/n/10 will of course know this information. On my linux machine a def
+ault installation
+ []
+
+
+Overfull \hbox (40.24501pt too wide) in paragraph at lines 527--531
+\OT1/pcr/m/n/10 is in /usr with the includes being in /usr/include and the libr
+ary being in /usr/lib.
+ []
+
+
+Overfull \hbox (10.24501pt too wide) in paragraph at lines 553--558
+\OT1/pcr/m/n/10 And that is all you should need to get chroma up and running in
+ scalar mode on a
+ []
+
+
+Overfull \hbox (16.24501pt too wide) in paragraph at lines 553--558
+\OT1/pcr/m/n/10 pentium based linux machine. Typing make should build the stock
+ applications for
+ []
+
+
+Overfull \hbox (46.24501pt too wide) in paragraph at lines 553--558
+\OT1/pcr/m/n/10 you that are required for the HackLatt tutorial and typing make
+ install should install
+ []
+
+
+Overfull \hbox (17.24504pt too wide) in paragraph at lines 563--570
+[]\OT1/pcr/m/n/10 I find that often, when porting to new architectures, QDP++ i
+s the hardest to
+ []
+
+
+Overfull \hbox (35.24504pt too wide) in paragraph at lines 563--570
+\OT1/pcr/m/n/10 compile. It has the most options, and if the compiler can't cop
+e with templates
+ []
+
+
+Overfull \hbox (5.24504pt too wide) in paragraph at lines 563--570
+\OT1/pcr/m/n/10 this is the first place you know about it. Barring the issues o
+f BAGEL and
+ []
+
+
+Overfull \hbox (5.24504pt too wide) in paragraph at lines 563--570
+\OT1/pcr/m/n/10 GMP, a native build of Chroma 4.9[] is straightforward as it re
+quires only an
+ []
+
+[10]
+Overfull \hbox (53.24504pt too wide) in paragraph at lines 570--573
+[]\OT1/pcr/m/n/10 The configure scripts in QDP++ and Chroma support the []--hel
+p command line argument.
+ []
+
+
+Overfull \hbox (23.24504pt too wide) in paragraph at lines 577--582
+[]\OT1/pcr/m/n/10 In the fullness of time, this installation guide will grow. N
+ow that you have
+ []
+
+
+Overfull \hbox (35.24504pt too wide) in paragraph at lines 577--582
+\OT1/pcr/m/n/10 got to the basics of the install process, and configuring, maki
+ng and installing
+ []
+
+
+Overfull \hbox (5.24504pt too wide) in paragraph at lines 577--582
+\OT1/pcr/m/n/10 you can also try using the example installation scripts you can
+ find in the
+ []
+
+
+Overfull \hbox (42.44505pt too wide) in paragraph at lines 577--582
+\OT1/pcr/m/n/10 qdp++/install[]scripts and chroma/install[]scripts directory of
+ the source packages.
+ []
+
+
+Overfull \hbox (17.24504pt too wide) in paragraph at lines 577--582
+\OT1/pcr/m/n/10 These directories often contain README scripts too which may or
+ may not prove
+ []
+
+[11] (chroma_install.aux) ) 
+Here is how much of TeX's memory you used:
+ 946 strings out of 20880
+ 11017 string characters out of 196184
+ 58130 words of memory out of 350001
+ 3919 multiletter control sequences out of 10000+15000
+ 11729 words of font info for 35 fonts, out of 400000 for 1000
+ 14 hyphenation exceptions out of 10000
+ 32i,7n,21p,734b,370s stack positions out of 3000i,100n,1500p,50000b,4000s
+
+Output written on chroma_install.dvi (11 pages, 41160 bytes).

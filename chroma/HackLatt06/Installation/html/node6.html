@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Source, Build and Install Directories</TITLE>
+<META NAME="description" CONTENT="Source, Build and Install Directories">
+<META NAME="keywords" CONTENT="chroma_install">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="chroma_install.css">
+
+<LINK REL="next" HREF="node7.html">
+<LINK REL="previous" HREF="node5.html">
+<LINK REL="up" HREF="node4.html">
+<LINK REL="next" HREF="node7.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html141"
+  HREF="node7.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html137"
+  HREF="node4.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html131"
+  HREF="node5.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html139"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html142"
+  HREF="node7.html">Make Compilers and Cross</A>
+<B> Up:</B> <A NAME="tex2html138"
+  HREF="node4.html">General Concepts for Building</A>
+<B> Previous:</B> <A NAME="tex2html132"
+  HREF="node5.html">The configure, make, make</A>
+ &nbsp <B>  <A NAME="tex2html140"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00042000000000000000">
+Source, Build and Install Directories</A>
+</H2>
+Generally, in order for a package to be usable by another package it needs
+to be installed. Installation can be just about anywhere one has UNIX priviliges to write to. Furthermore, in order for one to be able to build from pristine
+sources most packages can be compiled in a different directory from the source
+code. This leads to the concept of having 3 directories per package:
+<DL>
+<DT><STRONG><EM>The source directory </EM></STRONG></DT>
+<DD>- this is the directory which is pulled from CVS, or which results upon untarring a package
+</DD>
+<DT><STRONG><EM>The build directory </EM></STRONG></DT>
+<DD>is the directory in which the code is compiled. It may or may not be distinct from the source directory.
+</DD>
+<DT><STRONG><EM>The install directory</EM></STRONG></DT>
+<DD>is where the software is installed. It can be usually specified with the <code>--prefix=&lt;installdir&gt;</code> command lne argument to configure. If no <code>--prefix</code> argument is given, <TT>configure</TT> defaults to<TT>/usr/local</TT>.
+</DD>
+</DL>
+
+<P>
+Throughout these notes we will always endevour to build in a separate directory 
+from the source. 
+
+<P>
+Let us assume that you have checked out <TT>qdp++</TT> to a directory <TT>/home/bj/src/qdp++</TT>, or you have untarred a <TT>qdp++</TT> tarball and moved it to <TT>/home/bj/src/qdp++</TT>. This directory is your source directory.
+
+<P>
+Now in order to build <TT>qdp++</TT> you would make another directory lets say <TT>/home/bj/build/qdp++</TT> and then in that directory you could execute
+
+<P>
+<code>../../src/qdp++/configure --prefix=/home/bj/install/qdp++</code>
+
+<P>
+then <TT>/home/bj/build/qdp++</TT> is your build directory and <TT>/home/bj/install/qdp++</TT> is the install directory. (The install directory will be created automatically if it doesn't exist when you type <TT>make install</TT>)
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html141"
+  HREF="node7.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html137"
+  HREF="node4.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html131"
+  HREF="node5.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html139"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html142"
+  HREF="node7.html">Make Compilers and Cross</A>
+<B> Up:</B> <A NAME="tex2html138"
+  HREF="node4.html">General Concepts for Building</A>
+<B> Previous:</B> <A NAME="tex2html132"
+  HREF="node5.html">The configure, make, make</A>
+ &nbsp <B>  <A NAME="tex2html140"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Balint Joo
+2005-04-11
+</ADDRESS>
+</BODY>
+</HTML>

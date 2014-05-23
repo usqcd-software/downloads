@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Software Map</TITLE>
+<META NAME="description" CONTENT="Software Map">
+<META NAME="keywords" CONTENT="chroma_install">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="chroma_install.css">
+
+<LINK REL="next" HREF="node4.html">
+<LINK REL="previous" HREF="node2.html">
+<LINK REL="up" HREF="chroma_install.html">
+<LINK REL="next" HREF="node4.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html101"
+  HREF="node4.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html97"
+  HREF="chroma_install.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html91"
+  HREF="node2.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html99"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html102"
+  HREF="node4.html">General Concepts for Building</A>
+<B> Up:</B> <A NAME="tex2html98"
+  HREF="chroma_install.html">Installation notes for the</A>
+<B> Previous:</B> <A NAME="tex2html92"
+  HREF="node2.html">Preliminaries</A>
+ &nbsp <B>  <A NAME="tex2html100"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00030000000000000000">
+Software Map</A>
+</H1>
+We show the software map in fig. <A HREF="node3.html#f:SoftwareMap">2</A>.
+
+<DIV ALIGN="CENTER"><A NAME="f:SoftwareMap"></A><A NAME="19"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 1:</STRONG>
+The chroma software map</CAPTION>
+<TR><TD><IMG
+ WIDTH="575" HEIGHT="612" BORDER="0"
+ SRC="img1.png"
+ ALT="\begin{figure}\begin{center}
+\leavevmode
+\hbox{%%
+\epsfxsize =5in
+\epsffile{chroma_software_map.eps}}
+\end{center}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+As one can see the number and interrelationship of software components has
+become quite complicated. Let us describe the various components from the 
+software map below:
+<DL>
+<DT><STRONG><B>Gnu Autoconf and Automake:  </B></STRONG></DT>
+<DD>These packages are freely available from <A NAME="tex2html2"
+  HREF="http://www.gnu.org">the GNU Operating System web-site</A>. They are used in the build system for the 
+chroma software suite. While it is in theory possible to build the system 
+without having these installed, in practice it happens that some commits cause
+the various makefiles and makefile templates to have earlier timestamps than 
+the important <TT>Makefile.am</TT> files, in which case the dependency tracking
+of the build system <EM>will</EM> try to run <TT>automake</TT> and <TT>autoconf</TT>,
+and life is considerably simplified if these packages are installed. 
+
+<P>
+Some Linux and Unix systems have these packages installed, but often the versions as too old for compatibility. The minimal required versions are 
+<DL>
+<DT><STRONG><B><TT>autoconf-2.58</TT></B></STRONG></DT>
+<DD>which can be found <A NAME="tex2html3"
+  HREF="http://www.gnu.org/software/autoconf/">here</A>.
+
+</DD>
+<DT><STRONG><B><TT>automake-1.9.3</TT></B></STRONG></DT>
+<DD>which can be found <A NAME="tex2html4"
+  HREF="http://www.gnu.org/software/automake/">here</A>
+</DD>
+</DL>
+</DD>
+<DT><STRONG><B>Chroma:  </B> </STRONG></DT>
+<DD>Chroma is (obviously) the key software
+component, consisting of the various physics libraries and
+applications. It can be obtained from the <A NAME="tex2html5"
+  HREF="http://www.usqcd.org/usqcd-software/">USQCD
+Software Web Site</A>
+or from the
+<A NAME="tex2html6"
+  HREF="http://www.jlab.org/~edwards/lattice_cvs.html">Jlab CVS
+repository</A>
+(<EM>Status: building required</EM>)
+
+<P>
+</DD>
+<DT><STRONG><B>QDP++:  </B> </STRONG></DT>
+<DD>QDP is an integral part of the Chroma software system and implements Level 2 of the <A NAME="tex2html7"
+  HREF="http://www.scidac.org">US SciDAC programme</A>
+QCD software infrastructure. It can be obtained from anonymous CVS at the Jlab (<A NAME="tex2html8"
+  HREF="http://www.jlab.org/~edwards/lattice_cvs.html">see this link for instructions</A>) or the <A NAME="tex2html9"
+  HREF="http://www.usqcd.org/usqcd-software/">USQCD Software Web Site</A>. This package subsumes auxiliary packages <TT>qio</TT> and <TT>xpath_reader</TT> which provide SciDAC standard I/O and a XML reading/writing library respectively. (<EM>Status: building required</EM>)
+
+<P>
+</DD>
+<DT><STRONG><B>QMP:  </B> </STRONG></DT>
+<DD>QMP is SciDAC's message passing standard and is a key interface to allow the software to be portable to various parallel supercomputers. The intention of the SciDAC standard was that QMP be implemented by the machine providers, so on many machines you will find it already installed for you. If you are moving to a new machine, an MPI reference implementation is available from <A NAME="tex2html10"
+  HREF="http://www.usqcd.org/usqcd-software/">the USQCD Software Web site</A>
+or you can get 
+it from the <A NAME="tex2html11"
+  HREF="http://www.jlab.org/~edwards/lattice_cvs.html">Jlab CVS repository</A>. <EM>Status
+</EM>
+<UL>
+<LI>building required on new parallel architectures. The MPI reference implementation is a good place to start.
+</LI>
+<LI>installed on Jlab Myrinet/Gig-E clusters
+</LI>
+<LI>installed on QCDOC machines as part of the QOS
+</LI>
+</UL><EM>
+You don't need this package if you are only doing a scalar workstation build
+</EM>
+
+<P>
+</DD>
+<DT><STRONG><B>libxml2:  </B> </STRONG></DT>
+<DD>This package is shipped with most Linux and Unix systems as well as with Cygwin. It is the Gnome foundations open source XML parsing package, which QDP++ and Chroma use to read XML documents. On Cygwin machines, it may be possible that only the  <TT>libxml2</TT> applications are installed <TT>xmllint</TT>, <TT>xsltproc</TT> etc. In this case, the <TT>libxml2</TT> <EM>libraries</EM> package must also be installed. The project also has a <A NAME="tex2html12"
+  HREF="http://www.xmlsoft.org">web page</A>
+where source distributions for the package may be found. When working with sources (eg on QCDOC) we generally use version 2.6.6. Previous versions have been known to contain the odd memory leak. <EM>Status
+</EM>
+<UL>
+<LI>Versions of various age usually installed on linux and Unix systems
+</LI>
+<LI>Library installation may be needed on Cygwin systems
+</LI>
+<LI>Building may be required on new machines (eg BlueGene)
+</LI>
+<LI>Should be installed on QCDOC machines, but if you are rolling your own chroma you may need to build it
+</LI>
+</UL>
+</DD>
+<DT><STRONG><B>BAGEL and BAGEL Wilson Dslash: </B></STRONG></DT>
+<DD>These packages provide assembler optimisations for linear algebra in QDP++,
+the Wilson Dslash operator and a function for applying Wilson Dslash to a 
+vector of fermions. It is a key package for fast running on several RISC
+based architectures especially QCDOC, BlueGene and IBM Power based machines
+(although BAGEL also supports UltraSparcII, Alpha and Generic C (noarch)
+targets). Currently BAGEL is not available for general release, but will
+be available for general download soon. <EM>Status
+</EM>
+<UL>
+<LI>should be installed on QCDOC (eventually) it certainly is installed on the Edinburgh QCDOC.
+</LI>
+<LI>may need to install this if you are porting to a new machine (IBM Pseries, BlueGene/L and QCDOC or any of the other supported architectures)
+</LI>
+</UL><EM>
+This packages is not <EM>required</EM> for running, but without it on many targets
+the code will run slowly.
+</EM>
+</DD>
+<DT><STRONG><B>GMP: </B></STRONG></DT>
+<DD>is the GNU Multiple Precision library. It is currently used in the Remez algorithm which is used in the Hybrid Monte Carlo code, to provide coefficients for the rational approximations needed to run <EM>single flavour</EM> simulations using RHMC. If it is not installed on your machine, you can get it from <A NAME="tex2html13"
+  HREF="http://www.swox.com/gmp/">the GMP Web site</A>. <EM>Status:
+</EM>
+<UL>
+<LI>This package is installed on the QCDOC machines as it is also used by the CPS 
+for its RHMC implementation. 
+</LI>
+<LI>This package is often installed on Linux and other Unix (as well as Cygwin)
+systems
+</LI>
+<LI>You may need to install this on new machines you are porting to if you 
+intend to run a single flavour simulation using rational approximations
+</LI>
+</UL><EM>
+You don't need to worry about this package unless you intend to do RHMC
+simulations
+</EM>
+</DD>
+</DL>
+
+<P>
+The installation of <TT>autoconf</TT> and <TT>automake</TT> are straightforward,
+as is the installation of <TT>libxml</TT> (except when building on QCDOC, I'll
+get back to this later) and <TT>gmp</TT>. From here on, except when dealing with these packages for particular system reasons, I will assume that your system
+has these packages installed, and I'll concentrate on QDP++ and Chroma.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html101"
+  HREF="node4.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html97"
+  HREF="chroma_install.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html91"
+  HREF="node2.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html99"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html102"
+  HREF="node4.html">General Concepts for Building</A>
+<B> Up:</B> <A NAME="tex2html98"
+  HREF="chroma_install.html">Installation notes for the</A>
+<B> Previous:</B> <A NAME="tex2html92"
+  HREF="node2.html">Preliminaries</A>
+ &nbsp <B>  <A NAME="tex2html100"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Balint Joo
+2005-04-11
+</ADDRESS>
+</BODY>
+</HTML>

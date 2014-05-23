@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>The configure, make, make install chain</TITLE>
+<META NAME="description" CONTENT="The configure, make, make install chain">
+<META NAME="keywords" CONTENT="chroma_install">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="chroma_install.css">
+
+<LINK REL="next" HREF="node6.html">
+<LINK REL="previous" HREF="node4.html">
+<LINK REL="up" HREF="node4.html">
+<LINK REL="next" HREF="node6.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html129"
+  HREF="node6.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html125"
+  HREF="node4.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html119"
+  HREF="node4.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html127"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html130"
+  HREF="node6.html">Source, Build and Install</A>
+<B> Up:</B> <A NAME="tex2html126"
+  HREF="node4.html">General Concepts for Building</A>
+<B> Previous:</B> <A NAME="tex2html120"
+  HREF="node4.html">General Concepts for Building</A>
+ &nbsp <B>  <A NAME="tex2html128"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00041000000000000000">
+The <TT>configure</TT>, <TT>make</TT>, <TT>make install</TT> chain</A>
+</H2>
+All the software in the software map is generically built with the following
+instructions:
+
+<P>
+<TT>configure</TT>, <TT>make</TT>, <TT>make install</TT>
+
+<P>
+which should be familiar to OpenSource afficionados.
+
+<P>
+<DL>
+<DT><STRONG><TT>configure</TT>:  </STRONG></DT>
+<DD>generates <TT>Makefiles</TT> required for a build and performs various configuration actions (setting an install path, setting #defined variables, deciding which source files to compile, checking for various systems libraries and functions etc). Invocations of <TT>configure</TT> are further controlled by additional shell variables and command line switches which fall into 3 general classes:
+<DL>
+<DT><STRONG><EM>Enabling and disabling features</EM>  </STRONG></DT>
+<DD>type command line arguments. These are intended to generally enable various features that autoconf cannot detect for itself. The <TT>feature</TT> is a placeholder for the actual feature, and can have additional arguments. For example to enable a scalar build one would use the command line argument:
+
+<P>
+<code>--enable-parallel-arch=scalar</code>
+
+<P>
+where the <TT>parallel-arch</TT> is the <TT>feature</TT> and has one argument <TT>scalar</TT>. Not all features have arguments. For example to enable SSE2 optimisations to QDP++ one would use the command line argument
+
+<P>
+<code>--enable-sse2</code>
+
+<P>
+</DD>
+<DT><STRONG><EM>Specifying packages</EM></STRONG></DT>
+<DD>is generally used to specify the usage of an auxiliary package (such as say libxml2). Again these can take arguments like the <code>--enable-feature</code> switches. An example use is to specify to QDP++ the location
+of the installed <TT>libxml2</TT> library:
+
+<P>
+<code>--with-libxml2=/usr/local</code>
+
+<P>
+</DD>
+<DT><STRONG><EM>Environment variables</EM></STRONG></DT>
+<DD>can be used to give various pieces of information to the build system. One example of this is setting optimisation flags for a compiler. These can in principle differ from one compiler to the other or you  may wish a build that enables debugging etc. Also if you want to link against a library which is not supported by <TT>-with-package</TT> options, you can use these to set the include and linker paths to your library (eg when using <TT>gmp</TT>). Typically the variables <TT>CFLAGS, CXXFLAGS, LDFLAGS</TT> and <TT>LIBS</TT> are set this way, to control compiler behaviour as the default <TT>autoconf</TT> settings are often dumb/non-existent. An example command line is:
+<PRE>
+configure CXXFLAGS="-O2 -finline-limit=50000 -I/home/foo/gmp/include" \
+CFLAGS="-O2" LDFLAGS="-L/home/foo/gmp/lib" LIBS="-lgmp" --enable-gmp
+</PRE>
+which shows how to specify the flags to enable the GMP library installed
+in <TT>/home/foo/gmp</TT>. (This should be changed to a suitable <TT>-with-gmp</TT>
+option but that is for the future.)
+</DD>
+</DL>
+
+<P>
+</DD>
+<DT><STRONG><TT>make: </TT></STRONG></DT>
+<DD>Builds the libraries and applications (if any)
+
+<P>
+</DD>
+<DT><STRONG><TT>make install</TT></STRONG></DT>
+<DD>Installs the libraries
+</DD>
+</DL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html129"
+  HREF="node6.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html125"
+  HREF="node4.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html119"
+  HREF="node4.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html127"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html130"
+  HREF="node6.html">Source, Build and Install</A>
+<B> Up:</B> <A NAME="tex2html126"
+  HREF="node4.html">General Concepts for Building</A>
+<B> Previous:</B> <A NAME="tex2html120"
+  HREF="node4.html">General Concepts for Building</A>
+ &nbsp <B>  <A NAME="tex2html128"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Balint Joo
+2005-04-11
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,586 @@
+\documentclass{article}
+\usepackage{times}
+\usepackage{fullpage}
+\usepackage{epsfig}
+\usepackage{html}
+\title{Installation notes for the Chroma Software System}
+\author{B\'alint Jo\'o}
+\begin{document}
+\maketitle
+\tableofcontents
+\section{Preliminaries}
+This set of notes describes the work necessary for the installation
+of the Chroma software system. Chroma has been designed to be highly portable,
+and so far has been built on the following diverse number of systems:
+\begin{itemize}
+\item
+Linux and Cygwin scalar workstations
+\item
+PC Clusters running Linux with the following fabrics
+\begin{itemize}
+\item 
+Myrinet machines using MPICH-GM for communications
+\item
+GigE machines using M-Via based Gigabit Ethernet communications harness
+\item
+Ethernet based systems using MPICH-MPI communications
+\end{itemize}
+\item
+QCDOC machines using QCDOC-s QMP implementation
+\item
+IBM P-series computers using MPI based QMP harness
+\item
+BlueGene/L machines using MPI base QMP harness
+\end{itemize}
+
+The price of this level of portability is layering of software components.
+This has resulted in quite a complicated software map of various dependent software. 
+
+\section{Software Map}
+We show the software map in fig. \ref{f:SoftwareMap}.
+\begin{figure}[ht]
+\begin{center}
+\leavevmode
+\hbox{%
+\epsfxsize=5in
+\epsffile{chroma_software_map.eps}
+}
+\caption{The chroma software map}
+\end{center}
+\label{f:SoftwareMap}
+\end{figure}
+
+As one can see the number and interrelationship of software components has
+become quite complicated. Let us describe the various components from the 
+software map below:
+\begin{description}
+\item[{\bf Gnu Autoconf and Automake: \ }]
+These packages are freely available from \htmladdnormallink{the GNU Operating System web-site}{http://www.gnu.org}. They are used in the build system for the 
+chroma software suite. While it is in theory possible to build the system 
+without having these installed, in practice it happens that some commits cause
+the various makefiles and makefile templates to have earlier timestamps than 
+the important {\tt Makefile.am} files, in which case the dependency tracking
+of the build system {\em will} try to run {\tt automake} and {\tt autoconf},
+and life is considerably simplified if these packages are installed. 
+
+
+Some Linux and Unix systems have these packages installed, but often the versions as too old for compatibility. The minimal required versions are 
+\begin{description}
+   \item[{\bf \tt autoconf-2.58}] which can be found \htmladdnormallink{here}{http://www.gnu.org/software/autoconf/}.
+   \item[{\bf \tt automake-1.9.3}] which can be found \htmladdnormallink{here}{http://www.gnu.org/software/automake/}
+\end{description}
+\item[{\bf Chroma: \ } ] Chroma is (obviously) the key software
+component, consisting of the various physics libraries and
+applications. It can be obtained from the \htmladdnormallink{USQCD
+Software Web Site}{http://www.usqcd.org/usqcd-software/} or from the
+\htmladdnormallink{Jlab CVS
+repository}{http://www.jlab.org/~edwards/lattice_cvs.html} ({\em
+Status: building required})
+
+\item[{\bf QDP++: \ } ]
+QDP is an integral part of the Chroma software system and implements Level 2 of the \htmladdnormallink{US SciDAC programme}{http://www.scidac.org} QCD software infrastructure. It can be obtained from anonymous CVS at the Jlab (\htmladdnormallink{see this link for instructions}{http://www.jlab.org/~edwards/lattice_cvs.html}) or the \htmladdnormallink{USQCD Software Web Site}{http://www.usqcd.org/usqcd-software/}. This package subsumes auxiliary packages {\tt qio} and {\tt xpath\_reader} which provide SciDAC standard I/O and a XML reading/writing library respectively. ({\em Status: building required})
+
+\item[{\bf QMP: \ } ]
+QMP is SciDAC's message passing standard and is a key interface to allow the software to be portable to various parallel supercomputers. The intention of the SciDAC standard was that QMP be implemented by the machine providers, so on many machines you will find it already installed for you. If you are moving to a new machine, an MPI reference implementation is available from \htmladdnormallink{the USQCD Software Web site}{http://www.usqcd.org/usqcd-software/} or you can get 
+it from the \htmladdnormallink{Jlab CVS repository}{http://www.jlab.org/~edwards/lattice_cvs.html}. {\em Status
+\begin{itemize}
+\item 
+building required on new parallel architectures. The MPI reference implementation is a good place to start.
+\item
+installed on Jlab Myrinet/Gig-E clusters
+\item
+installed on QCDOC machines as part of the QOS
+\end{itemize}
+You don't need this package if you are only doing a scalar workstation build
+}
+
+\item[{\bf libxml2: \ } ]
+This package is shipped with most Linux and Unix systems as well as with Cygwin. It is the Gnome foundations open source XML parsing package, which QDP++ and Chroma use to read XML documents. On Cygwin machines, it may be possible that only the  {\tt libxml2} applications are installed {\tt xmllint}, {\tt xsltproc} etc. In this case, the {\tt libxml2} {\em libraries} package must also be installed. The project also has a \htmladdnormallink{web page}{http://www.xmlsoft.org} where source distributions for the package may be found. When working with sources (eg on QCDOC) we generally use version 2.6.6. Previous versions have been known to contain the odd memory leak. {\em Status
+\begin{itemize}
+\item
+Versions of various age usually installed on linux and Unix systems
+\item
+Library installation may be needed on Cygwin systems
+\item
+Building may be required on new machines (eg BlueGene)
+\item
+Should be installed on QCDOC machines, but if you are rolling your own chroma you may need to build it
+\end{itemize}
+}
+\item[{\bf BAGEL and BAGEL Wilson Dslash:\ }]
+These packages provide assembler optimisations for linear algebra in QDP++,
+the Wilson Dslash operator and a function for applying Wilson Dslash to a 
+vector of fermions. It is a key package for fast running on several RISC
+based architectures especially QCDOC, BlueGene and IBM Power based machines
+(although BAGEL also supports UltraSparcII, Alpha and Generic C (noarch)
+targets). Currently BAGEL is not available for general release, but will
+be available for general download soon. {\em Status
+\begin{itemize}
+\item
+  should be installed on QCDOC (eventually) it certainly is installed on the Edinburgh QCDOC.
+\item
+  may need to install this if you are porting to a new machine (IBM Pseries, BlueGene/L and QCDOC or any of the other supported architectures)
+\end{itemize}
+This packages is not {\em required} for running, but without it on many targets
+the code will run slowly.
+}
+\item[{\bf GMP: }]
+is the GNU Multiple Precision library. It is currently used in the Remez algorithm which is used in the Hybrid Monte Carlo code, to provide coefficients for the rational approximations needed to run {\em single flavour} simulations using RHMC. If it is not installed on your machine, you can get it from \htmladdnormallink{the GMP Web site}{http://www.swox.com/gmp/}. {\em Status:
+\begin{itemize}
+\item
+This package is installed on the QCDOC machines as it is also used by the CPS 
+for its RHMC implementation. 
+\item
+This package is often installed on Linux and other Unix (as well as Cygwin)
+systems
+\item
+You may need to install this on new machines you are porting to if you 
+intend to run a single flavour simulation using rational approximations
+\end{itemize}
+You don't need to worry about this package unless you intend to do RHMC
+simulations
+}
+\end{description}
+
+The installation of {\tt autoconf} and {\tt automake} are straightforward,
+as is the installation of {\tt libxml} (except when building on QCDOC, I'll
+get back to this later) and {\tt gmp}. From here on, except when dealing with these packages for particular system reasons, I will assume that your system
+has these packages installed, and I'll concentrate on QDP++ and Chroma.
+
+\section{General Concepts for Building}
+In order to make the packages more usable, we have attempted to adhere
+to general Open Source standards (one of the reasons we use {\tt autoconf}
+and {\tt automake} was to give the build system one has come to expect
+from standard Open Source packages). This is not to say that all the 
+software in the software map is open source. In particular BAGEL has
+some restrictions, which we will discuss later. For now let us shift 
+our focus back to building.
+
+Most of the concepts discuss here relate to autoconf and controlling 
+the configuration using {\tt configure} scripts. To get the full and proper
+lowdown on this one can consult the autoconf documentation on \htmladdnormallink{the autoconf web page}{http://www.gnu.org/software/autoconf/manual/}.
+
+\subsection{The {\tt configure}, {\tt make}, {\tt make install} chain}
+All the software in the software map is generically built with the following
+instructions:
+
+\hbox{{\tt configure}, {\tt make}, {\tt make install}}
+
+which should be familiar to OpenSource afficionados.
+
+\begin{description}
+\item[{\tt configure}: \ ]
+generates {\tt Makefiles} required for a build and performs various configuration actions (setting an install path, setting \#defined variables, deciding which source files to compile, checking for various systems libraries and functions etc). Invocations of {\tt configure} are further controlled by additional shell variables and command line switches which fall into 3 general classes:
+\begin{description}
+ \item[{\em Enabling and disabling features} \ ] type command line arguments. These are intended to generally enable various features that autoconf cannot detect for itself. The {\tt feature} is a placeholder for the actual feature, and can have additional arguments. For example to enable a scalar build one would use the command line argument:
+
+\hbox{\verb1--enable-parallel-arch=scalar1}
+
+where the {\tt parallel-arch} is the {\tt feature} and has one argument {\tt scalar}. Not all features have arguments. For example to enable SSE2 optimisations to QDP++ one would use the command line argument
+
+\hbox{\verb1--enable-sse21}
+
+ \item[{\em Specifying packages}] is generally used to specify the usage of an auxiliary package (such as say libxml2). Again these can take arguments like the {\verb1--enable-feature1} switches. An example use is to specify to QDP++ the location
+of the installed {\tt libxml2} library:
+
+\hbox{\verb1--with-libxml2=/usr/local1}
+
+\item[{\em Environment variables}] can be used to give various pieces of information to the build system. One example of this is setting optimisation flags for a compiler. These can in principle differ from one compiler to the other or you  may wish a build that enables debugging etc. Also if you want to link against a library which is not supported by {\tt --with-package} options, you can use these to set the include and linker paths to your library (eg when using {\tt gmp}). Typically the variables {\tt CFLAGS, CXXFLAGS, LDFLAGS} and {\tt LIBS} are set this way, to control compiler behaviour as the default {\tt autoconf} settings are often dumb/non-existent. An example command line is:
+\begin{verbatim}
+configure CXXFLAGS="-O2 -finline-limit=50000 -I/home/foo/gmp/include" \
+CFLAGS="-O2" LDFLAGS="-L/home/foo/gmp/lib" LIBS="-lgmp" --enable-gmp
+\end{verbatim}
+which shows how to specify the flags to enable the GMP library installed
+in {\tt /home/foo/gmp}. (This should be changed to a suitable {\tt --with-gmp}
+option but that is for the future.)
+\end{description}
+
+\item[{\tt make: }]
+Builds the libraries and applications (if any)
+
+\item[{\tt make install}] 
+Installs the libraries
+\end{description}
+
+\subsection{Source, Build and Install Directories}
+Generally, in order for a package to be usable by another package it needs
+to be installed. Installation can be just about anywhere one has UNIX priviliges to write to. Furthermore, in order for one to be able to build from pristine
+sources most packages can be compiled in a different directory from the source
+code. This leads to the concept of having 3 directories per package:
+\begin{description}
+\item[{\em The source directory }]
+-- this is the directory which is pulled from CVS, or which results upon untarring a package
+\item[{\em The build directory }] is the directory in which the code is compiled. It may or may not be distinct from the source directory.
+\item[{\em The install directory}] is where the software is installed. It can be usually specified with the \verb1--prefix=<installdir>1 command lne argument to configure. If no \verb1--prefix1 argument is given, {\tt configure} defaults to{\tt /usr/local}.
+\end{description}
+
+Throughout these notes we will always endevour to build in a separate directory 
+from the source. 
+
+Let us assume that you have checked out {\tt qdp++} to a directory {\tt /home/bj/src/qdp++}, or you have untarred a {\tt qdp++} tarball and moved it to {\tt /home/bj/src/qdp++}. This directory is your source directory.
+
+Now in order to build {\tt qdp++} you would make another directory lets say {\tt /home/bj/build/qdp++} and then in that directory you could execute
+
+\hbox{\verb1../../src/qdp++/configure --prefix=/home/bj/install/qdp++1}
+
+then {\tt /home/bj/build/qdp++} is your build directory and {\tt /home/bj/install/qdp++} is the install directory. (The install directory will be created automatically if it doesn't exist when you type {\tt make install})
+
+\subsection{Make Compilers and Cross Compilers}
+
+Automake is supposed to generate Makefiles which are compliant with the {\em
+GNU Makefile standards}. They should surely work with \htmladdnormallink{GNU Make}{http://www.gnu.org/software/make} which is also colloqually known as {\tt gmake}. Often systems with propriatery {\tt make} tools GNU make is also installed  and sometimes denoted {\tt gmake}. If you are in doubt, install GNU Make on your system from sources.
+
+The only compiler that is fully supported is \htmladdnormallink{\tt gcc/g++}{http://gcc.gnu.org}. This is simply because it is most likely that this is a compiler that most machines have available. You will need {\tt gcc} version 3 or higher. At the time of writing the current version of {\tt gcc} is version 3.4 (or higher).
+
+The chroma system has been compiled with other compilers including {\tt icc} \htmladdnormallink{the Intel C++ compiler for linux}{http://www.intel.com/software/products/compilers/clin/} as well as {\tt xlc/xlC} also known as \htmladdnormallink{the IBM Visual Age C/C++ compiler}{http://www-306.ibm.com/software/awdtools/vacpp/} although this fails on some systems. The \htmladdnormallink{Sun ONE Studio 8 Compiler}{http://www.sun.com/software/sundev/suncc/} at the time of writing, does not support template-template arguments which is necessary for compiling QDP++ and Chroma. If in doubt use {\tt GCC} 
+
+On some systems a distinction is made between the machine front end, where you can compile stuff and the back end, where the code will run. This can arise in several situations:
+\begin{itemize}
+\item
+The front end is different hardware from the back end for example on QCDOC and BlueGene/L
+\item
+The front end is scalar and the back end is parallel. Parallelism related checks fail to run on the front end (eg whether QMP works).
+\end{itemize}
+
+In this case a special kind of build is needed called cross compiling. The main distinguishing characteristic of cross compiling is that the executables produced by compilation cannot be run on a machine that is doing the compiling.
+
+In the first instance above, you may need an entirely separate compiler to perform the build: eg on QCDOC, {\tt gcc} may well be available on the front end but you need a specific installation that works only on the backend {\tt powerpc-gnu-elf-gcc}. 
+
+In the second case, you need the same compiler for the front and back end but
+some configure type checks need to be disabled because executables created cannot be run on the compiling machine.
+
+A particularly evil case is building the bagel libraries, which consist of two 
+cases. First some executables needed to be built on the front end which produce
+code that will be compiled for the back end. The first stage of the build 
+is on the front end (a so called native build) whereas the second stage is 
+a cross compilation.
+
+Autoconf terminology defines the following terms:
+\begin{description}
+\item{{\em The build}} system is the system on which the build/compilation
+is performed. This system can be specified by the \verb1--build1 command line
+argument to {\tt configure} scripts.
+
+\item{{\em The host}} system is the system on which the code will run. This system is specified with the \verb1--host1 command line argument to {\tt configure} scripts
+\end{description}
+
+For a configure script to work in cross compiling mode, you need to specify a 
+\verb1--host1 that is different from \verb1--build1. If you specify neither,
+they will be guessed to be the same and you will perform a {\em native} build.
+
+Autoconf defines a kind of name canonicalisation. The canonical names are the ones that must be given as arguments to the \verb1--host1 and \verb1--build1 command line of {\tt configure} 
+
+A system is defined by a 3 
+part canonical name consisting of the following 3 parts: {\tt processor-vendor-os}. These parts are very loosely defined. For example most linux machines have a canonical name something like {\tt i686-pc-linux-gnu}. Here {\tt i686} is the processor identifier, the vendor is {\tt pc} (some PC manufacturer) and the OS is {\tt linux-gnu}. The QCDOC front end has canonical name: {\tt powerpc-ibm-aix5.2.0.0}. The QCDOC back end is simply denoted {\tt powerpc-gnu-elf} with no refernce to the vendor or OS. For systems with nothing known about them one can use the canonical name {\tt none}.
+
+The following {\tt host/build} combinations are common:
+
+\hbox{\verb1--host=powerpc-gnu-elf --build=none1} 
+
+can be used when compiling for the QCDOC. The combination
+
+\hbox{\verb1--host=i686-pc-linux --build=none1}
+
+can be used to trip a cross compilation on a scalar Linux front end
+that is building for a parallel Linux back end that is potentially
+behind a queueing system so executables built for it cannot be run
+on/from the front end easily.
+
+\subsection{Filename extensions and Cygwin}
+We generally adhere to the following conventions:
+\begin{itemize}
+\item
+Header files have extension {\tt .h}
+\item
+C Sources have extension {\tt .c}
+\item
+C++ Sources have extension {\tt .cc}
+\item
+Object files have extension {\tt .o}
+\item
+Libraries have extension {\tt .a}
+\item
+Executables have no extension.
+\end{itemize}
+
+A notable exception when building for Cygwin (under Windows).  In this
+case executables have standard windows extension {\tt .exe}. So for
+example the application {\tt propagator} in chroma would be built
+under linux with the command
+
+\hbox{{\tt make propagator}}
+
+and the resulting program will be called {\tt propagator} 
+but under Cygwin one must build with
+
+\hbox{{\tt make propagator.exe}}
+
+and the resulting propagator will be called {\tt propagator.exe}.
+
+\section{Quick Start: A linux scalar build}
+In this section we will perform a native build for a scalar linux
+machine. I assume that libxml, and gmp, autoconf, automake,
+GNU make and gcc version 3.x is installed for you somehow (either by
+default, or that you have installed them).
+
+\subsection{Paths}
+You will need the sources for QDP++ and Chroma. I will assume that the
+QDP++ source is in {\tt /home/bj/src/qdp++} and that Chroma is in {\tt
+/home/bj/src/chroma}. Naturally you will put them them in different
+directories on your machines. Just remember to substitute your various
+paths for {\tt /home/bj} in the future.
+
+\subsection{Configuring and building QDP++}
+We need to build QDP++ first. Let us make a {\em build direcotry} and 
+go into it:
+
+\hbox{\tt mkdir /home/bj/build/qdp; cd /home/bj/build/qdp}
+
+Now we need to configure QDP++. We want to install it into {\tt /home/bj/install/qdp\_scalar\_single} (scalar build in single precision). We will do it 
+with the following command:
+
+\begin{verbatim}
+/home/bj/src/qdp++/configure --prefix=/home/bj/install/qdp_scalar_single \
+    --enable-parallel-arch=scalar
+\end{verbatim}
+
+This should configure QDP++. By default the precision will be single precision.
+There is no optimisation, no extra flags. You should see lots of messages from 
+{\tt configure} telling you that it is looking for libxml etc. If configure
+exits without an error you should be able to type
+
+\begin{verbatim}
+gmake; gmake install
+\end{verbatim}
+
+To build the system.
+
+\subsection{Inlining functions and optimisation}
+The previous build is not very useful. It leaves on the (default) debugging 
+flags and does not do any inlining, resulting in extremely {\em slow} code.
+We found with {\tt gcc} better code is produced by setting the following:
+
+\begin{verbatim}
+/home/bj/src/qdp++/configure --prefix=/home/bj/install/qdp_scalar_single \
+    --enable-parallel-arch=scalar CXXFLAGS="-O2 -finline-limit=50000" CFLAGS="-O2"
+\end{verbatim}
+
+This sets optimisation level 2 for both GCC and G++. It also sets the inline 
+limit for the C++ compiler to a large value, allowing a large amount of function inlining and should genereate better code.
+
+\subsection{Enabling SSE/SSE2}
+While the previous section enabled a large amount of compiler
+optimisation, on Pentium 4s and other SSE enabled targets with gcc/g++
+considerable speed improvements can be gained by enabling SSE short
+vector instruction optimisations.  These can be enabled with the
+\verb1--enable-sse1 and \verb1--enable-sse21 switches to
+autoconf. Double precision needs \verb1--enable-sse21 as the original
+SSE instructions did not support double precision. If specifying SSE2,
+normal SSE is automatically enabled. This brings the configuration
+command line for an SSE enabled, native, gcc, scalar build up to:
+\begin{verbatim}
+/home/bj/src/qdp++/configure --prefix=/home/bj/install/qdp_scalar_single \
+    --enable-parallel-arch=scalar \
+    --enable-sse2 \
+    CXXFLAGS="-O2 -finline-limit=50000" CFLAGS="-O2"
+\end{verbatim}
+which should suffice for most scalar linux penitum-like builds.
+
+\subsection{Double Precision}
+If you'd like to work in double precision you should add the \verb1--enable-precision=double1 command line argument to configure: 
+\begin{verbatim}
+/home/bj/src/qdp++/configure --prefix=/home/bj/install/qdp_scalar_double \
+    --enable-parallel-arch=scalar \
+    --enable-sse2 \
+    --enabele-precision=double \
+    CXXFLAGS="-O2 -finline-limit=50000" CFLAGS="-O2"
+\end{verbatim}
+
+\subsection{Specifying your own libxml}
+Suppose that {\tt libxml2} is not installed in the usual place on your
+system (for example it wasn't there, and you have installed it, but have
+not placed it into your PATH) If configure does not find it the configuration
+script will exit with an error message like
+\begin{verbatim}
+configure: error: Cannot compile/link a program with libxml2.
+    Use --with-libxml2=<dir> to select a working version.
+\end{verbatim}
+
+Let us suppose it has been installed in {\tt /home/bj/install/libxml2}. You can specify where it is using the \verb1--with-libxml21 option to configure:
+\begin{verbatim}
+/home/bj/src/qdp++/configure --prefix=/home/bj/install/qdp_scalar_single \
+    --enable-parallel-arch=scalar \
+    --enable-sse2 \
+    --enabele-precision=single \
+    --with-libxml=/home/bj/install/libxml2 \
+    CXXFLAGS="-O2 -finline-limit=50000" CFLAGS="-O2"
+\end{verbatim}
+
+\subsection{Automake related errors, and dealing with them}
+It may happen that after configuring you type :
+\hbox{\tt gmake}
+and you get an error like:
+\begin{verbatim}
+cd .. && \
+  /bin/sh /home/bj/tmp/qdp++/config/missing --run automake-1.7 --gnu  Makefile
+/home/bj/tmp/qdp++/config/missing: line 46: automake-1.7: command not found
+WARNING: `automake-1.7' is missing on your system.  You should only need it if
+         you modified `Makefile.am', `acinclude.m4' or `configure.ac'.
+         You might want to install the `Automake' and `Perl' packages.
+         Grab them from any GNU archive site.
+\end{verbatim}
+after which your build may carry on or break.
+
+This is a sign, that the {\tt Makefiles} in the source distribution, do
+not have the right date stamp dependencies. This could be due to several
+reasons:
+\begin{itemize}
+\item
+There was a careless commit
+\item
+The NFS client serving your files may have its clock out of sync with the
+machine on which you are trying to build
+\end{itemize}
+
+Here the best policy is to ensure that you have installed {\tt autoconf-2.58}
+and {\tt automake-1.9.3} and have them in your path. The build system will
+then recreate the necessary files, and re-run the configuration command
+before building for you.
+
+Another way to try and deal with the problem is to go to the {\em source
+directory} and run the following command:
+\begin{verbatim}
+aclocal; automake; autoconf
+\end{verbatim}
+and then going back to the build directory and trying again. Again tho
+you need to have recent enough versions of {\tt autoconf} and {\tt automake}
+installed.
+
+Note: On NFS clients with filetime synchronisation problems this may not
+fix your problem, and installing {\tt automake} and {\tt autoconf} may
+seem to put you into an infinite loop. This is because, even when
+autoconf and automake try to rebuild their files, due to the time 
+syncronisation problems you may still not get the date stamps right.
+At this point contact your system administrator.
+
+\subsection{Other errors}
+Suppose that autoconf and automake are all OK, and you get other errors.
+A common error is the following during the running of the configure script:
+\begin{verbatim}
+Error: compiler cannot create executables
+\end{verbatim}
+
+This is almost always because something is misspelled like an option to the
+C++ eg: {\tt -fimline-limit=5000}, or \verb1--with-libxml=1 instead of \verb1--with-libxml21. You should always inspect the {\tt config.log} file produced
+by configure to try and ascertain the source of the error.
+
+Only if you have made {\em absolutely certain} that you haven't misspelled
+anything or forgotten some needed configure argument should you send
+email to the package maintainer.
+
+\subsection{Building Chroma}\label{s:nativeChroma}
+Once you have got this far and built and installed QDP++ it is time to build
+Chroma. I am assuming that QDP++ is successfully installed in {\tt /home/bj/install/qdp\_scalar\_single} and that the chroma source is in {\tt /home/bj/src/chroma}
+
+Make a directory to build chroma in. Let's call it {\tt /home/bj/build/chroma }
+and enter into it. Configure chroma with the command
+
+\begin{verbatim}
+/home/bj/src/chroma/configure CXXFLAGS="" CFLAGS="" \
+  --with-qdp=/home/bj/install/qdp_scalar_single \
+  --prefix=/home/bj/install/chroma_scalar_single
+\end{verbatim}
+
+then type {\tt gmake}. Wait for the build to finish and type {\tt make
+ install} to perform the installation. This command line will install in 
+{\tt /home/bj/install/chroma\_scalar\_single}.  This will build chroma in 
+its simplest native mode. The empty quotation marks are needed to that
+autoconf does not put in the default {\tt -g} enabling debugging. 
+
+When building you should notice that chroma has picked up the values for
+{\tt CXXFLAGS} etc from the installed QDP++.
+
+\subsection{Enabling the SSE Wilson Dslash}
+This native build of Chroma is going to be very slow. On SSE enabled systems
+you should switch on the SSE assembler optimised dslash. This can be done
+with the \verb1--enable-sse-wilson-dslash1 to chroma. Depending on the precision of the underlying QDP++ build, chroma will select the right dslash for you
+(both single and double precision are available). If you were doing a parallel
+build, that would also be detected and the right dslash would be selected.
+The previous command becomes:
+
+\begin{verbatim}
+/home/bj/src/chroma/configure CXXFLAGS="" CFLAGS="" \
+  --with-qdp=/home/bj/install/qdp_scalar_single \
+  --enable-sse-wilson-dslash \
+  --prefix=/home/bj/install/chroma_scalar_single
+\end{verbatim}
+
+\subsection{Enabling the GMP library for RHMC}
+If you would like to perform simulations involving single flavours
+of fermions (eg 2+1 flavour, 1+1+1 flavour etc), you need to build 
+the Remez algorithm for computing rational approximations to various
+square roots. To do this you need to add the \verb1--enable-gmp1
+option to configure. However, this time life is a little more tricky, 
+since GMP integration is not yet complete. You also need to specify 
+the compiler include path, link path and the library name.
+
+Find out where you copy of GMP is installed. If you installed it yourself
+you will of course know this information. On my linux machine a default
+installation is in {\tt /usr} with the includes being in {\tt /usr/include}
+and the library being in {\tt /usr/lib}. The library is called {\tt libgmp.a}
+
+So for g++ you will need the following compiler arguments:
+\begin{itemize}
+\item
+{\tt CXXFLAGS="-I/usr/include"} -- to identify the {\tt include} directory
+\item
+{\tt LDFLAGS="-L/usr/lib"} -- to locate the library {\tt lib} directory
+\item
+{\tt LIBS="-lgmp"} -- to add the library to the list of linked libraries.
+\end{itemize}
+
+Your command line for configure would then look like:
+\begin{verbatim}
+/home/bj/src/chroma/configure CXXFLAGS="-I/usr/include" CFLAGS="" \
+  LDFLAGS="-L/usr/lib" LIBS="-lgmp" \
+  --with-qdp=/home/bj/install/qdp_scalar_single \
+  --enable-sse-wilson-dslash \
+  --enable-gmp \
+  --prefix=/home/bj/install/chroma_scalar_single
+\end{verbatim}
+
+\subsection{And that's it}
+And that is all you should need to get chroma up and running in scalar
+mode on a pentium based linux machine. Typing {\tt make} should build
+the stock applications for you that are required for the HackLatt tutorial
+and typing {\tt make install} should install them (in this example to
+{\tt /home/bj/install/chroma\_scalar\_single/bin}.
+
+\section{Notes}
+Some notes and experiences
+\begin{itemize}
+\item
+I find that often, when porting to new architectures, QDP++ is the
+hardest to compile. It has the most options, and if the compiler can't
+cope with templates this is the first place you know about it. Barring
+the issues of BAGEL and GMP, a native build of Chroma
+\ref{s:nativeChroma} is straightforward as it requires only an
+installation directory and the path to the QDP++ installation.
+\item
+The configure scripts in QDP++ and Chroma support the \verb1--help1 
+command line argument. If you get stuck with the configure switches
+it maybe worthwhile to run
+\begin{verbatim}
+configure --help
+\end{verbatim}
+\item
+In the fullness of time, this installation guide will grow. Now that
+you have got to the basics of the install process, and configuring, making
+and installing you can also try using the example installation scripts
+you can find in the {\tt qdp++/install\_scripts} and {\tt chroma/install\_scripts} directory of the source packages. These directories often contain README
+scripts too which may or may not prove enlightening.
+\end{itemize}
+
+Have fun!
+
+\end{document}
