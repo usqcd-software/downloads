@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Specifying your own libxml</TITLE>
+<META NAME="description" CONTENT="Specifying your own libxml">
+<META NAME="keywords" CONTENT="chroma_install">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="chroma_install.css">
+
+<LINK REL="next" HREF="node16.html">
+<LINK REL="previous" HREF="node14.html">
+<LINK REL="up" HREF="node9.html">
+<LINK REL="next" HREF="node16.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html259"
+  HREF="node16.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html255"
+  HREF="node9.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html249"
+  HREF="node14.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html257"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html260"
+  HREF="node16.html">Automake related errors, and</A>
+<B> Up:</B> <A NAME="tex2html256"
+  HREF="node9.html">Quick Start: A linux</A>
+<B> Previous:</B> <A NAME="tex2html250"
+  HREF="node14.html">Double Precision</A>
+ &nbsp <B>  <A NAME="tex2html258"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00056000000000000000">
+Specifying your own libxml</A>
+</H2>
+Suppose that <TT>libxml2</TT> is not installed in the usual place on your
+system (for example it wasn't there, and you have installed it, but have
+not placed it into your PATH) If configure does not find it the configuration
+script will exit with an error message like
+<PRE>
+configure: error: Cannot compile/link a program with libxml2.
+    Use --with-libxml2=&lt;dir&gt; to select a working version.
+</PRE>
+
+<P>
+Let us suppose it has been installed in <TT>/home/bj/install/libxml2</TT>. You can specify where it is using the <code>--with-libxml2</code> option to configure:
+<PRE>
+/home/bj/src/qdp++/configure --prefix=/home/bj/install/qdp_scalar_single \
+    --enable-parallel-arch=scalar \
+    --enable-sse2 \
+    --enabele-precision=single \
+    --with-libxml=/home/bj/install/libxml2 \
+    CXXFLAGS="-O2 -finline-limit=50000" CFLAGS="-O2"
+</PRE>
+
+<P>
+<BR><HR>
+<ADDRESS>
+Balint Joo
+2005-04-11
+</ADDRESS>
+</BODY>
+</HTML>

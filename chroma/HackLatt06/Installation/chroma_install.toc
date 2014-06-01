@@ -1,0 +1,21 @@
+\contentsline {section}{\numberline {1}Preliminaries}{1}
+\contentsline {section}{\numberline {2}Software Map}{2}
+\contentsline {section}{\numberline {3}General Concepts for Building}{4}
+\contentsline {subsection}{\numberline {3.1}The {\tt configure}, {\tt make}, {\tt make install} chain}{4}
+\contentsline {subsection}{\numberline {3.2}Source, Build and Install Directories}{5}
+\contentsline {subsection}{\numberline {3.3}Make Compilers and Cross Compilers}{5}
+\contentsline {subsection}{\numberline {3.4}Filename extensions and Cygwin}{6}
+\contentsline {section}{\numberline {4}Quick Start: A linux scalar build}{7}
+\contentsline {subsection}{\numberline {4.1}Paths}{7}
+\contentsline {subsection}{\numberline {4.2}Configuring and building QDP++}{7}
+\contentsline {subsection}{\numberline {4.3}Inlining functions and optimisation}{7}
+\contentsline {subsection}{\numberline {4.4}Enabling SSE/SSE2}{8}
+\contentsline {subsection}{\numberline {4.5}Double Precision}{8}
+\contentsline {subsection}{\numberline {4.6}Specifying your own libxml}{8}
+\contentsline {subsection}{\numberline {4.7}Automake related errors, and dealing with them}{8}
+\contentsline {subsection}{\numberline {4.8}Other errors}{9}
+\contentsline {subsection}{\numberline {4.9}Building Chroma}{9}
+\contentsline {subsection}{\numberline {4.10}Enabling the SSE Wilson Dslash}{10}
+\contentsline {subsection}{\numberline {4.11}Enabling the GMP library for RHMC}{10}
+\contentsline {subsection}{\numberline {4.12}And that's it}{10}
+\contentsline {section}{\numberline {5}Notes}{10}

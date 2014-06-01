@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Automake related errors, and dealing with them</TITLE>
+<META NAME="description" CONTENT="Automake related errors, and dealing with them">
+<META NAME="keywords" CONTENT="chroma_install">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="chroma_install.css">
+
+<LINK REL="next" HREF="node17.html">
+<LINK REL="previous" HREF="node15.html">
+<LINK REL="up" HREF="node9.html">
+<LINK REL="next" HREF="node17.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html271"
+  HREF="node17.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html267"
+  HREF="node9.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html261"
+  HREF="node15.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html269"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html272"
+  HREF="node17.html">Other errors</A>
+<B> Up:</B> <A NAME="tex2html268"
+  HREF="node9.html">Quick Start: A linux</A>
+<B> Previous:</B> <A NAME="tex2html262"
+  HREF="node15.html">Specifying your own libxml</A>
+ &nbsp <B>  <A NAME="tex2html270"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00057000000000000000">
+Automake related errors, and dealing with them</A>
+</H2>
+It may happen that after configuring you type :
+<TT>gmake</TT>
+and you get an error like:
+<PRE>
+cd .. &amp;&amp; \
+  /bin/sh /home/bj/tmp/qdp++/config/missing --run automake-1.7 --gnu  Makefile
+/home/bj/tmp/qdp++/config/missing: line 46: automake-1.7: command not found
+WARNING: `automake-1.7' is missing on your system.  You should only need it if
+         you modified `Makefile.am', `acinclude.m4' or `configure.ac'.
+         You might want to install the `Automake' and `Perl' packages.
+         Grab them from any GNU archive site.
+</PRE>
+after which your build may carry on or break.
+
+<P>
+This is a sign, that the <TT>Makefiles</TT> in the source distribution, do
+not have the right date stamp dependencies. This could be due to several
+reasons:
+
+<UL>
+<LI>There was a careless commit
+</LI>
+<LI>The NFS client serving your files may have its clock out of sync with the
+machine on which you are trying to build
+</LI>
+</UL>
+
+<P>
+Here the best policy is to ensure that you have installed <TT>autoconf-2.58</TT>
+and <TT>automake-1.9.3</TT> and have them in your path. The build system will
+then recreate the necessary files, and re-run the configuration command
+before building for you.
+
+<P>
+Another way to try and deal with the problem is to go to the <EM>source
+directory</EM> and run the following command:
+<PRE>
+aclocal; automake; autoconf
+</PRE>
+and then going back to the build directory and trying again. Again tho
+you need to have recent enough versions of <TT>autoconf</TT> and <TT>automake</TT>
+installed.
+
+<P>
+Note: On NFS clients with filetime synchronisation problems this may not
+fix your problem, and installing <TT>automake</TT> and <TT>autoconf</TT> may
+seem to put you into an infinite loop. This is because, even when
+autoconf and automake try to rebuild their files, due to the time 
+syncronisation problems you may still not get the date stamps right.
+At this point contact your system administrator.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html271"
+  HREF="node17.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html267"
+  HREF="node9.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html261"
+  HREF="node15.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html269"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html272"
+  HREF="node17.html">Other errors</A>
+<B> Up:</B> <A NAME="tex2html268"
+  HREF="node9.html">Quick Start: A linux</A>
+<B> Previous:</B> <A NAME="tex2html262"
+  HREF="node15.html">Specifying your own libxml</A>
+ &nbsp <B>  <A NAME="tex2html270"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Balint Joo
+2005-04-11
+</ADDRESS>
+</BODY>
+</HTML>

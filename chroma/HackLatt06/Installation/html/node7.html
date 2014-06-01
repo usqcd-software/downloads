@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Make Compilers and Cross Compilers</TITLE>
+<META NAME="description" CONTENT="Make Compilers and Cross Compilers">
+<META NAME="keywords" CONTENT="chroma_install">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="chroma_install.css">
+
+<LINK REL="next" HREF="node8.html">
+<LINK REL="previous" HREF="node6.html">
+<LINK REL="up" HREF="node4.html">
+<LINK REL="next" HREF="node8.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html153"
+  HREF="node8.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html149"
+  HREF="node4.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html143"
+  HREF="node6.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html151"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html154"
+  HREF="node8.html">Filename extensions and Cygwin</A>
+<B> Up:</B> <A NAME="tex2html150"
+  HREF="node4.html">General Concepts for Building</A>
+<B> Previous:</B> <A NAME="tex2html144"
+  HREF="node6.html">Source, Build and Install</A>
+ &nbsp <B>  <A NAME="tex2html152"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00043000000000000000">
+Make Compilers and Cross Compilers</A>
+</H2>
+
+<P>
+Automake is supposed to generate Makefiles which are compliant with the <EM>GNU Makefile standards</EM>. They should surely work with <A NAME="tex2html15"
+  HREF="http://www.gnu.org/software/make">GNU Make</A>
+which is also colloqually known as <TT>gmake</TT>. Often systems with propriatery <TT>make</TT> tools GNU make is also installed  and sometimes denoted <TT>gmake</TT>. If you are in doubt, install GNU Make on your system from sources.
+
+<P>
+The only compiler that is fully supported is <A NAME="tex2html16"
+  HREF="http://gcc.gnu.org"><TT>gcc/g++</TT></A>. This is simply because it is most likely that this is a compiler that most machines have available. You will need <TT>gcc</TT> version 3 or higher. At the time of writing the current version of <TT>gcc</TT> is version 3.4 (or higher).
+
+<P>
+The chroma system has been compiled with other compilers including <TT>icc</TT> <A NAME="tex2html17"
+  HREF="http://www.intel.com/software/products/compilers/clin/">the Intel C++ compiler for linux</A>
+as well as <TT>xlc/xlC</TT> also known as <A NAME="tex2html18"
+  HREF="http://www-306.ibm.com/software/awdtools/vacpp/">the IBM Visual Age C/C++ compiler</A>
+although this fails on some systems. The <A NAME="tex2html19"
+  HREF="http://www.sun.com/software/sundev/suncc/">Sun ONE Studio 8 Compiler</A>
+at the time of writing, does not support template-template arguments which is necessary for compiling QDP++ and Chroma. If in doubt use <TT>GCC</TT> 
+
+<P>
+On some systems a distinction is made between the machine front end, where you can compile stuff and the back end, where the code will run. This can arise in several situations:
+
+<UL>
+<LI>The front end is different hardware from the back end for example on QCDOC and BlueGene/L
+</LI>
+<LI>The front end is scalar and the back end is parallel. Parallelism related checks fail to run on the front end (eg whether QMP works).
+</LI>
+</UL>
+
+<P>
+In this case a special kind of build is needed called cross compiling. The main distinguishing characteristic of cross compiling is that the executables produced by compilation cannot be run on a machine that is doing the compiling.
+
+<P>
+In the first instance above, you may need an entirely separate compiler to perform the build: eg on QCDOC, <TT>gcc</TT> may well be available on the front end but you need a specific installation that works only on the backend <TT>powerpc-gnu-elf-gcc</TT>. 
+
+<P>
+In the second case, you need the same compiler for the front and back end but
+some configure type checks need to be disabled because executables created cannot be run on the compiling machine.
+
+<P>
+A particularly evil case is building the bagel libraries, which consist of two 
+cases. First some executables needed to be built on the front end which produce
+code that will be compiled for the back end. The first stage of the build 
+is on the front end (a so called native build) whereas the second stage is 
+a cross compilation.
+
+<P>
+Autoconf terminology defines the following terms:
+<DL>
+<DT></DT>
+<DD><EM>The build</EM> system is the system on which the build/compilation
+is performed. This system can be specified by the <code>--build</code> command line
+argument to <TT>configure</TT> scripts.
+
+<P>
+</DD>
+<DT></DT>
+<DD><EM>The host</EM> system is the system on which the code will run. This system is specified with the <code>--host</code> command line argument to <TT>configure</TT> scripts
+</DD>
+</DL>
+
+<P>
+For a configure script to work in cross compiling mode, you need to specify a 
+<code>--host</code> that is different from <code>--build</code>. If you specify neither,
+they will be guessed to be the same and you will perform a <EM>native</EM> build.
+
+<P>
+Autoconf defines a kind of name canonicalisation. The canonical names are the ones that must be given as arguments to the <code>--host</code> and <code>--build</code> command line of <TT>configure</TT> 
+
+<P>
+A system is defined by a 3 
+part canonical name consisting of the following 3 parts: <TT>processor-vendor-os</TT>. These parts are very loosely defined. For example most linux machines have a canonical name something like <TT>i686-pc-linux-gnu</TT>. Here <TT>i686</TT> is the processor identifier, the vendor is <TT>pc</TT> (some PC manufacturer) and the OS is <TT>linux-gnu</TT>. The QCDOC front end has canonical name: <TT>powerpc-ibm-aix5.2.0.0</TT>. The QCDOC back end is simply denoted <TT>powerpc-gnu-elf</TT> with no refernce to the vendor or OS. For systems with nothing known about them one can use the canonical name <TT>none</TT>.
+
+<P>
+The following <TT>host/build</TT> combinations are common:
+
+<P>
+<code>--host=powerpc-gnu-elf --build=none</code> 
+
+<P>
+can be used when compiling for the QCDOC. The combination
+
+<P>
+<code>--host=i686-pc-linux --build=none</code>
+
+<P>
+can be used to trip a cross compilation on a scalar Linux front end
+that is building for a parallel Linux back end that is potentially
+behind a queueing system so executables built for it cannot be run
+on/from the front end easily.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html153"
+  HREF="node8.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html149"
+  HREF="node4.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html143"
+  HREF="node6.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html151"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html154"
+  HREF="node8.html">Filename extensions and Cygwin</A>
+<B> Up:</B> <A NAME="tex2html150"
+  HREF="node4.html">General Concepts for Building</A>
+<B> Previous:</B> <A NAME="tex2html144"
+  HREF="node6.html">Source, Build and Install</A>
+ &nbsp <B>  <A NAME="tex2html152"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Balint Joo
+2005-04-11
+</ADDRESS>
+</BODY>
+</HTML>

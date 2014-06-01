@@ -1,0 +1,1049 @@
+<html>
+<head>
+<title>Tutorial 2: Programming with QDP++ and Chroma</title>
+</head>
+
+<body>
+<h1>Tutorial 2: Programming with QDP++ and Chroma</h1>
+
+<h2>Introduction</h2>
+<p>
+This tutorial takes you through the basics of programming with 
+Chroma and linking against the Chroma library. It also shows you
+how we deal with XML in code.</p>
+
+<h2>Skill Level</h2>
+<p>
+This tutorial is rated <em>intermediate</em>. No heavy knowledge of
+C++ is needed. You can just <em>"go with the flow"</em>.</p>
+
+<h2>Getting the files</h2>
+<p>
+Download the files for this tutorial by using <a href="./tut2_files/tut2_files.tar.gz"> from this link </a></p>
+
+<p>Unpack the files with the following command:
+<blockquote><tt>
+gunzip tut2_files.tar.gz <br>
+tar xvf tut2_files.tar <br>
+</tt></blockquote>
+Now enter the working directory by typing:
+<blockquote><tt>
+cd Tutorial2
+</tt></blockquote>
+</p>
+
+<p>You should find several files in this directory:
+<dl>
+  <dn><tt>input.xml</tt></dn>
+  <dd>The input XML file for this tutorial</dd>
+  
+  <dn><tt>propagator_0</tt></dn>
+  <dd>A test propagator for this tutorial</dd>
+  
+  <dn><tt>test_purgaug.cfg1</tt></dn>
+  <dd>Your favourite old V=4x4x4x8 test lattice</dd>
+
+  <dn><tt>Makefile</tt></dn>
+  <dd>A Makefile to build the tutorial main program</dd>
+
+  <dn><tt>tut2.cc</tt></dn>
+  <dd>A skeleton Chroma application we will use during this tutorial</dd>
+</dl>
+</p>
+
+<h2>The <tt>Makefile</tt></h2>
+<p>
+First let us look at (and edit) the Makefile. Bring it up in <tt>emacs</tt></p>
+
+<ul>
+  <li>The first line defines a Makefile variable called <tt>CHROMA</tt>, containing the path to the chroma <em>installation</em>. We need to fix this so that
+it points to the installation on tutorial machines. You need to substitute the 
+your chroma installation directory here.</li>
+
+<li>The second line sets the location of the <tt>chroma-config</tt> program.
+This is based below the path defined in the <tt>CHROMA</tt> variable so you
+don't need to change it</li>
+
+  <li><p>The next four lines define Makefile variables:
+       <ul>
+         <li> <tt>CXX</tt> -- The C++ compiler used to compile chroma </li>
+	 <li> <tt>CXXFLAGS</tt> -- The compiler flags to compile chroma </li>
+	 <li> <tt>LDFLAGS</tt> -- Additional linker flags to link chroma executables</li>
+	 <li> <tt>LIBS</tt> -- external libraries that need to be linked with Chroma</li>
+        </ul>
+    In the case of the <tt>CXXFLAGS</tt> we put also the option <tt>-I.</tt> instructing the compiler to look in the local directories for header files too. In this tutorial we don't have extra header files so this is a little redundant.</p>
+        <p>Note that these variables are set using commands of the form:
+	<blockquote><tt>
+	  $(shell $(CONFIG) --cxx) 
+	 </tt></blockquote>
+         This instructs make to execute the command line following the string <tt>shell</tt>. In this case it will run the <tt>chroma-config</tt> program with various flags to determine characteristics of the installation needed to work with Chroma. If you change the <tt>CHROMA</tt> variable, this Makefile should work even on the QCDOC as long as you use <em>GNU Make</em>.</p>
+
+	 <p>You can use this command yourself without putting it in a Makefile.
+Try typing:
+<blockquote><tt>
+   &lt; your chroma installation directory &gt;/bin/chroma-config
+</tt></blockquote>
+to get a list of options. Now try to use some of them:
+<blockquote><tt>
+   &lt; your chroma installation directory &gt;/bin/chroma-config --cxx
+</tt></blockquote></p>
+
+   </li>
+
+   <li>We have an empty <tt>HDRS</tt> variables, since we don't have extra headers.</li>
+   
+   <li>We have a variable called <tt>OBJS</tt> that defines the object files used in our exercise. Currently we have only one object file: <tt>tut3.o</tt> which will be created from the source file <tt>tut3.cc</tt>.</li>
+  
+   <li><p>We have the first rule of our makefile:
+   <blockquote><tt>
+   tut2: $(OBJS)<br>
+   &nbsp;&nbsp; $(CXX) -o $@ $(CXXFLAGS) $(OBJS) $(LDFLAGS) $(LIBS)<br>
+   </tt></blockquote>
+   Hidden at the start of the second line is a TAB character. </p>
+   
+   <p>This rule tells the makefile that we make <em>target</em> <tt>tut2</tt>
+   which depends on the files listed in the <tt>OBJS</tt> variable, by calling
+   the command in the <tt>CXX</tt> macro with the following arguments. The
+   <tt>$@</tt> character is expanded to the name of the target, and the other
+   variables are also expanded to their earlier definitions</p>
+   
+   <p>Basically, this rule tells make, how to build our test executable</p></li>
+
+   <li><p>We have a rule to make <tt>.o</tt> object files from <tt>.cc</tt> source files:
+   <blockquote><tt>
+   %.o: %.cc $(HDRS) <br>
+&nbsp;&nbsp;	$(CXX) $(CXXFLAGS) -c $&lt; <br>
+   </tt></blockquote>
+   Here the <tt>$&lt;</tt> character specifies the input file, and as with
+   <em>all</em> make rule, the processing instruction has a TAB character
+   in front of it.
+
+   <li>Finally we have a rule for cleaning up. This is the rule that
+   gets executed when you type <tt>make clean</tt></li>
+</ul>
+</p>
+
+<p>So this makefile, will first try to make <tt>tut2.o</tt> as it is 
+a dependency of the <tt>tut2</tt> target. It uses the <em>implicit</em>
+rule to make <tt>.o</tt> files from <tt>.cc</tt> files. Finally, it 
+creates the executable using the rule for <tt>tut2</tt>. When you type
+<tt>make</tt> without arguments, the first target will be processed which 
+in this case is to make <tt>tut2</tt>.</p>
+
+<h2>Compiling and Running the Tutorial</h2>
+<p>Once you have changed the <tt>CHROMA</tt> macro in line one, you can 
+just type <tt> make </tt> to build the executable. You should see output similar to
+<blockquote><tt>
+g++ -I/home/balint/gnu/include -I/home/balint/install/chroma_scalar_single/include <br>
+-O2 -finline-limit=50000 -I/home/balint/install/qdp_scalar_single/include -I/opt/local/include/libxml2 -I. -c tut3.cc<br>
+In file included from /home/balint/install/chroma_scalar_single/include/chromaba<br>
+se.h:15,<br>
+&nbsp; &nbsp;                 from /home/balint/install/chroma_scalar_single/include/chroma.h:29,<br>
+&nbsp; &nbsp;                 from tut3.cc:6:<br>
+/home/balint/install/qdp_scalar_single/include/qdp.h:174:2: warning:<br> #warning "Using scalar architecture"<br>
+g++ -o tut3 -I/home/balint/gnu/include -I/home/balint/install/chroma_scalar_single/include<br> 
+-O2 -finline-limit=50000 -I/home/balint/install/qdp_scalar_single/include -I/opt/local/include/libxml2 -I. tut3.o <br>
+-R/home/balint/gnu/lib 
+-L/home/balint/gnu/lib -L/home/balint/install/chroma_scalar_single/lib <br>
+-L/home/balint/install/qdp_scalar_single/lib -lchroma -lqdp -lXPathReader <br>
+-lxmlWriter -lqio -llime -L/opt/local/lib -R/opt/local/lib -lxml2 -lz <br>
+-lpthread -lm -lsocket -lnsl -lgmp<br>
+</tt></blockquote>
+You can ignore the warning. It is simply (intentionally) informing you that
+you are doing a scalar build.</p>
+
+<p>You can now run the executable like you do with the stock applications:
+<blockquote><tt>
+./tut2 -i input.xml -o output.xl
+</tt></blockquote> </p>
+and you should see the following output:
+<blockquote><tt>
+Hello World            <br>
+Finished init of RNG   <br>
+Finished lattice layout <br>
+Starting up unit gauge (free) config<br>
+Single Precision Read <br>
+QIO_read_finished<br>
+</tt></blockquote>
+and an <tt>output.xml</tt> file should have appeared in your
+local directory which we will inspect later.
+
+<p>
+<em>So far you should have (apart from learning about makefiles) learned
+how you can use the <tt>chroma-config</tt> program to get the compiler
+and linker flags to link an application. If you want to do your own little
+projects you now can. We have shown you a simple makefile which can
+compile chroma applications</em> </p>
+
+<h2>Hacking Chroma</h2>
+<p>
+Bring the <tt>tut2.cc</tt> file up in emacs and let us look through it.
+Lines beginning with <tt>//</tt> or text between <tt>/*</tt> and <tt>*/</tt>
+are comments.</p>
+
+<p> First we include the file <tt>chroma.h</tt> which contains many 
+definitions. It's location is given to the compiler by the <tt>-I</tt>
+flags given by <tt>chroma-config --cxxflags</tt>.</p>
+
+<p>We tell the compiler that we are using the Chroma namespace. This 
+is there so that other code can use the same names we do but in their
+own namespace</p>
+
+<p>At this point it becomes useful to follow the comments in the code, and
+I'll just give a cursory overview of what is happening in the code. If you
+have done any C/C++ work this should be easy.</p>
+
+<p>On line 18 we define a structure called <tt>Param_t</tt> which will be
+used to hold parameters. Currently the only parameter is
+<blockquote><tt>
+multi1d&lt;int&gt; nrow;
+</tt></blockquote>
+The <tt>multi1d</tt> is a C++ templated type for 1d arrays. It can have
+its size reset. The template parameter <tt>int</tt> between the &lt; and &gt;
+signifies that this will be an array of integers. It will be called <tt>nrow</tt> which is the conventional name for an array that holds the lattice size.</p>
+
+<p>On line 25, we define a struct called <tt>Prop_t</tt> which will hold 
+in itself a single string, the name of the propagator file. This string
+will be called <tt>prop_file</tt> and has C++ type <tt>std::string</tt>
+(or <tt>string</tt> from the <tt>std</tt> namespace).</p>
+
+<p>On line 32 we define the complete input structure for the code called
+<tt>App_input_t</tt>. This consists of the previous <tt>Param_t</tt>, <tt>Prop_t</tt> structs and a struct called <tt>Cfg_t</tt> which is defined already
+in the chroma library.</p>
+
+<h3>Reading XML</h3>
+
+<p>We need to define XML reading routines for the structs we have just
+defined. This is done in the functions on lines 41, 49 and 58. Note that
+the functions all have <em> the same name</em>: <tt>read</tt>. 
+The first two inputs are the same in all three cases but the third argument
+is different. This is a technique called <em>function overloading</em>
+in C++ and is a component of <em>polymorphic</em> programming.</p>
+
+<p>Note that in the read routines, we specify as the first argument an object of type <tt>XMLReader&</tt> and <tt>const string& path</tt>. The <tt>XMLReader&</tt> is a reference to an XML document container, which allows us to read from 
+the document. The <tt>path</tt> is an XPath expression. Consider the 
+following XML snippet:
+<blockquote><tt>
+&lt?xml version="1.0"?&gt;<br>
+&lt;foo&gt;<br>
+&nbsp; &lt;bar&gt; <br>
+&nbsp; &nbsp; &lt;fred&gt; 5 &lt;/fred&gt; <br>
+&nbsp; &lt;/bar&gt; <br>
+&lt;/foo&gt;</br>
+</tt></blockquote> 
+then we can select the value 5 using the Xpath expression:
+<blockquote><tt>
+/foo/bar/fred
+</tt></blockquote>
+We could do this in Chroma with the commands:
+<blockquote>
+<tt>
+int integer; <br>
+read(xml_reader, "/foo/bar/fred", integer);
+</tt>
+</blockquote>
+Where the <tt>xml_reader</tt> object would be of type <tt>XMLReader</tt>
+and should contain the XML document in question. Because the reader function
+is declared as:
+<blockquote><tt>
+void read(XMLReader& reader, const std::string& path, int& i);
+</tt></blockquote>
+the <tt>&</tt>s mean that the arguments are passed by reference 
+and are potentially modifiable (with the exception of the path which 
+is declared <tt>const</tt> ie immutable).</p>
+
+<p>We used the Xpath expression <tt>/foo/bar/fred</tt>. This is an
+<em>absolute path</em>. We can also do the equivalend of <tt>cd</tt>-ing
+in to the <tt>bar</tt> tag, and perform  <em>relative</em> queries from there:
+<blockquote><tt>
+XMLReader reader2(xml_reader, "/foo/bar");<br>
+int integer;<br>
+read(reader2,"fred",integer);<br>
+</tt></blockquote>
+This technique is useful if a particular tag has several subtags of interest,
+and also to process individual groups. We use this trick on lines 41, 49 and
+58 of our example code, to select the groups of interest for reading 
+into individual structs. </p>
+
+<p>Our technique, in lieu of data binding, is to build up recursive
+<tt>read</tt> functions using relative queries. This can be seen in 
+around line 56, where we have just 3 reads to read in each part of the 
+App_input_t structure, using the readers for the parts that we have
+just defined and are already defined in the chroma library</p>
+
+<h3>Exceptions</h3>
+<p>
+Occasionally things we may try and do are not possible. At times like this
+we need to interrupt what we are doing to report the error condition. This
+is done in C++ with the mechanism of exceptions. For example if 
+we cannot open a file, or cannot match an XPath expression, we "throw"
+an exception. This exception can be caught by the program and handled
+gracefully. If it is not caught, then generally the program aborts.</p>
+
+<p>For example, if the <tt>read</tt> in line 50 fails an exception
+will occur. This function does not handle the exception, so it 
+will propagate up to the <tt>read</tt> defined on line 56, which is the only
+one to call the original <tt>read</tt>. We can see beginning on line 61
+the following construct:
+<blockquote><tt>
+try { <br>
+  // Do stuff <br>
+} <br> 
+catch( const string& e) <br>
+{ <br>
+  // Do this stuff if a string exception occurs<br>
+  <br>
+}
+</tt></blockquote>
+What happens here is that the routines in the <tt>try</tt> block are
+executed, and if any of them throw an exception of type <tt>string</tt>
+that exception will be caught, and an appropriate error will be displayed.
+The <tt>XMLReader</tt>s only throw exceptions of type <tt>string</tt>. The
+strings contain error messages.</p>
+
+<p>There can be other types of exceptions eg: file opening exceptions, 
+casting exceptions, memory allocation exceptions that are more than
+just strings. Generally for each different type of exception you need
+a separate <tt>catch</tt> block. However there is a catch all case
+in which will catch all exceptions. An example of this is given on line 102
+<blockquote><tt>
+catch(...)  // Catch all types of exceptions <br>
+{ <br>
+ // Handle exceptions here <br>
+} <br>
+</tt></blockquote></p>
+
+<h3>Main Program, Initialization and Ending</h3>
+
+<p>Once we have defined our XML readers, we get on to the main program
+proper on line 83, declared as:
+<blockquote><tt>
+int main(int argc, char **argv)
+</tt></blockquote>
+which is a standard declaration that should be familiar to you if you 
+have ever used C. The <tt>argc</tt> is the number of command line arguments,
+and the <tt>argv</tt> is an array of C strings (<tt>char*</tt>s) holding the 
+actual arguments.</p>
+
+<p>On line 88 we have
+<blockquote><tt>
+Chroma::initialize(&argc,&argv)
+</tt></blockquote>
+which initialises QDP++ for us, and also grabs the input and output
+filenames out of the command line arguments.</p>
+
+<p>Paired with this is a 
+<blockquote><tt>
+Chroma::finalize()
+</tt></blockquote>
+at the end of the program at line 221</p>
+
+<p>On line 89, there is a function call <tt>START_CODE()</tt> paired
+with a function <tt>END_CODE()</tt> on line 217. These functions invoke
+the profiling functionality of QDP++ if that has been enabled. You 
+are encouraged to put <tt>START_CODE()</tt> and <tt>END_CODE()</tt> calls
+in later functions that you may write yourself.</p>
+
+<h3>The rest of the code</h3>
+
+<p>Lines 94-109 open our XML reader to
+read the input XML for the application.
+<li>We instantiate the <tt>App_input_t</tt> struct on line 94</li>
+<li>We instantiate the <tt>XMLReader</tt> on line 100</li>
+<li>We try to open the user specified input file or <tt>DATA</tt> 
+ between 101-109 catching errors as we go. Note the use of 
+<tt>Chroma::getXMLInputFileName()</tt> -- read the comments for explanation</li>
+<li>On line 112 we write <tt>Hello World</tt> to the terminal. Note we don't use the standard <tt>cout</tt> but rather the one defined in the <tt>QDPIO</tt>
+namespace:
+<blockquote><tt>
+ QDPIO::cout << "Hello World" << endl;<br>
+</tt></blockquote>
+The <tt>endl</tt> asks for a newline character. Using this special <tt>QDPIO::cout</tt> on a parallel machine will result only in 1 processor writing to the 
+terminal.</li>
+<li>Line 116, reads the app input structure from root tag <tt>&lt;tutorial2&gt;</tt>.</li>
+<li>Lines 120 and 123 initialise the lattice layout from the XML that has been 
+parsed into the <tt>App_input_t</tt> struct <tt>input</tt> making use of the 
+<tt>nrow</tt> parameters:
+<blockquote><tt>
+  Layout::setLattSize(input.param.nrow);<br>
+<br>
+  // Initialise<br>
+  Layout::create(); <br>
+</tt></blockquote>
+ This is something
+that always needs to be done before you want to do anythig lattice-y.</li>
+<li>Lines 133-143 read the gauge configuration specified in the <tt>&lt;Cfg&gt;</tt> tag of the input XML file. We now commonly use XML headers in our configuration files. Further, if using the SciDAC format, there are also file related
+XML headers too. The <tt>gaugeStartup</tt> function returns these in the 
+readers <tt>gauge_file_xml</tt> and <tt>gauge_xml</tt>. The actual gauge 
+field has type:
+<blockquote><tt>
+multi1d&lt;LatticeColorMatrix&gt; u(Nd);
+</tt></blockquote>
+In other words it is a 1D array (with Nd elements) of <tt>LatticeColorMatrix</tt> objects. Each array element represents the SU(3) link fields in one of the Nd directions.</p><p>Finally the unitarity of the field is checked in line 141.</p></li>
+
+<li>lines 152-163 read a SciDAC LIME format propagator from the disk. This is similar to reading the gauge fields, but with different function calls.</li>
+<li>There is some amount of XML writing following all this, we will come back
+to it in the next section</li>
+<li>On line 203 we measure the plaquette and link trace, after which there is room for you to code</li>
+</ul>
+
+<h3>Writing XML</h3>
+<p>
+QDP++ provides Chroma with three ways of writing XML: 
+<ul>
+  <li><tt>XMLFileWriter</tt> -- These objects write to files</li>
+  <li><tt>XMLBufferWriter</tt> -- These objects write to memory - ie to strings</li>
+  <li><tt>XMLArrayWriter</tt> -- These can be used to write sequences seperated
+by <tt>&lt;elem&gt;</tt> tags</li>
+</ul>
+</p>
+
+<p>The writers support two kinds of operations:
+<li><tt>push()</tt> and <tt>pop()</tt> operations. These open up and close
+group XML tags respectively. So
+<blockquote><tt>
+XMLFileWriter foo("my_file.xml"); // Opens a new XML file called my_file.xml<br>
+push(foo,"Root"); <br>
+pop(foo);<br>
+</tt></blockquote>
+will open an XML file. The <tt>push</tt> will open a tag: <tt>&lt;Root&gt;</tt>
+and the pop will close it by writing <tt>&lt;/Root&gt;</tt>.</li>
+<li><tt>write()</tt> -- These operations will write data to the XML file. The instruction
+<blockquote><tt>
+write(foo, "Barf", 5);
+</tt></blockquote> 
+will write into the file controlled by the writer <tt>foo</tt> the following XML:
+<blockquote><tt>
+&lt;Barf&gt;5&lt;/Barf&gt;
+</tt></blockquote>
+</li>
+</ul>
+The operations can be combined to produce fully fledged XML documents:
+<blockquote><tt>
+ XMLFileWriter foo("my_file.xml"); // Opens a new XML file called my_file.xml<br>
+push(foo,"Root"); <br>
+write(foo, "Barf", 5);<br>
+pop(foo);<br>
+</tt></blockquote>
+should produce:
+<blockquote><tt>
+&lt;?xml version="1.0" ?&gt;<br>
+&lt;Root&gt; <br>
+ &nbsp; &lt;Barf&gt;5&lt;/Barf&gt; <br>
+&lt;/Root&gt;
+</tt></blockquote>
+in the file <tt>my_file.xml</tt>.
+</p>
+
+<p>Additionally, you can use XML writers to spew back the contents of readers.
+This will strip the readers of their XML headers.
+<blockquote><tt>
+XMLReader in("file.xml");<br>
+XMLFileWriter out("outfile.xml");<br>
+push(out, "Root"); <br>
+write(out, "Fred", in); <br>
+pop(out); <br>
+</tt></blockquote>
+should spew the contents of <tt>file.xml</tt> into <tt>outfile.xml</tt>
+with a root tag of <tt>Root</tt> and surrounded by tags <tt>&lt;Fred&gt; &nbsp; &lt;/Fred&gt;</tt>.</p>
+
+<p>Some functions write their own tags, and do not need surrounding <tt>push</tt> and <tt>pop</tt> functions examples of this are:
+<ul>
+<li><tt>proginfo()</tt> on line 174</li>
+<li><tt>MesPlq()</tt> on line 199</li>
+</ul></p>
+
+<p>Sometimes the underlying file stream of an <tt>XMLFileWriter</tt> is 
+buffered, so although you write to it, it may not immediately appear 
+in the resulting file. If at this point your code crashes, it may not
+get written out at all. You can explicitly flush the streams associated
+with a writer by calling their member function <tt>flush</tt>. This 
+may help you track more easily where crash-es have occurred, or make
+output from long calculations more "regular". You can see examples of this
+on lines 195 and 200 of the example program <tt>tut2.cc</tt></p>
+
+<p><em>At this point we have covered everything in the <tt>tut2.cc</tt>
+file and it is time for a few exercises</em></p>
+
+<h3>Exercise 1: XML Processing</h3>
+<p>
+Look at the output file we produced earlier: <tt>output.xml</tt>.
+Correlate the tags therein with the <tt>push()</tt>, <tt>pop</tt>,
+<tt>write</tt>, <tt>proginfo</tt>, <tt>MesPlq</tt> functions.</p>
+
+<h3>Exercise 2: More XML Processing</h3>
+<p>
+Look at the input file <tt>input.xml</tt>. Correlate the tags there,
+with the reader functions and XPath expressions</p>
+
+<h3>Exercise 3: More XML Processing</h3>
+<p>
+Make the read function for the <tt>Param_t</tt> struct read in your name
+from tags <tt>&lt;my_name&gt;</tt> and <tt>&lt;/my_name&gt;</tt>.</p>
+
+<p>You will need to add a member to the <tt>Param_t</tt> struct near line 18.
+This should be of type <tt>std::string</tt>. You will need to add a line near
+line 50, to read the new tag.</p>
+
+<p>You will need to add the tag to the <tt>input.xml</tt> file.</tt>
+
+<p>Now remake the program and run it.</p>
+
+<h3>Exercise 4: Computing the pion correlator</h3>
+<p>Lets do some physics</p>
+
+<p> Find the part of the program marked out with comments:
+<blockquote><tt>
+  // Do something exciting here yourself. <br>
+  // Suggested exercise: Compute the zero mom pion on the propagator you <br>
+  //                     have read.<br>
+</tt></blockquote>
+We will write our code below this. You should add in the 
+code, into the file as we go along.</p>
+
+<p>The program will have read for you a propagator into an object 
+called <tt>quark_propagator</tt>. One thing we can do with this
+is to use it to compute the pseudoscalar operator:
+<blockquote>
+C(t) = sum_{x} Tr gamma_5 \bar{G}(0,x) gamma_5 G(0,x) <br>
+</blockquote>
+where G(0,x) is the quark propagator and \bar{G} is the antiquark
+propagator. While it is straightforward
+to optimise the pion to be just the norm of the propagator, lets
+work with this form, it leaves room for more generalisation.</p>
+
+<p>Let us form the antiquark propagator:
+<blockquote>
+\bar{G}(0,x) = gamma_5 G(0,x) gamma_5
+</blockquote>
+we can do this in chroma as follows:
+<blockquote><tt>
+LatticePropagator anti_quark = Gamma(15)*quark_propagator*Gamma(15);
+</tt></blockquote>
+remembering the spin conventions from tutorial 1 (15 is all four bits set so:
+gamma_1 gamma_2 gamma_3 gamma_4 which is the definition of gamma_5).</p>
+
+<p>Now we need to trace this with the original propagator inserting
+gamma_5 matrices. We can do this in Chroma with the line:
+<blockquote><tt>
+ LatticeComplex traced_props = trace( Gamma(15)*adj(anti_quark)*Gamma(15)*quark_propagator);
+</tt></blockquote>
+<p>
+
+<p>Now we need to sum this over spatial sites only, to give us a
+correlation function. Usually we also need to convolve the correlation
+function with momentum phase factors. Chroma has special technology
+to do this an object called <tt>SftMom</tt> which stands for SlowFourier
+TransformMomenta. This object can precompute the momentum phase factors,
+and use them to Fourier transform correlation functions like <tt>traced_props</tt>. Let us create such an object with the phases for ZERO momentum. In 
+Chroma this is accomplished by
+<blockquote><tt>
+SftMom phases(0, true, Nd-1);
+</blockquote></tt>
+This creates the momentum phases, with a maximum mom^2 of zero. The <tt>
+true</tt> argument asks for equivalent momenta to be averaged, which 
+is not relevant in this case. The <tt>Nd-1</tt> nominates direction
+<tt>Nd-1=3</tt> as the time direction (remember these are indexed from 0).</p>
+
+<p>Let us now fourier transform our propagator and sum it over space:
+<blockquote><tt>
+multi2d&lt;DComplex&gt; hsum; // A 2D array of double prec complex numbers <br>
+                        // One dimension is indexed by momenta</br>
+			// The other is the timeslice</br>
+
+<br>
+hsum = phases.sft(traced_props); // Apply the fourier transform</br>
+</tt></blockquote></p>
+
+<p>The array <tt>hsum</tt> is indexed as:
+<blockquote><tt>
+  hsum[ momentum_index ][ t ];
+</tt></blockquote>
+with the number of momenta determined from the <tt>SftMom</tt> class
+by its <em>member function</em> <tt>numMom()</tt>. Further we can convert
+the <tt>momentum</tt> index to the actual 3-vector momentum, using the 
+member function <tt>numToMom()</tt>. Let us use these to write out our
+correlator into an XML file. We will use an XMLArrayWriter to write this
+out. 
+<blockquote><tt>
+// Create an XMLArrayWriter to write out am array of numMom() elements <br>
+XMLArrayWriter momenta(xml_out, phases.numMom()); <br>
+<br>
+push(momenta, "PseudoScalar"); // Array will be called PseudoScalar<br> 
+<br>
+// loop over all the momenta <br>
+for(int i=0; i < phases.numMom(); i++) { <br>
+<br>
+&nbsp; // Special XMLArrayWriter instruction to start a new array element <br>
+&nbsp; push(momenta); <br>
+<br>
+&nbsp; // Write out the momentum index <br>
+&nbsp; write(momenta, "mom_index", i); <br>
+<br>
+&nbsp; // Write out the 3 momentum corresponding to this index <br>
+&nbsp; write(momenta, "mom", phases.numToMom(i)); <br>
+<br>
+&nbsp; // Write correlator <br>
+&nbsp; write(momenta, "correlator", hsum[i]);<br>
+<br>
+&nbsp; // We are done with this element <br>
+&nbsp; pop(momenta);<br>
+}<br>
+<br>
+pop(momenta); // Pop the toplevel tag <br>
+</tt></blockquote></p>
+
+If you have been conciensously adding all this code as we went along
+you should now save your program, and run <tt>make</tt> to remake it.
+Now run it with (with input and output XML files) and look at the 
+output XML file. It should have at its end the following snippet:
+<blockquote><tt>
+  &lt;PseudoScalar&gt;<br>
+  &lt;elem&gt;<br>
+&nbsp;&nbsp;      &lt;mom_index&gt;0&lt;/mom_index&gt;<br>
+&nbsp;&nbsp;      &lt;mom&gt;0 0 0&lt;/mom&gt;<br>
+&nbsp;&nbsp;      &lt;correlator&gt;<br>
+&nbsp;&nbsp;&nbsp;        &lt;elem&gt;<br> 
+&nbsp;&nbsp;&nbsp;&nbsp;         &lt;re&gt;0.147564&lt;/re&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;          &lt;im&gt;0&lt;/im&gt;<br> 
+&nbsp;&nbsp;&nbsp;       &lt;/elem&gt;<br>
+&nbsp;&nbsp;&nbsp;        &lt;elem&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;          &lt;re&gt;0.00923146&lt;/re&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;          &lt;im&gt;0&lt;/im&gt;<br>
+&nbsp;&nbsp;&nbsp;        &lt;/elem&gt;<br>
+&nbsp;&nbsp;&nbsp;        &lt;elem&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;          &lt;re&gt;0.0028872&lt;/re&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;          &lt;im&gt;0&lt;/im&gt;<br>
+&nbsp;&nbsp;&nbsp;        &lt;/elem&gt;<br>
+&nbsp;&nbsp;&nbsp;        &lt;elem&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;          &lt;re&gt;0.00109399&lt;/re&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;          &lt;im&gt;0&lt;/im&gt;<br>
+&nbsp;&nbsp;&nbsp;        &lt;/elem&gt;<br>
+&nbsp;&nbsp;&nbsp;        &lt;elem&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;          &lt;re&gt;0.000683482&lt;/re&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;          &lt;im&gt;0&lt;/im&gt;<br>
+&nbsp;&nbsp;&nbsp;        &lt;/elem&gt;<br>
+&nbsp;&nbsp;&nbsp;        &lt;elem&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;          &lt;re&gt;0.00110199&lt;/re&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;          &lt;im&gt;0&lt;/im&gt;<br>
+&nbsp;&nbsp;&nbsp;        &lt;/elem&gt;<br>
+&nbsp;&nbsp;&nbsp;        &lt;elem&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;          &lt;re&gt;0.00286503&lt;/re&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;          &lt;im&gt;0&lt;/im&gt;<br>
+&nbsp;&nbsp;&nbsp;        &lt;/elem&gt;<br>
+&nbsp;&nbsp;&nbsp;        &lt;elem&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;          &lt;re&gt;0.00919643&lt;/re&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;          &lt;im&gt;0&lt;/im&gt;<br>
+&nbsp;&nbsp;&nbsp;        &lt;/elem&gt;<br>
+&nbsp;&nbsp;      &lt;/correlator&gt;<br>
+    &lt;/elem&gt;<br>
+  &lt;/PseudoScalar&gt;<br>
+</tt></blockquote></p>
+
+<h2>Exercise 5: Handles and LinearOperators</h3>
+<p>
+In this exercise we will create a basic Wilson linear operator and do
+things with it. Here we will work directly with the objects. In the 
+next exercise we will play with the factories.</p>
+
+<p>Find the comment:
+<blockquote>
+<tt>
+// Do something exciting here yourself <br/>
+// Suggested exercise: Create a linear operator and apply it <br/>
+// to a gaussian noise vector.<br/>
+</tt>
+</blockquote>
+and we will work below this</p>
+
+<p>Getting hold of a linear operator involves the following steps:
+<ul>
+  <li>First we must specify our boundary conditions</li>
+  <li>Then we must make a <tt>CreateFermState</tt> object. This is an indirection so that we can use the same fermion actions for both thin link and smeared link states. Information about the boundaries is buried in the <tt>CreateFermState</tt></li>
+  <li>We can then create a <tt>FermionAction</tt> using the <tt>CreateFermState</tt>. This object will allow us to create fermionic states and linear operators.</li>
+
+  <li>We use the <tt>FermionAction</tt> to create a gauge field state that can bhave a <tt>LinearOperator</tt> built over it (ie one that may be smeared/stouted and have the boundaries applied to it).</li>
+  <li>We then use the <tt>FermionAction</tt> to create the linear operator over the state which we just created.</li>
+</ul>
+</p>
+<p>This chain seems elaborate but really it is quite logical. The basic idea is that once we built the fermion action, it can take a gauge field and modify it
+appropriately to build the linear operator over. Once this is done, we can 
+create the linear operator. So this is essentially the last two lines.
+We also need to specify the boundary conditions, clearly, so that is the
+first line. But why this messing around with <tt>CreateFermState</tt>...
+Well it didn't use to be this way until we realised that we may want
+to build fermion operators over stout links say, but also to keep 
+the thin links for the gauge actions. So we'd have to have either
+<ul>
+  <li>Stout the gauge fields first OR</li>
+  <li>Copy the whole fermion action changing only its <tt>createState</tt> function</li>
+  <li>Do what we chose to do: put in an extra indirection.</li>
+</ul>
+The extra indirection being the <tt>CreateFermState</tt> intermediary.
+This is a base class, whose derived classes can create either simple
+or stouted (and in the future perhaps other) states.</p>
+
+<p>Secondly we should mention that <tt>FermBC</tt>, <tt>CreateFermState</tt>,
+<tt>FermAct</tt> and <tt>LinearOperator</tt> all take template parameters.
+We use the following 3 template parameters:
+<ul>
+  <li><tt>T</tt> the type of the FermionField (<tt>LatticeFermion</tt>)
+  <li><tt>P</tt> the type for the LieAlgebra (momenta) - even differentiable linear operators need to know this - the time derivatives (forces) live in the Lie Algebra. We typically use <tt>multi1d&lt;LatticeColorMatrix&gt;</tt></li>
+  <li><tt>Q</tt> the type of the Group (gauge fields), again we typically use <tt>multi1d&lt;LatticeColorMatrix&gt;</tt></li>
+</ul>
+Typing out the full types (can be done and is done in many places throughout chroma) is unwieldy, with long lines and lots of angle brackets. We can save ourselves some tyding and make the code readable by defining aliases to these types. We can do this anywhere in the code but only once within one scoping unit. Let's do it now. Add the following <tt>typedef</tt> lines into the file:
+<blockquote>
+<tt>
+  typedef QDP::LatticeFermion T; <br/>
+  typedef QDP::multi1d&lt;LatticeColorMatrix&gt; P; <br/>
+  typedef QDP::multi1d&lt;LatticeColorMatrix&gt; Q; <br/>
+</tt>
+</blockquote> 
+
+<p>Now we need to specify the boundary conditions and we need a 
+<tt>FermBC&lt;T,P,Q&gt;</tt> object for this. Recall that this is a 
+virtual base class, so we cannot instantiate it directly. We have
+to create its subclass and keep a reference (or in this case 
+a reference counted handle) to it. To keep things simple, 
+we'll use a <tt>SimpleFermBC&lt;T,P,Q&gt;</tt> which allows
+periodic, antiperiodic and Dirichlet boundaries. We'll use periodic
+for the first 3 dims and antiperiodic for the 4th (time) dim.
+<blockquote>
+<tt>
+  // Parameters for boundary conditions <br/>
+  SimpleFermBCParams bc_params; <br/>
+<br/>
+  bc_params.boundary.resize(Nd); <br/>
+  for(int i=0; i &lt; Nd-1; i++) {  <br/>
+  &nbsp;&nbsp;  bc_params.boundary[i] = BC_TYPE_PERIODIC; <br/>
+  } <br/>
+  bc_params.boundary[Nd-1] = BC_TYPE_ANTIPERIODIC; <br/>
+<br/>
+  // The boundary conditions themselves - we will get one from the <br/>
+  // heap using new and drop it into the handle, since that is what <br/>
+  // the CreateFermState constructor wants.<br/>
+  Handle&lt; FermBC&lt;T,P,Q&gt; &gt; fbc_handle( new SimpleFermBC&lt; T,P,Q &gt;(bc_params) );
+</tt>
+</blockquote>
+So here we got an instance of the derived class (<tt>SimpleFermBC</tt>) and 
+returned a pointer to it. The pointer got down-cast to be a pointer to the base class (<tt>FermBC</tt>) which we used in the <em>constructor</em> of the 
+<tt>Handle</tt>. We don't need to worry about freeing this. When the <tt>Handle</tt> goes out of scope and the reference count drops to 0, it will be disposed of automatically.</p>
+
+<p>Now we need to create a <tt>CreateFermState&lt; T,P,Q &gt;</tt> object which can be used to apply the Boundaries we just created to a simple thin field. Again to keep things simple, we'll use what is called a <tt>CreateSimpleFermState</tt> class which is a derived class of <tt>CreateFermState</tt> that only applies boundaries, and does not do things to the links otherwise. We follow a similar pattern to creating the <tt>SimpleFermBC</tt>. Create the base class from the heap using <tt>new</tt>, down cast the pointer to the base class, and drop it into the a handle. All this can be done by the line:
+<blockquote>
+<tt>
+// Create a FermState Creator with boundaries<br/>
+Handle&lt;CreateFermState&lt;T,P,Q&gt; &gt; cfs( new CreateSimpleFermState&lt;T,P,Q&gt;(fbc_handle));<br/>
+</tt>
+</blockquote> 
+</p>
+
+<p>Now we have enough information (objects) to create a <tt>FermionAction</tt>.
+We will start off with an EvenOddPreconditioned WilsonFermion action:
+<blockquote><tt>
+// Now create the FermAct using the FermState Creator<br/>
+EvenOddPrecWilsonFermAct S( cfs, Real(0.3));<br/></tt>
+</blockquote>
+Here the <tt>Real(0.3)</tt> is the desired quark mass which is the only 
+real parameter for this action.</p>
+
+<p>Let us start working with the FermionAction. We need to take our gauge field and create a state from it which has the boundaries applied:
+<blockquote>
+<tt>
+  // Use the FermAct to create a suitable FermState<br/>
+  Handle&lt; FermState&lt;T,P,Q&gt; &gt; fs( S.createState(u) );<br/>
+</tt>
+</blockquote>
+</p>
+<p>
+Now we can create a linear operator over this state:
+<blockquote>
+<tt>
+  // Use the FermAct to create a linear Operator over the FermState<br/>
+  Handle&lt; LinearOperator&lt;T&gt; &gt; M( S.linOp(fs) ); <br/>
+</tt>
+</blockquote>
+</p>
+
+<p>
+Now that we have a Linear Operator. We need to apply it to somethig. We will
+use a LatticeFermion filled with gaussian noise. The code for initialising the vectors and applying the operator is below.
+<blockquote>
+<tt>
+  // Declare the vectors<br/>
+  LatticeFermion source_vector; <br/>
+  LatticeFermion target_vector; <br/>
+  <br/>
+  // fill the source with gaussian noise<br/>
+  // We use the subset method of the linear operator <br/>
+  // so we only fill the part of the vector the operator cares about<br/>
+  <br/>
+  gaussian(source_vector, M->subset()); <br/>
+  target_vector[ M->subset() ] = zero;  <br/>
+  <br/>
+  // Apply the linear operator<br/>
+  (*M)(target_vector, source_vector, PLUS);<br/>
+</tt>
+</blockquote>
+</p>
+<p>
+Finally we should do something we can check. One thing we can check 
+is that applying the linear operator and its dagger in succession
+gives the same result as applying M^\dagger M. We can get the 
+"squared operator" by using the <tt>lMdagM()</tt> function in the
+fermion action. Since this is a 'test' we will make it first fail
+by leaving a deliberate bug in the code.
+
+
+The code is as follows. The comments explain the intention. Imagine it 
+continuing on from before:
+<blockquote>
+<tt>
+  // We already have M source. <br/>
+  // Now apply M^{\dagger} onto the target <br/>
+  // to get (M^\dagger M) source_vector <br/>
+  <br/>
+  LatticeFermion mdagm_target_1;<br/>
+  <br/>
+  <b>// DELIBERATE MISTAKE TO TEST THE TEST: Use PLUS instead of MINUS<br/>
+  (*M)(mdagm_target_1, target_vector, PLUS); // MINUS means apply M^\dagger
+  </b>
+  <br/>
+  <br/>
+  // Now check against M^\dagger M method.<br/>
+  // Create the linear operator <br/>
+  Handle&lt; const LinearOperator&lt;LatticeFermion&gt; &gt; MdM( <b>S.lMdagM(fs)</b> ); <br/>
+  <br/>
+  // A target for the MdM operator<br/>
+  // I will not initialize it as I would just overwrite the initialisation<br/>
+  LatticeFermion mdagm_target_2; <br/>
+  <br/>
+  // Apply the "squared" operator<br/>
+  (*MdM)(mdagm_target_2, source_vector, PLUS); <br/>
+  <br/>
+  // A vector for the difference of the 2 results <br/>
+  LatticeFermion diff; <br/>
+  <br/>
+  // Take the difference on the subset of the linear operator<br/>
+<b>// Note: Subset index is only on the target</b> <br/>
+  diff[M->subset()] = mdagm_target_2 - mdagm_target_1; <br/>
+  <br/>
+  // Compute the norm of the difference on the subset <br/>
+  // norm2() computes the squared norm. <br/>
+  Double norm_diff = sqrt(norm2(diff, M->subset())); <br/>
+  <br/>
+  // Print the difference.<br/>
+  QDPIO::cout << "LinearOperator test: norm2(diff) = " << norm_diff << endl; <br/>
+  <br/>
+  
+  // Check that the difference is small <br/>
+<b>// Note: I use the toBool() function because I am comparing QDP++<br/>
+  // types rather than C++ primitive types and I have not overloaded</b><br/>
+  <br/>
+  if( toBool( norm_diff > Double(1.0e-5) ) ) {  <br/>
+    &nbsp;&nbsp;QDPIO::cout << "LinearOperator test FAILED" << endl << flush;<br/>
+    &nbsp;&nbsp;QDP_abort(1); <br/>
+  } <br/>
+  else {  <br/>
+    &nbsp;&nbsp;QDPIO::cout << "LinearOperator test PASSED" << endl << flush;<br/>
+  } <br/>
+</tt>
+</blockquote>
+</p>
+
+<p>
+When you compile and run the program you should see telling you that the test has <b>FAILED</b>. This of course is unsurprising since we put in a deliberate
+bug to check that the test does its job. Correct the mistake and make the 
+test pass, by changing the incorrect <tt>PLUS</tt> into a <tt>MINUS</tt>
+so that the second application of <tt>M</tt> applies the daggered operator. 
+</p>
+<p>
+What you have written is essentially a <em>unit test</em>. This is different
+from a <em>regression test</em> as it checks expected behaviour rather than that previous code has not been broken.</p>
+
+<h2>Exercise 6: Factories</h2>
+<p>
+In the previous exercise we explicitly created the boundary condition parameters, boundary conditions and the fermion action. In this exercise we will use a factory to make this process more generic. This will
+<ul>
+  <li>Allow us to switch fermion actions using an input XML file</li>
+  <li>Allow us to use stout smearing</li>
+  <li>Allow us to use different boundaries using an input XML file</li>
+  <li>See how to use the factories</li>
+</ul>
+</p>
+<p>Find the line in the file after the 
+<blockquote>
+<tt>
+  // Do something exciting here yourself <br/>
+  // Suggested exercise: Create a linear operator and apply it<br/>
+  // to a gaussian noise vector. <br/>
+  typedef QDP::LatticeFermion T; <br/>
+  typedef QDP::multi1d&lt;LatticeColorMatrix&gt; P; <br/>
+  typedef QDP::multi1d&lt;LatticeColorMatrix&gt; Q; <br/>
+</tt>
+</blockquote>
+ and 
+delete the code from below this all  the way until you reach the line
+<blockquote>
+<tt>
+// Use the FermAct to create a suitable FermState
+ </tt>
+</blockquote>
+</p>
+<p>
+We will insert the code here, essentially creating the same fermion action
+<tt>S</tt> by a different means. We can add in the following piece of
+code
+<blockquote>
+<tt>
+  // I define this up front because I can't do it within the<br/>
+  // try{} catch{} block.<br/>
+  // I initialise it to 0.<br/>
+  <br/>
+  WilsonTypeFermAct&lt;T,P,Q&gt;* ferm_act_pointer = 0; <br/>
+  // Try and read a fermion action definition<br/>
+  try { <br/>
+  &nbsp;&nbsp;<b>// Get the name of the fermion action</b><br/>
+  &nbsp;&nbsp;std::string fermact_name;<br/>
+  &nbsp;&nbsp;read(xml_in, "/tutorial3/FermionAction/FermAct", fermact_name);<br/>
+<br/>
+  &nbsp;&nbsp;<b>// Get the factory to create the FermionAction</b><br/>
+  &nbsp;&nbsp;ferm_act_pointer = <br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;TheWilsonTypeFermActFactory::Instance().createObject(fermact_name,<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xml_in,<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/tutorial3/FermionAction");<br/>
+  }<br/>
+  // Handle any errors<br/>
+  catch( const std::string& e) { <br/>
+    &nbsp;&nbsp;QDPIO::cerr << "Caught Exception: " << e << endl << flush;<br/>
+    &nbsp;&nbsp;QDP_abort(1);<br/>
+  }<br/>
+<br/>
+  // Drop the pointer into a handle - so that it gets cleaned up later<br/>
+  Handle&lt; WilsonTypeFermAct&lt;T,P,Q&gt; S_handle(ferm_act_pointer);<br/>
+<br/>
+  // We could just use the handle, but in the previous code we used <br/>
+  // the object. We can emulate this behaviour by creating a <b>reference</b><br/>
+  // to the dereferenced handle.<br/>
+  <br/>
+  WilsonTypeFermAct&lt;T,P,Q&gt;&amp; S = *S_handle; <br/>
+<br/>
+
+</tt>
+</blockquote>
+</p>
+<p>
+What has happened? We have replaced the concrete invocation of the Wilson
+Fermion action with a more generic class: <tt>WilsonTypeFermAct</tt>. So 
+this code should work now for all available <tt>WilsonTypeFermAct</tt>s 
+that are registered with our factory.</p>
+
+<p>
+Secondly, we are reading the <tt>FermionAction</tt> tag from the XML file.
+This contains the <tt>FermState</tt> tag and the <tt>FermionBC</tt> tag
+which specify the wanted subclasses of <tt>CreateFermState</tt> and
+<tt>FermBC</tt> respectively. So we can now also run this program with
+stout states and other <tt>FermionBC</tt>s.
+
+
+<p>Before running the program we need to add the FermionAction we want to 
+the input XML file: Within the first group (ie between the <tt>&lt;tutorial3&gt; &lt;/tutorial3&gt;</tt> tags, below the <tt>&lt;Prop&gt;</tt> tag) add in the following snippet:
+<blockquote>
+<tt>  
+&lt;FermionAction&gt; <br/>
+&nbsp;&nbsp;  &lt;FermAct&gt;WILSON&lt;/FermAct&gt; <br/>
+&nbsp;&nbsp;   &lt;Mass&gt;0.3&lt;/Mass&gt; <br/>
+&nbsp;&nbsp;   &lt;FermState&gt; <br/>
+&nbsp;&nbsp; &nbsp;&nbsp;      &lt;Name&gt;SIMPLE_FERM_STATE&lt;/Name&gt; <br/>
+&nbsp;&nbsp; &nbsp;&nbsp;      &lt;FermionBC&gt; <br/>
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;         &lt;FermBC&gt;SIMPLE_FERMBC&lt;/FermBC&gt;  <br/>
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;         &lt;boundary&gt;1 1 1 -1&lt;/boundary&gt;  <br/>
+&nbsp;&nbsp; &nbsp;&nbsp;      &lt;/FermionBC&gt;  <br/>
+&nbsp;&nbsp;   &lt;/FermState&gt;  <br/>
+&lt;/FermionAction&gt; <br/>
+</tt>
+</blockquote>
+</p>
+
+<p>
+Note that the fermion action says <tt>WILSON</tt> but in principle you now
+switch this to <tt>CLOVER</tt> or <tt>PARWILSON</tt> (twisted mass) with their
+extra parameters. So in principle your code can now unit test the MdagM
+method of all Wilson-like fermions. Likewise you can change the <tt>FermState</tt> as well (eg to <tt>STOUT_FERM_STATE</tt>) and of course you can
+also vary teh boundary types.
+<p>
+If you run this program you may find that it ends in dismal <b>FAILURE</b>, with the message:
+<blockquote>
+<tt>
+Couldnt find key WILSON in the map:<br/>
+Available Keys are :<br/>
+Caught Exception: Factory error: unknown identifier: id = WILSON</br/>
+</tt>
+</blockquote> 
+</p>
+<p>This is the problem of linkage. I mentioned in the talk on Design Patterns
+in Chroma. We need to generate linkage for the fermion actions in the 
+factory. If we don't do this, all our nice Fermion Actions, Boundary
+Conditions etc do not get registered in the respective factories.</p>
+
+
+
+<p>
+To register all the actions and measurements we use in chroma, 
+we need to add the line
+<blockquote>
+<tt>
+WilsonTypeFermActs4DEnv::registerAll();
+</tt>
+</blockquote>
+somewhere before the line:
+<blockquote>
+<tt>
+  &nbsp;&nbsp;ferm_act_pointer = <br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;TheWilsonTypeFermActFactory::Instance().createObject(fermact_name,<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xml_in,<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/tutorial3/FermionAction");<br/>
+</tt>
+</blockquote>
+</p>
+<p>
+This will bring in linkage for all the WilsonType FermionActions and their dependencies, and should
+make the test pass. In the main programs this kind of linkage hack is moved
+to an explicit <tt>linkageHack()</tt> function.
+</p>
+<h2>Exercise 7: Play Away</h2>
+<p>
+You can now do lots of things and should play:
+<ul>
+  <li>Insert Different Gamma Matrices instead of gamma_5, and generate other mesons</li>
+  <li>Increase the maximum allowed momenta in <tt>SftMom</tt></li>
+  <li>Turn off averaging over momenta when you create <tt>SftMom</tt></li>
+  <li>Try different linear operators. Look in <tt>chroma/tests/chroma/hadron/propagator</tt> for input files.
+  <li>Try using a stout smeared state. Here is one with periodic boundaries in space and antiperiodic in time:
+  <blockquote><tt>
+          &lt;FermState&gt;  <br/>
+          &nbsp;&nbsp; &lt;Name&gt;STOUT_FERM_STATE&lt;/Name&gt; <br/>
+          &nbsp;&nbsp; &lt;rho&gt;0.22&lt;/rho&gt; <br/>
+          &nbsp;&nbsp; &lt;n_smear&gt;3&lt;/n_smear&gt;  <br/>
+          &nbsp;&nbsp; &lt;orthog_dir&gt;3&lt;/orthog_dir&gt;  <br/>
+          &nbsp;&nbsp; &lt;FermionBC&gt;  <br/>
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;         &lt;FermBC&gt;SIMPLE_FERMBC&lt;/FermBC&gt;  <br/>
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;         &lt;boundary&gt;1 1 1 -1&lt;/boundary&gt;  <br/>
+
+          &nbsp;&nbsp; &lt;/FermionBC&gt; <br/>
+          &lt;/FermState&gt; <br/>
+     </tt>
+    </blockquote>
+    This should do 3 levels of stout smearing with an isotropic coefficient
+<tt>rho = 0.22</tt> in space only (<tt>orthog_dir=3</tt> excludes smearing in the time direction.</li>
+</ul>
+</p>
+
+<h1>Phew !!! You have completed Tutorial 3</h1>
+<p>
+You should now be able to read a lot of the measurement code, understand
+basic XML manipulation, write your own readers/writers, measurements 
+and link against an installed library
+</p>
+</body>
+</html>

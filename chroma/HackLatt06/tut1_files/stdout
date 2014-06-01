@@ -1,0 +1,240 @@
+InlineMeasurements are: 
+<InlineMeasurements>
+
+    <elem>
+      <Name>MAKE_SOURCE</Name>
+      <Frequency>1</Frequency>
+      <Param>
+        <version>6</version>
+        <Source>
+          <version>1</version>
+          <SourceType>POINT_SOURCE</SourceType>
+          <j_decay>3</j_decay>
+          <t_srce>0 0 0 0</t_srce>
+	</Source>
+      </Param>
+      <NamedObject>
+        <source_id>pt_source</source_id>
+      </NamedObject>
+      <xml_file>source.xml</xml_file>
+    </elem>
+
+    <elem>
+      <Name>PROPAGATOR</Name>
+      <Frequency>1</Frequency>
+      <Param>
+        <version>9</version>
+        <quarkSpinType>FULL</quarkSpinType>
+        <obsvP>false</obsvP>
+        <FermionAction>
+         <FermAct>WILSON</FermAct>
+         <Kappa>0.11</Kappa>
+         <FermionBC>
+           <FermBC>SIMPLE_FERMBC</FermBC>
+           <boundary>1 1 1 -1</boundary>
+         </FermionBC>
+        </FermionAction>
+        <InvertParam>
+          <invType>CG_INVERTER</invType>
+          <RsdCG>1.0e-8</RsdCG>
+          <MaxCG>1000</MaxCG>
+        </InvertParam>
+      </Param>
+      <NamedObject>
+        <source_id>pt_source</source_id>
+        <prop_id>pt_prop</prop_id>
+      </NamedObject>
+    </elem>
+
+
+     <elem>
+      <annotation>
+        Discard the unwanted source
+      </annotation>
+      <Name>ERASE_NAMED_OBJECT</Name>
+      <Frequency>1</Frequency>
+      <NamedObject>
+        <object_id>pt_source</object_id>
+      </NamedObject>
+    </elem>
+
+   <elem>
+      <annotation>
+        Save the propagator
+      </annotation>
+      <Name>QIO_WRITE_NAMED_OBJECT</Name>
+      <Frequency>1</Frequency>
+      <NamedObject>
+        <object_id>pt_prop</object_id>
+        <object_type>LatticePropagator</object_type>
+      </NamedObject>
+      <File>
+        <file_name>./my_prop</file_name>
+        <file_volfmt>SINGLEFILE</file_volfmt>
+      </File>
+    </elem>
+
+    <elem>
+      <annotation>
+         Compute the spectrum. 
+         This version is a clone of the one below, but the xml output is
+         written to a separate file.
+      </annotation>
+      <Name>SPECTRUM</Name>
+      <Frequency>1</Frequency>
+      <Param>
+        <version>12</version>
+        <Pt_snk>true</Pt_snk>
+        <Sl_snk>true</Sl_snk>
+        <Wl_snk>false</Wl_snk>
+        <MesonP>true</MesonP>
+        <CurrentP>true</CurrentP>
+        <BaryonP>true</BaryonP>
+        <HybMesP>true</HybMesP>
+        <fact_sm>2.5</fact_sm>
+        <numb_sm>2</numb_sm>
+        <time_rev>false</time_rev>
+        <mom2_max>3</mom2_max>
+        <avg_equiv_mom>true</avg_equiv_mom>
+        <wvf_kind>GAUGE_INV_GAUSSIAN</wvf_kind>
+        <wvf_param>2.0</wvf_param>
+        <wvfIntPar>5</wvfIntPar>
+        <link_smear_fact>2.5</link_smear_fact>
+        <link_smear_num>0</link_smear_num> 
+       </Param>
+      <NamedObject>
+        <prop_ids>
+          <elem>pt_prop</elem>
+        </prop_ids>
+      </NamedObject>
+      <xml_file>spectrum.out.xml</xml_file>
+    </elem>
+  </InlineMeasurements>
+
+Finished init of RNG
+Finished lattice layout
+Attempt to read gauge field
+Gauge field successfully read: time= 0.012023 secs
+readGaugeId: entering
+readGaugeId: exiting
+readGaugeId: entering
+readGaugeId: exiting
+readGaugeId: entering
+readGaugeId: exiting
+There are 5 measurements 
+reset: entering
+reset: exiting
+set: entering
+set: set default gauge field id = default_gauge_field
+Set the default gauge field
+set: exiting
+Doing 5 measurements
+MAKE_SOURCE: propagator source constructor
+Source = POINT_SOURCE
+Point source
+color = 0
+spin = 0
+spin = 1
+spin = 2
+spin = 3
+color = 1
+spin = 0
+spin = 1
+spin = 2
+spin = 3
+color = 2
+spin = 0
+spin = 1
+spin = 2
+spin = 3
+Attempt to update source
+Source successfully update
+MAKE_SOURCE: total time = 0.190947 secs
+MAKE_SOURCE: ran successfully
+PROPAGATOR: propagator calculation
+Snarf the source from a named buffer
+Source successfully read and parsed
+FermAct = WILSON
+Try the various factories
+Suitable factory found: compute the quark prop
+Entering quarkProp4
+InvCG2: starting
+InvCG: k = 27  cp = 2.6023e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.080097(s) Flops=4.05565e+07 => 506.343 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  506.343 Mflops = 0.506343 Gflops = 0.000506343 Tflops
+InvCG2: starting
+InvCG: k = 27  cp = 2.68502e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.08173(s) Flops=4.05565e+07 => 496.226 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  496.226 Mflops = 0.496226 Gflops = 0.000496226 Tflops
+InvCG2: starting
+InvCG: k = 27  cp = 2.21219e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.079024(s) Flops=4.05565e+07 => 513.218 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  513.218 Mflops = 0.513218 Gflops = 0.000513218 Tflops
+InvCG2: starting
+InvCG: k = 27  cp = 3.36474e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.079112(s) Flops=4.05565e+07 => 512.647 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  512.647 Mflops = 0.512647 Gflops = 0.000512647 Tflops
+InvCG2: starting
+InvCG: k = 27  cp = 2.67347e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.082145(s) Flops=4.05565e+07 => 493.719 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  493.719 Mflops = 0.493719 Gflops = 0.000493719 Tflops
+InvCG2: starting
+InvCG: k = 27  cp = 2.09013e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.084033(s) Flops=4.05565e+07 => 482.626 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  482.626 Mflops = 0.482626 Gflops = 0.000482626 Tflops
+InvCG2: starting
+InvCG: k = 27  cp = 2.76533e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.078041(s) Flops=4.05565e+07 => 519.683 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  519.683 Mflops = 0.519683 Gflops = 0.000519683 Tflops
+InvCG2: starting
+InvCG: k = 27  cp = 2.81022e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.077022(s) Flops=4.05565e+07 => 526.558 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  526.558 Mflops = 0.526558 Gflops = 0.000526558 Tflops
+InvCG2: starting
+InvCG: k = 27  cp = 2.37967e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.075927(s) Flops=4.05565e+07 => 534.152 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  534.152 Mflops = 0.534152 Gflops = 0.000534152 Tflops
+InvCG2: starting
+InvCG: k = 27  cp = 2.78416e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.075963(s) Flops=4.05565e+07 => 533.899 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  533.899 Mflops = 0.533899 Gflops = 0.000533899 Tflops
+InvCG2: starting
+InvCG: k = 27  cp = 2.83732e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.077927(s) Flops=4.05565e+07 => 520.443 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  520.443 Mflops = 0.520443 Gflops = 0.000520443 Tflops
+InvCG2: starting
+InvCG: k = 27  cp = 2.29336e-16
+QDP:FlopCount:invcg2 Performance/CPU: t=0.082075(s) Flops=4.05565e+07 => 494.14 Mflops/cpu.
+QDP:FlopCount:invcg2 Total performance:  494.14 Mflops = 0.49414 Gflops = 0.00049414 Tflops
+Exiting quarkProp4
+Propagator computed: time= 1.14797 secs
+Start writing propagator info
+Propagator successfully updated
+PROPAGATOR: total time = 1.184 secs
+PROPAGATOR: ran successfully
+ERASE_NAMED_OBJECT: object erase
+Attempt to erase object name = pt_source
+Object erased
+ERASE_NAMED_OBJECT: ran successfully
+QIO_WRITE_NAMED_OBJECT: object writer
+Attempt to write object name = pt_prop
+Object successfully written: time= 0.029927 secs
+QIO_WRITE_NAMED_OBJECT: ran successfully
+SPECTRUM: Spectroscopy for Wilson-like fermions
+
+     Gauge group: SU(3)
+     volume: 4 x 4 x 4 x 8
+Attempt to read propagator info
+Propagator successfully read and parsed
+Try action and mass
+FermAct = WILSON
+Mass = 0.545455
+SPECTRUM: mesons computed: time= 0.879951 secs
+SPECTRUM: hybrid mesons computed: time= 4.07125 secs
+SPECTRUM: currents computed: time= 0.424064 secs
+SPECTRUM: baryons computed: time= 5.31585 secs
+SPECTRUM: total time = 10.9853 secs
+SPECTRUM: ran successfully
+reset: entering
+Default gauge field erased
+reset: exiting

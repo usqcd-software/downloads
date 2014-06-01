@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002 (1.62) JA patch-1.4
+patched version by:  Kenshi Muto, Debian Project.
+LaTeX2HTML 2002 (1.62),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Other errors</TITLE>
+<META NAME="description" CONTENT="Other errors">
+<META NAME="keywords" CONTENT="chroma_install">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002 JA patch-1.4">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="chroma_install.css">
+
+<LINK REL="next" HREF="node18.html">
+<LINK REL="previous" HREF="node16.html">
+<LINK REL="up" HREF="node9.html">
+<LINK REL="next" HREF="node18.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html283"
+  HREF="node18.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="file:/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html279"
+  HREF="node9.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="file:/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html273"
+  HREF="node16.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="file:/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html281"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="file:/usr/share/latex2html/icons/contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html284"
+  HREF="node18.html">Building Chroma</A>
+<B> Up:</B> <A NAME="tex2html280"
+  HREF="node9.html">Quick Start: A linux</A>
+<B> Previous:</B> <A NAME="tex2html274"
+  HREF="node16.html">Automake related errors, and</A>
+ &nbsp <B>  <A NAME="tex2html282"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00058000000000000000">
+Other errors</A>
+</H2>
+Suppose that autoconf and automake are all OK, and you get other errors.
+A common error is the following during the running of the configure script:
+<PRE>
+Error: compiler cannot create executables
+</PRE>
+
+<P>
+This is almost always because something is misspelled like an option to the
+C++ eg: <TT>-fimline-limit=5000</TT>, or <code>--with-libxml=</code> instead of <code>--with-libxml2</code>. You should always inspect the <TT>config.log</TT> file produced
+by configure to try and ascertain the source of the error.
+
+<P>
+Only if you have made <EM>absolutely certain</EM> that you haven't misspelled
+anything or forgotten some needed configure argument should you send
+email to the package maintainer.
+
+<P>
+<BR><HR>
+<ADDRESS>
+Balint Joo
+2005-04-11
+</ADDRESS>
+</BODY>
+</HTML>

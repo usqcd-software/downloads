@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tutorial3>
+  <Param>
+    <nrow>4 4 4 8</nrow>
+  </Param>
+  <Cfg>
+    <cfg_type>UNIT</cfg_type>
+    <cfg_file>ignored</cfg_file>
+  </Cfg>
+  <Prop>
+    <prop_file>./propagator_0</prop_file>
+  </Prop>
+</tutorial3>
