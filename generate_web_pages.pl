@@ -4,7 +4,7 @@
 #
 
 # These are the canonical directories to be searched
-foreach my $dir ("bagel_qdp", "c-lime", "qdp", "qdp++", "qio", "qla", "qmp", "qmt", "qopqdp", "qhmc")
+foreach my $dir ("bagel_qdp", "c-lime", "qdp", "qdp++", "qio", "qla", "qmp", "qmt", "qopqdp", "qhmc", "qiolite")
 {
   chdir($dir);
 
